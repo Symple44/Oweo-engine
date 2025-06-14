@@ -83,14 +83,20 @@
    5. THEMES - Variantes de thème
    ======================================== */
 
-/* Thème clair */
+/* Thème clair (mode) */
 @import url('themes/light.css');
 
-/* Thème sombre */
+/* Thème sombre (mode) */
 @import url('themes/dark.css');
 
 /* Thème signature Oweo */
 @import url('themes/oweo.css');
+
+/* Thème Modern */
+@import url('themes/modern.css');
+
+/* Thème Classic */
+@import url('themes/classic.css');
 
 /* ========================================
    6. VENDORS - Bibliothèques tierces (optionnel)

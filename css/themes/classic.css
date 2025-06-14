@@ -1,0 +1,312 @@
+/* ========================================
+   css/themes/classic.css - Thème Classic Oweo 2.0
+   ======================================== */
+
+/* ========================================
+   THÈME CLASSIC
+   ======================================== */
+
+[data-theme="classic"] {
+  /* ========================================
+     REDÉFINITION DES COULEURS PRIMAIRES
+     ======================================== */
+  
+  /* Couleur primaire Classic - Bleu traditionnel */
+  --classic-primary-hue: 217;
+  --classic-primary-saturation: 91%;
+  --classic-primary-lightness: 60%;
+  
+  --theme-primary: hsl(var(--classic-primary-hue), var(--classic-primary-saturation), var(--classic-primary-lightness));
+  --theme-primary-light: hsl(var(--classic-primary-hue), 85%, 70%);
+  --theme-primary-dark: hsl(var(--classic-primary-hue), 95%, 45%);
+  --theme-primary-alpha-5: hsla(var(--classic-primary-hue), var(--classic-primary-saturation), var(--classic-primary-lightness), 0.05);
+  --theme-primary-alpha-10: hsla(var(--classic-primary-hue), var(--classic-primary-saturation), var(--classic-primary-lightness), 0.1);
+  --theme-primary-alpha-20: hsla(var(--classic-primary-hue), var(--classic-primary-saturation), var(--classic-primary-lightness), 0.2);
+  
+  /* Couleur accent Classic - Vert forêt */
+  --classic-accent-hue: 158;
+  --classic-accent-saturation: 64%;
+  --classic-accent-lightness: 42%;
+  
+  --theme-accent: hsl(var(--classic-accent-hue), var(--classic-accent-saturation), var(--classic-accent-lightness));
+  --theme-accent-light: hsl(var(--classic-accent-hue), 60%, 55%);
+  --theme-accent-dark: hsl(var(--classic-accent-hue), 70%, 35%);
+  --theme-accent-alpha-10: hsla(var(--classic-accent-hue), var(--classic-accent-saturation), var(--classic-accent-lightness), 0.1);
+  --theme-accent-alpha-20: hsla(var(--classic-accent-hue), var(--classic-accent-saturation), var(--classic-accent-lightness), 0.2);
+  
+  /* Couleur tertiaire Classic - Gris bleuté */
+  --classic-tertiary-hue: 210;
+  --classic-tertiary-saturation: 20%;
+  --classic-tertiary-lightness: 50%;
+  
+  --theme-tertiary: hsl(var(--classic-tertiary-hue), var(--classic-tertiary-saturation), var(--classic-tertiary-lightness));
+  --theme-tertiary-light: hsl(var(--classic-tertiary-hue), 15%, 65%);
+  --theme-tertiary-dark: hsl(var(--classic-tertiary-hue), 25%, 35%);
+  
+  /* ========================================
+     STYLES VISUELS CLASSIC
+     ======================================== */
+  
+  /* Gradients subtils */
+  --gradient-classic: linear-gradient(180deg, var(--theme-primary), var(--theme-primary-dark));
+  --gradient-classic-soft: linear-gradient(180deg, var(--bg-primary), var(--bg-secondary));
+  --gradient-classic-header: linear-gradient(180deg, #f8f9fa 0%, #e9ecef 100%);
+  
+  /* Ombres traditionnelles */
+  --shadow-classic-sm: 0 1px 2px rgba(0, 0, 0, 0.05);
+  --shadow-classic-base: 0 1px 3px rgba(0, 0, 0, 0.1), 0 1px 2px rgba(0, 0, 0, 0.06);
+  --shadow-classic-lg: 0 3px 6px rgba(0, 0, 0, 0.15);
+  --shadow-classic-inset: inset 0 1px 2px rgba(0, 0, 0, 0.1);
+  
+  /* ========================================
+     PARAMÈTRES CLASSIC
+     ======================================== */
+  
+  /* Bordures plus marquées */
+  --border-classic: 1px solid var(--color-gray-300);
+  --border-classic-strong: 2px solid var(--color-gray-400);
+  
+  /* Radius plus carrés */
+  --radius-classic: 0.25rem;
+  --radius-classic-lg: 0.375rem;
+  
+  /* Typographie traditionnelle */
+  --font-family-classic: Georgia, 'Times New Roman', serif;
+  --font-family-classic-sans: Arial, Helvetica, sans-serif;
+  
+  /* Transitions plus rapides */
+  --transition-classic: all 150ms ease-in-out;
+}
+
+/* ========================================
+   COMPOSANTS CLASSIC
+   ======================================== */
+
+/* Boutons Classic */
+[data-theme="classic"] .btn {
+  border-radius: var(--radius-classic);
+  border: 1px solid var(--border-default);
+  font-weight: var(--font-weight-normal);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  font-size: var(--font-size-sm);
+  transition: var(--transition-classic);
+  box-shadow: var(--shadow-classic-sm);
+}
+
+[data-theme="classic"] .btn--primary {
+  background: var(--gradient-classic);
+  border-color: var(--theme-primary-dark);
+  box-shadow: var(--shadow-classic-base);
+}
+
+[data-theme="classic"] .btn--primary:hover {
+  background: var(--theme-primary-dark);
+  box-shadow: var(--shadow-classic-lg);
+}
+
+[data-theme="classic"] .btn--primary:active {
+  box-shadow: var(--shadow-classic-inset);
+}
+
+/* Cards Classic */
+[data-theme="classic"] .card {
+  border: var(--border-classic);
+  border-radius: var(--radius-classic);
+  box-shadow: var(--shadow-classic-base);
+  background: var(--bg-card);
+}
+
+[data-theme="classic"] .card-header {
+  background: var(--gradient-classic-header);
+  border-bottom: var(--border-classic);
+  font-weight: var(--font-weight-semibold);
+}
+
+[data-theme="classic"] .card:hover {
+  box-shadow: var(--shadow-classic-lg);
+}
+
+/* Navigation Classic */
+[data-theme="classic"] .navbar {
+  background: var(--gradient-classic-header);
+  border-bottom: var(--border-classic);
+  box-shadow: var(--shadow-classic-sm);
+}
+
+[data-theme="classic"] .navbar-link {
+  padding: var(--space-2) var(--space-4);
+  border-radius: var(--radius-classic);
+  text-transform: uppercase;
+  font-size: var(--font-size-sm);
+  letter-spacing: 0.05em;
+  font-weight: var(--font-weight-medium);
+  transition: var(--transition-classic);
+}
+
+[data-theme="classic"] .navbar-link:hover {
+  background: var(--bg-secondary);
+  color: var(--theme-primary);
+}
+
+[data-theme="classic"] .navbar-link.active {
+  background: var(--theme-primary);
+  color: var(--text-on-primary);
+}
+
+/* Forms Classic */
+[data-theme="classic"] .form-control {
+  border: var(--border-classic);
+  border-radius: var(--radius-classic);
+  background: var(--bg-input);
+  box-shadow: var(--shadow-classic-inset);
+  transition: var(--transition-classic);
+}
+
+[data-theme="classic"] .form-control:focus {
+  border-color: var(--theme-primary);
+  box-shadow: var(--shadow-classic-inset), 0 0 0 2px var(--theme-primary-alpha-20);
+}
+
+[data-theme="classic"] .form-label {
+  font-weight: var(--font-weight-semibold);
+  text-transform: uppercase;
+  font-size: var(--font-size-xs);
+  letter-spacing: 0.05em;
+  color: var(--text-secondary);
+}
+
+/* Tables Classic */
+[data-theme="classic"] table {
+  border: var(--border-classic);
+  border-radius: var(--radius-classic);
+  overflow: hidden;
+}
+
+[data-theme="classic"] th {
+  background: var(--gradient-classic-header);
+  border-bottom: var(--border-classic-strong);
+  font-weight: var(--font-weight-semibold);
+  text-transform: uppercase;
+  font-size: var(--font-size-sm);
+  letter-spacing: 0.05em;
+}
+
+[data-theme="classic"] td {
+  border-bottom: var(--border-classic);
+}
+
+[data-theme="classic"] tr:hover {
+  background: var(--bg-secondary);
+}
+
+/* Badges Classic */
+[data-theme="classic"] .badge {
+  border-radius: var(--radius-classic);
+  font-weight: var(--font-weight-normal);
+  text-transform: uppercase;
+  font-size: var(--font-size-xs);
+  letter-spacing: 0.05em;
+  padding: var(--space-1) var(--space-2);
+  border: 1px solid currentColor;
+}
+
+/* ========================================
+   ÉLÉMENTS DÉCORATIFS CLASSIC
+   ======================================== */
+
+/* Séparateurs */
+[data-theme="classic"] hr {
+  border: none;
+  border-top: var(--border-classic);
+  margin: var(--space-8) 0;
+}
+
+/* Citations */
+[data-theme="classic"] blockquote {
+  border-left: 4px solid var(--theme-primary);
+  background: var(--bg-secondary);
+  padding: var(--space-4) var(--space-6);
+  font-style: italic;
+  font-family: var(--font-family-classic);
+}
+
+/* Headers de section */
+[data-theme="classic"] .section-header {
+  border-bottom: var(--border-classic);
+  padding-bottom: var(--space-4);
+  margin-bottom: var(--space-6);
+}
+
+[data-theme="classic"] .section-title {
+  font-family: var(--font-family-classic);
+  font-weight: var(--font-weight-normal);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+}
+
+/* ========================================
+   MODE SOMBRE CLASSIC
+   ======================================== */
+
+[data-theme="classic"][data-mode="dark"] {
+  /* Ajustements pour le mode sombre */
+  --gradient-classic-header: linear-gradient(180deg, #2d3748 0%, #1a202c 100%);
+  
+  /* Couleurs plus douces en mode sombre */
+  --theme-primary: hsl(var(--classic-primary-hue), 70%, 65%);
+  --theme-accent: hsl(var(--classic-accent-hue), 50%, 55%);
+  
+  /* Bordures plus subtiles */
+  --border-classic: 1px solid var(--color-gray-700);
+  --border-classic-strong: 2px solid var(--color-gray-600);
+}
+
+/* ========================================
+   ANIMATIONS CLASSIC
+   ======================================== */
+
+/* Animations plus simples et directes */
+[data-theme="classic"] * {
+  animation-duration: 150ms !important;
+  animation-timing-function: ease-in-out !important;
+}
+
+/* Hover effects subtils */
+[data-theme="classic"] a:hover,
+[data-theme="classic"] button:hover {
+  transition: var(--transition-classic);
+}
+
+/* ========================================
+   FOOTER CLASSIC
+   ======================================== */
+
+[data-theme="classic"] .footer {
+  background: var(--gradient-classic-header);
+  border-top: var(--border-classic-strong);
+}
+
+[data-theme="classic"] .footer-title {
+  font-family: var(--font-family-classic);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  font-size: var(--font-size-sm);
+}
+
+/* ========================================
+   RESPONSIVE CLASSIC
+   ======================================== */
+
+@media (max-width: 768px) {
+  [data-theme="classic"] {
+    /* Ajustements mobiles */
+    --radius-classic: 0;
+    --radius-classic-lg: 0.25rem;
+  }
+  
+  [data-theme="classic"] .navbar-link {
+    text-transform: none;
+    letter-spacing: normal;
+  }
+}
