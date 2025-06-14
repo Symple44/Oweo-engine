@@ -1,0 +1,488 @@
+<!DOCTYPE html>
+<html lang="fr" data-theme="oweo" data-mode="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Oweo - Expert ERP Charpente Métallique</title>
+    <link rel="icon" type="image/x-icon" href="/favicon.ico">
+    
+    <!-- ========================================
+         CSS FRAMEWORK OWEO 2.0
+         ======================================== -->
+    
+    <!-- Core CSS -->
+    <link rel="stylesheet" href="css/core/reset.css">
+    <link rel="stylesheet" href="css/core/variables.css">
+    <link rel="stylesheet" href="css/core/typography.css">
+    <link rel="stylesheet" href="css/core/grid.css">
+    <link rel="stylesheet" href="css/core/utilities.css">
+    
+    <!-- Layout CSS -->
+    <link rel="stylesheet" href="css/layout/layout.css">
+    <link rel="stylesheet" href="css/layout/navbar.css">
+    <link rel="stylesheet" href="css/layout/sidebar.css">
+    <link rel="stylesheet" href="css/layout/footer.css">
+    <link rel="stylesheet" href="css/layout/search-bar.css">
+    
+    <!-- Components CSS -->
+    <link rel="stylesheet" href="css/components/buttons.css">
+    <link rel="stylesheet" href="css/components/cards.css">
+    <link rel="stylesheet" href="css/components/forms.css">
+    <link rel="stylesheet" href="css/components/modals.css">
+    <link rel="stylesheet" href="css/components/notifications.css">
+    <link rel="stylesheet" href="css/components/cookies.css">
+    <link rel="stylesheet" href="css/components/theme-switcher.css">
+    
+    <!-- Pages CSS -->
+    <link rel="stylesheet" href="css/pages/auth.css">
+    <link rel="stylesheet" href="css/pages/dashboard.css">
+    <link rel="stylesheet" href="css/pages/home.css">
+    
+    <!-- Themes CSS -->
+    <link rel="stylesheet" href="css/themes/light.css">
+    <link rel="stylesheet" href="css/themes/dark.css">
+    <link rel="stylesheet" href="css/themes/oweo.css">
+    
+    <!-- External Libraries -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <meta name="description" content="Oweo - Solutions ERP spécialisées pour la charpente métallique">
+</head>
+<body class="layout-horizontal theme-oweo mode-light">
+    
+    <!-- ========================================
+         LAYOUT WRAPPER
+         ======================================== -->
+    <div id="app-wrapper" class="app-wrapper">
+        
+        <!-- Navbar (Horizontal/Vertical) -->
+        <nav id="navbar" class="navbar" role="navigation" aria-label="Navigation principale">
+            <div class="navbar-container">
+                <!-- Brand -->
+                <div class="navbar-brand">
+                    <a href="#home" class="brand-link">
+                        <i class="fas fa-industry brand-icon"></i>
+                        <span class="brand-text">Oweo</span>
+                    </a>
+                </div>
+                
+                <!-- Nav Items -->
+                <div class="navbar-nav">
+                    <a href="#home" class="nav-link active">
+                        <i class="fas fa-home"></i>
+                        <span>Accueil</span>
+                    </a>
+                    <a href="#dashboard" class="nav-link">
+                        <i class="fas fa-tachometer-alt"></i>
+                        <span>Dashboard</span>
+                    </a>
+                    <a href="#services" class="nav-link">
+                        <i class="fas fa-cogs"></i>
+                        <span>Services</span>
+                    </a>
+                    <a href="#demos" class="nav-link">
+                        <i class="fas fa-flask"></i>
+                        <span>Démos</span>
+                    </a>
+                    <a href="#contact" class="nav-link">
+                        <i class="fas fa-envelope"></i>
+                        <span>Contact</span>
+                    </a>
+                </div>
+                
+                <!-- Actions -->
+                <div class="navbar-actions">
+                    <!-- Theme Switcher -->
+                    <div class="theme-switcher">
+                        <button id="theme-toggle" class="theme-toggle" aria-label="Changer le thème">
+                            <i class="fas fa-moon" data-theme-icon></i>
+                        </button>
+                    </div>
+                    
+                    <!-- User Menu -->
+                    <div class="user-menu" id="user-menu">
+                        <button class="user-menu-toggle" aria-label="Menu utilisateur">
+                            <i class="fas fa-user-circle"></i>
+                            <span class="user-name" data-user-name>Invité</span>
+                        </button>
+                        <div class="user-dropdown">
+                            <div class="user-info" data-auth-only>
+                                <div class="user-avatar">
+                                    <i class="fas fa-user"></i>
+                                </div>
+                                <div class="user-details">
+                                    <div class="user-display-name" data-user-display-name></div>
+                                    <div class="user-email" data-user-email></div>
+                                </div>
+                            </div>
+                            <div class="dropdown-divider" data-auth-only></div>
+                            <a href="#profile" class="dropdown-item" data-auth-only>
+                                <i class="fas fa-user-cog"></i>
+                                <span>Mon Profil</span>
+                            </a>
+                            <a href="#settings" class="dropdown-item" data-auth-only>
+                                <i class="fas fa-cog"></i>
+                                <span>Paramètres</span>
+                            </a>
+                            <div class="dropdown-divider" data-auth-only></div>
+                            <button class="dropdown-item" data-auth-only onclick="AuthManager.logout()">
+                                <i class="fas fa-sign-out-alt"></i>
+                                <span>Déconnexion</span>
+                            </button>
+                            <button class="dropdown-item" data-guest-only onclick="AuthManager.showLoginModal()">
+                                <i class="fas fa-sign-in-alt"></i>
+                                <span>Connexion</span>
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <!-- Mobile Toggle -->
+                    <button class="navbar-toggle" id="navbar-toggle" aria-label="Menu mobile">
+                        <span class="toggle-line"></span>
+                        <span class="toggle-line"></span>
+                        <span class="toggle-line"></span>
+                    </button>
+                </div>
+            </div>
+        </nav>
+        
+        <!-- Main Layout Container -->
+        <div class="layout-container">
+            
+            <!-- Sidebar (Optional) -->
+            <aside id="sidebar" class="sidebar" aria-label="Menu latéral">
+                <div class="sidebar-header">
+                    <h3>Menu</h3>
+                    <button class="sidebar-close" aria-label="Fermer le menu">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+                
+                <nav class="sidebar-nav">
+                    <div class="nav-section">
+                        <h4 class="nav-section-title">Navigation</h4>
+                        <a href="#home" class="sidebar-link active">
+                            <i class="fas fa-home"></i>
+                            <span>Accueil</span>
+                        </a>
+                        <a href="#dashboard" class="sidebar-link">
+                            <i class="fas fa-tachometer-alt"></i>
+                            <span>Dashboard</span>
+                        </a>
+                    </div>
+                    
+                    <div class="nav-section" data-auth-only>
+                        <h4 class="nav-section-title">Outils</h4>
+                        <a href="#chiffrage" class="sidebar-link">
+                            <i class="fas fa-calculator"></i>
+                            <span>Chiffrage</span>
+                        </a>
+                        <a href="#dstv" class="sidebar-link">
+                            <i class="fas fa-cog"></i>
+                            <span>Interface DSTV</span>
+                        </a>
+                    </div>
+                </nav>
+                
+                <div class="sidebar-footer">
+                    <div class="sidebar-user" data-auth-only>
+                        <i class="fas fa-user-circle"></i>
+                        <span data-user-name>Utilisateur</span>
+                    </div>
+                </div>
+            </aside>
+            
+            <!-- Main Content Area -->
+            <main class="main-content" role="main">
+                
+                <!-- Search Bar (Optional) -->
+                <div id="search-bar" class="search-bar" role="search">
+                    <div class="search-container">
+                        <div class="search-input-wrapper">
+                            <i class="fas fa-search search-icon"></i>
+                            <input 
+                                type="search" 
+                                id="global-search" 
+                                class="search-input" 
+                                placeholder="Rechercher..."
+                                aria-label="Recherche globale"
+                            >
+                            <button class="search-clear" aria-label="Effacer la recherche">
+                                <i class="fas fa-times"></i>
+                            </button>
+                        </div>
+                        <div class="search-filters">
+                            <button class="filter-btn active" data-filter="all">
+                                Tout
+                            </button>
+                            <button class="filter-btn" data-filter="pages">
+                                Pages
+                            </button>
+                            <button class="filter-btn" data-filter="demos">
+                                Démos
+                            </button>
+                            <button class="filter-btn" data-filter="docs">
+                                Documentation
+                            </button>
+                        </div>
+                    </div>
+                    <div id="search-results" class="search-results"></div>
+                </div>
+                
+                <!-- Page Content -->
+                <div id="page-content" class="page-content">
+                    <!-- Dynamic content loaded here -->
+                    <div class="loading-state">
+                        <div class="spinner"></div>
+                        <p>Chargement...</p>
+                    </div>
+                </div>
+                
+            </main>
+        </div>
+        
+        <!-- Footer -->
+        <footer id="footer" class="footer" role="contentinfo">
+            <div class="footer-container">
+                <div class="footer-content">
+                    <div class="footer-section">
+                        <h3>Oweo</h3>
+                        <p>Expert en solutions ERP pour la charpente métallique</p>
+                        <div class="social-links">
+                            <a href="#" aria-label="LinkedIn">
+                                <i class="fab fa-linkedin"></i>
+                            </a>
+                            <a href="#" aria-label="Twitter">
+                                <i class="fab fa-twitter"></i>
+                            </a>
+                        </div>
+                    </div>
+                    
+                    <div class="footer-section">
+                        <h4>Navigation</h4>
+                        <ul class="footer-links">
+                            <li><a href="#home">Accueil</a></li>
+                            <li><a href="#services">Services</a></li>
+                            <li><a href="#demos">Démos</a></li>
+                            <li><a href="#contact">Contact</a></li>
+                        </ul>
+                    </div>
+                    
+                    <div class="footer-section">
+                        <h4>Légal</h4>
+                        <ul class="footer-links">
+                            <li><a href="#privacy">Politique de confidentialité</a></li>
+                            <li><a href="#terms">CGU</a></li>
+                            <li><a href="#cookies">Cookies</a></li>
+                        </ul>
+                    </div>
+                    
+                    <div class="footer-section">
+                        <h4>Contact</h4>
+                        <p>
+                            <i class="fas fa-envelope"></i>
+                            contact@oweo-consulting.fr
+                        </p>
+                        <p>
+                            <i class="fas fa-phone"></i>
+                            06 86 76 81 31
+                        </p>
+                    </div>
+                </div>
+                
+                <div class="footer-bottom">
+                    <p>&copy; 2025 Oweo. Tous droits réservés.</p>
+                </div>
+            </div>
+        </footer>
+        
+    </div>
+    
+    <!-- ========================================
+         OVERLAYS & MODALS
+         ======================================== -->
+    
+    <!-- Notifications Container -->
+    <div id="notifications" class="notifications-container" aria-live="polite"></div>
+    
+    <!-- Modal Container -->
+    <div id="modal-container" class="modal-container"></div>
+    
+    <!-- Cookie Banner -->
+    <div id="cookie-banner" class="cookie-banner" role="banner" aria-label="Gestion des cookies">
+        <div class="cookie-content">
+            <div class="cookie-text">
+                <h3>🍪 Nous utilisons des cookies</h3>
+                <p>
+                    Nous utilisons des cookies pour améliorer votre expérience. 
+                    En continuant, vous acceptez notre politique de cookies.
+                </p>
+            </div>
+            <div class="cookie-actions">
+                <button class="btn btn-secondary" onclick="CookieManager.showSettings()">
+                    Personnaliser
+                </button>
+                <button class="btn btn-primary" onclick="CookieManager.acceptAll()">
+                    Tout accepter
+                </button>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Theme Customizer (Dev Mode) -->
+    <div id="theme-customizer" class="theme-customizer">
+        <button class="customizer-toggle" aria-label="Personnaliser le thème">
+            <i class="fas fa-palette"></i>
+        </button>
+        
+        <div class="customizer-panel">
+            <h3>Personnalisation du thème</h3>
+            
+            <div class="customizer-section">
+                <h4>Layout</h4>
+                <div class="layout-options">
+                    <label>
+                        <input type="radio" name="layout" value="horizontal" checked>
+                        <span>Horizontal</span>
+                    </label>
+                    <label>
+                        <input type="radio" name="layout" value="vertical">
+                        <span>Vertical</span>
+                    </label>
+                </div>
+            </div>
+            
+            <div class="customizer-section">
+                <h4>Thème</h4>
+                <div class="theme-options">
+                    <button class="theme-option" data-theme="light">
+                        <i class="fas fa-sun"></i>
+                        Clair
+                    </button>
+                    <button class="theme-option" data-theme="dark">
+                        <i class="fas fa-moon"></i>
+                        Sombre
+                    </button>
+                    <button class="theme-option" data-theme="oweo">
+                        <i class="fas fa-star"></i>
+                        Oweo
+                    </button>
+                </div>
+            </div>
+            
+            <div class="customizer-section">
+                <h4>Couleurs</h4>
+                <div class="color-options">
+                    <label>
+                        Primaire
+                        <input type="color" id="color-primary" value="#00d4ff">
+                    </label>
+                    <label>
+                        Secondaire
+                        <input type="color" id="color-secondary" value="#7c3aed">
+                    </label>
+                </div>
+            </div>
+            
+            <div class="customizer-actions">
+                <button class="btn btn-secondary" onclick="ThemeManager.reset()">
+                    Réinitialiser
+                </button>
+                <button class="btn btn-primary" onclick="ThemeManager.save()">
+                    Sauvegarder
+                </button>
+            </div>
+        </div>
+    </div>
+    
+    <!-- ========================================
+         JAVASCRIPT CORE
+         ======================================== -->
+    
+    <!-- Configuration -->
+    <script src="js/config/app.config.js"></script>
+    <script src="js/config/api.config.js"></script>
+    
+    <!-- Core Modules -->
+    <script src="js/core/event-bus.js"></script>
+    <script src="js/core/router.js"></script>
+    <script src="js/core/storage-manager.js"></script>
+    
+    <!-- Services -->
+    <script src="js/services/api.service.js"></script>
+    <script src="js/services/auth.service.js"></script>
+    <script src="js/services/notification.service.js"></script>
+    <script src="js/services/cookie.service.js"></script>
+    
+    <!-- Managers -->
+    <script src="js/managers/theme.manager.js"></script>
+    <script src="js/managers/layout.manager.js"></script>
+    <script src="js/managers/search.manager.js"></script>
+    <script src="js/managers/auth.manager.js"></script>
+    
+    <!-- UI Components -->
+    <script src="js/components/navbar.js"></script>
+    <script src="js/components/sidebar.js"></script>
+    <script src="js/components/search-bar.js"></script>
+    <script src="js/components/modal.js"></script>
+    
+    <!-- Pages -->
+    <script src="js/pages/home.page.js"></script>
+    <script src="js/pages/dashboard.page.js"></script>
+    <script src="js/pages/auth.page.js"></script>
+    
+    <!-- Application -->
+    <script src="js/app.js"></script>
+    
+    <!-- ========================================
+         INITIALIZATION
+         ======================================== -->
+    <script>
+        // Configuration globale
+        window.OWEO_APP = {
+            version: '2.0.0',
+            environment: window.location.hostname === 'localhost' ? 'development' : 'production',
+            debug: window.location.hostname === 'localhost'
+        };
+        
+        // Initialisation de l'application
+        document.addEventListener('DOMContentLoaded', async () => {
+            try {
+                // 1. Initialiser les services de base
+                await StorageManager.init();
+                await CookieManager.init();
+                await ThemeManager.init();
+                
+                // 2. Vérifier l'authentification
+                await AuthManager.checkAuth();
+                
+                // 3. Initialiser l'interface
+                await LayoutManager.init();
+                await SearchManager.init();
+                
+                // 4. Initialiser le routeur et l'app
+                await Router.init();
+                await App.init();
+                
+                console.log('✅ Application Oweo 2.0 initialisée');
+                
+                // Mode développement
+                if (OWEO_APP.debug) {
+                    window.OweoDebug = {
+                        app: App,
+                        router: Router,
+                        auth: AuthManager,
+                        theme: ThemeManager,
+                        api: ApiService
+                    };
+                    console.log('🔧 Mode debug activé - window.OweoDebug disponible');
+                }
+                
+            } catch (error) {
+                console.error('❌ Erreur lors de l\'initialisation:', error);
+                NotificationService.error('Erreur lors du chargement de l\'application');
+            }
+        });
+    </script>
+</body>
+</html>

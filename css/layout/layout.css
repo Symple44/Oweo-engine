@@ -1,0 +1,492 @@
+/* css/layout/layout.css
+   Architecture de mise en page modulaire et responsive */
+
+/* ========================================
+   LAYOUT WRAPPER
+   ======================================== */
+
+.app-wrapper {
+    display: flex;
+    min-height: 100vh;
+    background: var(--color-background);
+    color: var(--color-text);
+    transition: background-color 0.3s ease;
+}
+
+/* ========================================
+   LAYOUT MODES
+   ======================================== */
+
+/* Mode Horizontal (navbar en haut) */
+.layout-horizontal .app-wrapper {
+    flex-direction: column;
+}
+
+.layout-horizontal .navbar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: var(--navbar-height, 70px);
+    z-index: 1000;
+}
+
+.layout-horizontal .layout-container {
+    margin-top: var(--navbar-height, 70px);
+    display: flex;
+    flex: 1;
+    position: relative;
+}
+
+.layout-horizontal .sidebar {
+    position: fixed;
+    left: 0;
+    top: var(--navbar-height, 70px);
+    bottom: 0;
+    width: var(--sidebar-width, 260px);
+    transform: translateX(-100%);
+    transition: transform 0.3s ease;
+    z-index: 999;
+}
+
+.layout-horizontal .sidebar.active {
+    transform: translateX(0);
+}
+
+.layout-horizontal.has-sidebar .main-content {
+    margin-left: var(--sidebar-width, 260px);
+}
+
+/* Mode Vertical (navbar sur le côté) */
+.layout-vertical .app-wrapper {
+    flex-direction: row;
+}
+
+.layout-vertical .navbar {
+    position: fixed;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: var(--navbar-vertical-width, 80px);
+    height: 100vh;
+    z-index: 1000;
+}
+
+.layout-vertical .navbar.expanded {
+    width: var(--navbar-vertical-expanded, 260px);
+}
+
+.layout-vertical .layout-container {
+    margin-left: var(--navbar-vertical-width, 80px);
+    display: flex;
+    flex: 1;
+    position: relative;
+}
+
+.layout-vertical.navbar-expanded .layout-container {
+    margin-left: var(--navbar-vertical-expanded, 260px);
+}
+
+.layout-vertical .sidebar {
+    position: relative;
+    width: var(--sidebar-width, 260px);
+    flex-shrink: 0;
+}
+
+/* ========================================
+   MAIN CONTENT AREA
+   ======================================== */
+
+.main-content {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    background: var(--color-background);
+    transition: margin 0.3s ease;
+}
+
+/* Search Bar */
+.search-bar {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    background: var(--color-surface);
+    border-bottom: 1px solid var(--color-border);
+    padding: 1rem;
+    display: none;
+}
+
+.search-bar.active {
+    display: block;
+}
+
+.search-container {
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.search-input-wrapper {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.search-input {
+    width: 100%;
+    padding: 0.75rem 3rem;
+    background: var(--color-background);
+    border: 1px solid var(--color-border);
+    border-radius: 8px;
+    font-size: 1rem;
+    color: var(--color-text);
+    transition: all 0.3s ease;
+}
+
+.search-input:focus {
+    outline: none;
+    border-color: var(--color-primary);
+    box-shadow: 0 0 0 3px rgba(0, 212, 255, 0.1);
+}
+
+.search-icon {
+    position: absolute;
+    left: 1rem;
+    color: var(--color-text-muted);
+}
+
+.search-clear {
+    position: absolute;
+    right: 1rem;
+    background: none;
+    border: none;
+    color: var(--color-text-muted);
+    cursor: pointer;
+    padding: 0.5rem;
+    display: none;
+}
+
+.search-input:not(:placeholder-shown) ~ .search-clear {
+    display: block;
+}
+
+.search-filters {
+    display: flex;
+    gap: 0.5rem;
+    margin-top: 0.75rem;
+    flex-wrap: wrap;
+}
+
+.filter-btn {
+    padding: 0.5rem 1rem;
+    background: transparent;
+    border: 1px solid var(--color-border);
+    border-radius: 20px;
+    color: var(--color-text-secondary);
+    font-size: 0.875rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.filter-btn:hover {
+    border-color: var(--color-primary);
+    color: var(--color-primary);
+}
+
+.filter-btn.active {
+    background: var(--color-primary);
+    border-color: var(--color-primary);
+    color: white;
+}
+
+.search-results {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    background: var(--color-card);
+    border: 1px solid var(--color-border);
+    border-radius: 8px;
+    margin-top: 0.5rem;
+    max-height: 400px;
+    overflow-y: auto;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+    display: none;
+}
+
+.search-results.active {
+    display: block;
+}
+
+/* Page Content */
+.page-content {
+    flex: 1;
+    padding: 2rem;
+    max-width: 1400px;
+    width: 100%;
+    margin: 0 auto;
+}
+
+.loading-state {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 400px;
+    color: var(--color-text-muted);
+}
+
+.spinner {
+    width: 48px;
+    height: 48px;
+    border: 3px solid var(--color-border);
+    border-top-color: var(--color-primary);
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+    margin-bottom: 1rem;
+}
+
+@keyframes spin {
+    to { transform: rotate(360deg); }
+}
+
+/* ========================================
+   LAYOUT UTILITIES
+   ======================================== */
+
+/* Container Sizes */
+.container {
+    width: 100%;
+    margin: 0 auto;
+    padding: 0 1rem;
+}
+
+.container-sm { max-width: 640px; }
+.container-md { max-width: 768px; }
+.container-lg { max-width: 1024px; }
+.container-xl { max-width: 1280px; }
+.container-2xl { max-width: 1536px; }
+
+/* Spacing */
+.section {
+    padding: 4rem 0;
+}
+
+.section-sm { padding: 2rem 0; }
+.section-lg { padding: 6rem 0; }
+.section-xl { padding: 8rem 0; }
+
+/* Grid System */
+.grid {
+    display: grid;
+    gap: 1.5rem;
+}
+
+.grid-cols-1 { grid-template-columns: repeat(1, 1fr); }
+.grid-cols-2 { grid-template-columns: repeat(2, 1fr); }
+.grid-cols-3 { grid-template-columns: repeat(3, 1fr); }
+.grid-cols-4 { grid-template-columns: repeat(4, 1fr); }
+.grid-cols-12 { grid-template-columns: repeat(12, 1fr); }
+
+/* Flexbox Utilities */
+.flex { display: flex; }
+.flex-col { flex-direction: column; }
+.flex-wrap { flex-wrap: wrap; }
+.items-center { align-items: center; }
+.items-start { align-items: flex-start; }
+.items-end { align-items: flex-end; }
+.justify-center { justify-content: center; }
+.justify-between { justify-content: space-between; }
+.justify-end { justify-content: flex-end; }
+.flex-1 { flex: 1; }
+.gap-1 { gap: 0.25rem; }
+.gap-2 { gap: 0.5rem; }
+.gap-3 { gap: 0.75rem; }
+.gap-4 { gap: 1rem; }
+.gap-6 { gap: 1.5rem; }
+.gap-8 { gap: 2rem; }
+
+/* ========================================
+   RESPONSIVE BREAKPOINTS
+   ======================================== */
+
+/* Tablet (768px) */
+@media (max-width: 768px) {
+    /* Force horizontal layout on mobile */
+    .layout-vertical {
+        flex-direction: column !important;
+    }
+    
+    .layout-vertical .navbar {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        width: 100%;
+        height: var(--navbar-height, 70px);
+        bottom: auto;
+    }
+    
+    .layout-vertical .layout-container {
+        margin-left: 0;
+        margin-top: var(--navbar-height, 70px);
+    }
+    
+    .layout-vertical .sidebar {
+        position: fixed;
+        left: 0;
+        top: var(--navbar-height, 70px);
+        bottom: 0;
+        width: var(--sidebar-width, 260px);
+        transform: translateX(-100%);
+        transition: transform 0.3s ease;
+    }
+    
+    .layout-vertical .sidebar.active {
+        transform: translateX(0);
+    }
+    
+    /* Sidebar always overlay on mobile */
+    .has-sidebar .main-content {
+        margin-left: 0 !important;
+    }
+    
+    /* Adjust content padding */
+    .page-content {
+        padding: 1rem;
+    }
+    
+    /* Grid responsive */
+    .grid-cols-2,
+    .grid-cols-3,
+    .grid-cols-4 {
+        grid-template-columns: 1fr;
+    }
+    
+    /* Hide desktop-only elements */
+    .desktop-only {
+        display: none !important;
+    }
+    
+    /* Show mobile-only elements */
+    .mobile-only {
+        display: block !important;
+    }
+}
+
+/* Mobile (480px) */
+@media (max-width: 480px) {
+    .container {
+        padding: 0 0.75rem;
+    }
+    
+    .section {
+        padding: 2rem 0;
+    }
+    
+    .search-filters {
+        overflow-x: auto;
+        flex-wrap: nowrap;
+        -webkit-overflow-scrolling: touch;
+        margin: 0.75rem -0.75rem 0;
+        padding: 0 0.75rem;
+    }
+    
+    .filter-btn {
+        flex-shrink: 0;
+    }
+}
+
+/* Large screens (1024px+) */
+@media (min-width: 1024px) {
+    .layout-horizontal.has-sidebar .sidebar {
+        position: relative;
+        transform: translateX(0);
+    }
+    
+    .sidebar-close {
+        display: none;
+    }
+}
+
+/* ========================================
+   OVERLAY & BACKDROP
+   ======================================== */
+
+.sidebar-backdrop {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 998;
+    display: none;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.sidebar-backdrop.active {
+    display: block;
+    opacity: 1;
+}
+
+/* ========================================
+   PRINT STYLES
+   ======================================== */
+
+@media print {
+    .navbar,
+    .sidebar,
+    .search-bar,
+    .footer {
+        display: none !important;
+    }
+    
+    .main-content {
+        margin: 0 !important;
+    }
+    
+    .page-content {
+        max-width: 100% !important;
+        padding: 0 !important;
+    }
+}
+
+/* ========================================
+   ACCESSIBILITY
+   ======================================== */
+
+/* Focus styles */
+*:focus {
+    outline: 2px solid var(--color-primary);
+    outline-offset: 2px;
+}
+
+/* Skip to content link */
+.skip-to-content {
+    position: absolute;
+    left: -9999px;
+    z-index: 999;
+    padding: 1rem;
+    background: var(--color-primary);
+    color: white;
+    text-decoration: none;
+    border-radius: 4px;
+}
+
+.skip-to-content:focus {
+    left: 1rem;
+    top: 1rem;
+}
+
+/* Reduced motion */
+@media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+    }
+}
