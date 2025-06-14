@@ -1,5 +1,5 @@
 // js/core/app.js
-// Application principale Oweo - version corrigée
+// Application principale Oweo - version adaptative
 
 class OweoApp {
     constructor() {
@@ -7,6 +7,24 @@ class OweoApp {
         this.router = null;
         this.isInitialized = false;
         this.components = {};
+        
+        // Détecter le mode de déploiement
+        this.isProduction = !window.location.hostname.includes('localhost') && window.location.protocol !== 'file:';
+        this.basePath = this.detectBasePath();
+    }
+    
+    detectBasePath() {
+        const path = window.location.pathname;
+        
+        if (path.endsWith('index.html')) {
+            return path.substring(0, path.lastIndexOf('/'));
+        }
+        
+        if (path.endsWith('/')) {
+            return path.slice(0, -1);
+        }
+        
+        return path;
     }
     
     async init() {
@@ -16,6 +34,8 @@ class OweoApp {
         }
         
         console.log('🚀 Initializing Oweo App...');
+        console.log('📍 Base path:', this.basePath);
+        console.log('🌐 Production mode:', this.isProduction);
         
         try {
             // 1. Initialiser les services globaux
@@ -69,8 +89,11 @@ class OweoApp {
                     await service.instance.init();
                 } catch (error) {
                     console.warn(`  ⚠️ Failed to initialize ${service.name}:`, error);
+                    if (service.required) {
+                        throw error;
+                    }
                 }
-            } else if (service.required !== false) {
+            } else if (service.required) {
                 console.warn(`  ⚠️ ${service.name} not found or has no init method`);
             }
         }
@@ -131,45 +154,99 @@ class OweoApp {
     registerRoutes() {
         if (!this.router) return;
         
-        // Page d'accueil
-        this.router.register('/', async (container) => {
+        // Page d'accueil - gérer plusieurs variantes
+        const homeHandler = async (container) => {
             if (window.HomePage) {
                 const page = new window.HomePage();
                 await page.render(container);
             } else {
-                container.innerHTML = '<h1>Bienvenue sur Oweo</h1>';
+                container.innerHTML = `
+                    <div class="home-page" style="text-align: center; padding: 4rem;">
+                        <h1>Bienvenue sur Oweo</h1>
+                        <p>Solutions ERP pour la charpente métallique</p>
+                        <div style="margin-top: 2rem;">
+                            <a href="${this.router.useHashRouting ? '#/services' : '/services'}" class="btn btn-primary">
+                                Découvrir nos services
+                            </a>
+                        </div>
+                    </div>
+                `;
             }
-        });
+        };
+        
+        // Enregistrer plusieurs chemins pour la page d'accueil
+        this.router.register('/', homeHandler);
+        this.router.register('/home', homeHandler);
+        this.router.register('/index', homeHandler);
         
         // Autres pages
         const pages = [
-            { path: '/home', class: 'HomePage' },
-            { path: '/dashboard', class: 'DashboardPage' },
+            { path: '/dashboard', class: 'DashboardPage', requiresAuth: true },
             { path: '/services', class: 'ServicesPage' },
             { path: '/contact', class: 'ContactPage' },
             { path: '/login', class: 'AuthPage' },
             { path: '/register', class: 'AuthPage' }
         ];
         
-        pages.forEach(({ path, class: pageClass }) => {
+        pages.forEach(({ path, class: pageClass, requiresAuth }) => {
             this.router.register(path, async (container) => {
+                // Vérifier l'authentification si nécessaire
+                if (requiresAuth && window.AuthManager && !window.AuthManager.isLoggedIn()) {
+                    console.warn(`  ⚠️ Authentication required for ${path}`);
+                    this.router.navigate('/login');
+                    return;
+                }
+                
                 if (window[pageClass]) {
-                    const page = new window[pageClass]();
-                    await page.render(container);
-                    console.log(`  ✅ Route registered: ${path} -> ${pageClass}`);
+                    try {
+                        const page = new window[pageClass]();
+                        await page.render(container);
+                        console.log(`  ✅ Page rendered: ${path} -> ${pageClass}`);
+                    } catch (error) {
+                        console.error(`  ❌ Error rendering ${pageClass}:`, error);
+                        container.innerHTML = `
+                            <div class="error-container" style="padding: 2rem;">
+                                <h2>Erreur de chargement</h2>
+                                <p>La page "${pageClass}" n'a pas pu être chargée.</p>
+                                <p style="color: var(--error, #dc2626);">${error.message}</p>
+                            </div>
+                        `;
+                    }
                 } else {
                     console.warn(`  ⚠️ Page class not found: ${pageClass}`);
-                    container.innerHTML = `<h1>Page "${pageClass}" non trouvée</h1>`;
+                    container.innerHTML = `
+                        <div class="page-not-found" style="text-align: center; padding: 4rem;">
+                            <h1>Page en construction</h1>
+                            <p>La page "${pageClass}" n'est pas encore disponible.</p>
+                            <a href="${this.router.useHashRouting ? '#/' : '/'}" class="btn btn-primary" style="margin-top: 1rem;">
+                                Retour à l'accueil
+                            </a>
+                        </div>
+                    `;
                 }
             });
         });
+        
+        console.log(`  📍 Registered ${pages.length + 3} routes`);
     }
     
     showStaticHomePage() {
         const container = document.getElementById('app');
-        if (container && window.HomePage) {
-            const homePage = new window.HomePage();
-            homePage.render(container);
+        if (container) {
+            if (window.HomePage) {
+                const homePage = new window.HomePage();
+                homePage.render(container);
+            } else {
+                container.innerHTML = `
+                    <div class="static-home" style="padding: 4rem;">
+                        <h1>Oweo - Solutions ERP</h1>
+                        <p>Navigation non disponible. Veuillez recharger la page.</p>
+                        <button onclick="location.reload()" class="btn btn-primary" style="margin-top: 1rem;">
+                            Recharger
+                        </button>
+                    </div>
+                `;
+            }
         }
     }
     
@@ -180,9 +257,15 @@ class OweoApp {
                 <div class="error-page" style="text-align: center; padding: 4rem;">
                     <h1 style="color: #dc2626;">Erreur</h1>
                     <p>Une erreur s'est produite lors du chargement de l'application.</p>
-                    <details style="margin-top: 2rem;">
-                        <summary>Détails techniques</summary>
-                        <pre style="text-align: left; background: #f3f4f6; padding: 1rem; margin-top: 1rem;">${error.stack || error.message}</pre>
+                    <details style="margin-top: 2rem; max-width: 600px; margin-left: auto; margin-right: auto;">
+                        <summary style="cursor: pointer;">Détails techniques</summary>
+                        <pre style="text-align: left; background: #f3f4f6; padding: 1rem; margin-top: 1rem; overflow: auto;">
+${error.stack || error.message}
+
+Base Path: ${this.basePath}
+Production: ${this.isProduction}
+URL: ${window.location.href}
+                        </pre>
                     </details>
                     <button onclick="location.reload()" class="btn btn-primary" style="margin-top: 2rem;">
                         Recharger
@@ -191,9 +274,24 @@ class OweoApp {
             `;
         }
     }
+    
+    /**
+     * Obtenir l'URL complète pour une ressource
+     */
+    getResourceUrl(path) {
+        if (path.startsWith('http://') || path.startsWith('https://') || path.startsWith('//')) {
+            return path;
+        }
+        
+        if (path.startsWith('/')) {
+            path = path.substring(1);
+        }
+        
+        return this.basePath + '/' + path;
+    }
 }
 
-// Exposer la CLASSE globalement, pas l'instance
+// Exposer la CLASSE globalement
 window.OweoApp = OweoApp;
 
 // Export pour les modules

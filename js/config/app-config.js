@@ -1,5 +1,39 @@
 // js/config/app-config.js
-// Configuration centralisée de l'application Oweo
+// Configuration centralisée adaptative de l'application Oweo
+
+// Fonction pour détecter l'environnement et les chemins
+function detectEnvironment() {
+    const hostname = window.location.hostname;
+    const protocol = window.location.protocol;
+    const pathname = window.location.pathname;
+    
+    // Détecter le chemin de base
+    let basePath = '';
+    if (pathname.endsWith('index.html')) {
+        basePath = pathname.substring(0, pathname.lastIndexOf('/'));
+    } else if (pathname.endsWith('/')) {
+        basePath = pathname.slice(0, -1);
+    } else {
+        basePath = pathname;
+    }
+    
+    // Détecter l'environnement
+    const isLocal = hostname === 'localhost' || hostname === '127.0.0.1' || protocol === 'file:';
+    const isDev = isLocal || hostname.includes('dev') || hostname.includes('staging');
+    const isProd = !isDev;
+    
+    return {
+        isLocal,
+        isDev,
+        isProd,
+        protocol,
+        hostname,
+        basePath,
+        baseUrl: window.location.origin + basePath
+    };
+}
+
+const ENV = detectEnvironment();
 
 window.APP_CONFIG = {
     // ========================================
@@ -10,20 +44,32 @@ window.APP_CONFIG = {
         version: '2.0.0',
         description: 'Solutions ERP pour la charpente métallique',
         author: 'Oweo Consulting',
-        copyright: '© 2025 Oweo. Tous droits réservés.'
+        copyright: '© 2025 Oweo. Tous droits réservés.',
+        company: 'Oweo',
+        environment: ENV
     },
     
     // ========================================
     // API Configuration
     // ========================================
     api: {
-        // Utiliser une URL par défaut si non définie
-        baseUrl: window.location.hostname === 'localhost' 
+        // URL de l'API adaptative selon l'environnement
+        baseUrl: ENV.isLocal 
             ? 'http://localhost:3000/api/v1' 
-            : 'https://api.oweo-consulting.fr/v1',
+            : `${window.location.origin}/api/v1`,
+        
+        // Alternative si l'API est sur un autre domaine
+        // baseUrl: 'https://api.oweo-consulting.fr/v1',
+        
         timeout: 30000,
         retryAttempts: 3,
         retryDelay: 1000,
+        
+        // Headers par défaut
+        headers: {
+            'X-App-Version': '2.0.0',
+            'X-Client-Type': 'web'
+        },
         
         endpoints: {
             // Auth
@@ -63,6 +109,42 @@ window.APP_CONFIG = {
             // Analytics
             analytics: '/analytics',
             dashboardStats: '/analytics/dashboard'
+        }
+    },
+    
+    // ========================================
+    // Chemins et URLs
+    // ========================================
+    paths: {
+        base: ENV.basePath,
+        assets: ENV.basePath + '/assets',
+        images: ENV.basePath + '/assets/images',
+        css: ENV.basePath + '/css',
+        js: ENV.basePath + '/js',
+        
+        // Méthode helper pour obtenir une URL complète
+        getUrl: function(path) {
+            if (path.startsWith('http://') || path.startsWith('https://') || path.startsWith('//')) {
+                return path;
+            }
+            if (!path.startsWith('/')) {
+                path = '/' + path;
+            }
+            return ENV.basePath + path;
+        }
+    },
+    
+    // ========================================
+    // Contact (exemple)
+    // ========================================
+    contact: {
+        email: 'contact@oweo-consulting.fr',
+        phone: '+33 1 23 45 67 89',
+        address: {
+            street: '123 Rue de l\'Innovation',
+            postalCode: '75001',
+            city: 'Paris',
+            country: 'France'
         }
     },
     
@@ -164,17 +246,20 @@ window.APP_CONFIG = {
         exportPDF: true,
         exportExcel: true,
         collaboration: false,
-        aiAssistant: false
+        aiAssistant: false,
+        
+        // Mode hash pour le routeur (utile pour les déploiements statiques)
+        hashRouting: ENV.protocol === 'file:' || window.location.search.includes('hash=true')
     },
     
     // ========================================
     // Développement
     // ========================================
     dev: {
-        debug: window.location.hostname === 'localhost' || window.location.protocol === 'file:',
-        logLevel: 'info', // 'error' | 'warn' | 'info' | 'debug'
+        debug: ENV.isDev,
+        logLevel: ENV.isProd ? 'error' : 'info',
         mockAPI: false,
-        showDevTools: true
+        showDevTools: ENV.isDev
     }
 };
 
@@ -231,3 +316,11 @@ window.log = {
         }
     }
 };
+
+// Afficher les informations de configuration au chargement
+console.log('🚀 Oweo Config loaded:', {
+    version: window.APP_CONFIG.app.version,
+    environment: ENV,
+    apiUrl: window.APP_CONFIG.api.baseUrl,
+    debug: window.APP_CONFIG.dev.debug
+});
