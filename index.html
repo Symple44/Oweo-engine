@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="fr" data-theme="oweo" data-mode="light">
+<html lang="fr" data-theme="light" data-mode="light">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -8,19 +8,217 @@
     
     <!-- ========================================
          CSS FRAMEWORK OWEO 2.0
-         Architecture modulaire
          ======================================== -->
     
-    <!-- Option 1: Import unique (recommandé) -->
+    <!-- Import unique du CSS principal -->
     <link rel="stylesheet" href="css/main.css">
     
     <!-- External Libraries -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link href="https://assets.calendly.com/assets/external/widget.css" rel="stylesheet">
     
     <meta name="description" content="Oweo - Solutions ERP spécialisées pour la charpente métallique">
+    
+    <style>
+        /* Styles temporaires pour le chargement initial */
+        .loading-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            background: var(--bg-primary, #ffffff);
+            color: var(--text-primary, #111827);
+        }
+        
+        .loading-spinner {
+            width: 48px;
+            height: 48px;
+            border: 3px solid var(--border-default, #e5e7eb);
+            border-top-color: var(--primary, #00d4ff);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin-bottom: 1rem;
+        }
+        
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+        
+        .loading-text {
+            font-size: 1.125rem;
+            color: var(--text-secondary, #4b5563);
+        }
+        
+        /* Styles de base pour la navbar */
+        .navbar {
+            height: var(--navbar-height, 64px);
+            background: var(--bg-surface, #ffffff);
+            border-bottom: 1px solid var(--border-default, #e5e7eb);
+            box-shadow: var(--shadow-sm, 0 1px 2px 0 rgba(0, 0, 0, 0.05));
+        }
+        
+        .navbar-container {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            height: 100%;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 1rem;
+        }
+        
+        .navbar-brand {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            text-decoration: none;
+            color: var(--text-primary, #111827);
+            font-weight: 700;
+            font-size: 1.25rem;
+        }
+        
+        .navbar-logo {
+            height: 32px;
+            width: auto;
+        }
+        
+        .navbar-logo svg {
+            height: 100%;
+            width: auto;
+        }
+        
+        a.navbar-logo {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            text-decoration: none;
+            color: var(--text-primary, #111827);
+        }
+        
+        .navbar-menu {
+            display: flex;
+            gap: 2rem;
+            align-items: center;
+        }
+        
+        .navbar-link {
+            text-decoration: none;
+            color: var(--text-secondary, #4b5563);
+            font-weight: 500;
+            transition: color 0.2s;
+        }
+        
+        .navbar-link:hover {
+            color: var(--primary, #00d4ff);
+        }
+        
+        /* Styles de base pour les boutons */
+        .btn {
+            padding: 0.5rem 1rem;
+            border-radius: 0.375rem;
+            font-weight: 500;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            border: none;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        
+        .btn-primary {
+            background: var(--primary, #00d4ff);
+            color: var(--text-on-primary, #ffffff);
+        }
+        
+        .btn-primary:hover {
+            background: var(--primary-dark, #00a8cc);
+            transform: translateY(-1px);
+            box-shadow: var(--shadow-base, 0 1px 3px 0 rgba(0, 0, 0, 0.1));
+        }
+        
+        .theme-switcher-btn {
+            background: transparent;
+            border: none;
+            cursor: pointer;
+            padding: 0.5rem;
+            border-radius: 0.375rem;
+            transition: background 0.2s;
+            color: var(--text-secondary, #4b5563);
+        }
+        
+        .theme-switcher-btn:hover {
+            background: var(--bg-hover, #f9fafb);
+        }
+        
+        /* Masquer les icônes de thème selon le mode */
+        [data-mode="light"] .theme-icon-dark,
+        [data-mode="dark"] .theme-icon-light {
+            display: none;
+        }
+        
+        /* Footer de base */
+        .footer {
+            background: var(--bg-secondary, #f9fafb);
+            border-top: 1px solid var(--border-default, #e5e7eb);
+            padding: 2rem 0;
+            margin-top: auto;
+        }
+        
+        .footer-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 1rem;
+            text-align: center;
+            color: var(--text-secondary, #4b5563);
+        }
+        
+        /* Layout de base */
+        .app-wrapper {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .layout-container {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .main-content {
+            flex: 1;
+            padding: 2rem 0;
+        }
+        
+        .app-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 1rem;
+        }
+        
+        /* Theme switcher flottant */
+        .theme-switcher-floating {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            z-index: 1000;
+        }
+        
+        .theme-switcher-floating .theme-switcher-btn {
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            background: var(--bg-card, #ffffff);
+            box-shadow: var(--shadow-lg, 0 10px 15px -3px rgba(0, 0, 0, 0.1));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.25rem;
+        }
+    </style>
 </head>
-<body class="layout-horizontal theme-oweo mode-light">
+<body class="layout-horizontal theme-light mode-light">
     
     <!-- Layout wrapper -->
     <div class="app-wrapper">
@@ -28,17 +226,30 @@
         <!-- Navigation -->
         <nav id="navbar" class="navbar">
             <div class="navbar-container">
-                <!-- Navigation content -->
+                <div class="navbar-brand">
+                    <!-- Logo SVG intégré comme fallback -->
+                    <svg class="navbar-logo" width="32" height="32" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" style="fill: var(--primary, #00d4ff);">
+                        <circle cx="50" cy="50" r="45" fill="currentColor" opacity="0.1"/>
+                        <path d="M50 20 L70 40 L70 70 L50 80 L30 70 L30 40 Z" fill="currentColor"/>
+                        <text x="50" y="55" text-anchor="middle" font-size="24" font-weight="bold" fill="white">O</text>
+                    </svg>
+                    <span class="navbar-title">Oweo</span>
+                </div>
+                <div class="navbar-menu">
+                    <!-- Menu items will be added by JavaScript -->
+                </div>
+                <div class="navbar-actions">
+                    <!-- Theme switcher button -->
+                    <button class="theme-switcher-btn" aria-label="Changer de thème">
+                        <i class="fas fa-sun theme-icon-light"></i>
+                        <i class="fas fa-moon theme-icon-dark"></i>
+                    </button>
+                </div>
             </div>
         </nav>
         
         <!-- Layout container -->
         <div class="layout-container">
-            
-            <!-- Sidebar (optional) -->
-            <aside id="sidebar" class="sidebar">
-                <!-- Sidebar content -->
-            </aside>
             
             <!-- Main content -->
             <main id="app" class="main-content">
@@ -56,7 +267,7 @@
         <!-- Footer -->
         <footer id="footer" class="footer">
             <div class="footer-container">
-                <!-- Footer content -->
+                <p>&copy; 2024 Oweo. Tous droits réservés.</p>
             </div>
         </footer>
         
@@ -68,16 +279,9 @@
     <!-- Notifications container -->
     <div id="notifications-container" class="notifications-container notifications-container--top-right"></div>
     
-    <!-- Cookie banner -->
-    <div id="cookie-banner" class="cookie-banner">
-        <div class="cookie-banner-container">
-            <!-- Cookie content -->
-        </div>
-    </div>
-    
     <!-- Theme switcher (floating) -->
     <div class="theme-switcher theme-switcher-floating">
-        <button class="theme-switcher-btn" aria-label="Changer de thème">
+        <button class="theme-switcher-btn" id="theme-toggle" aria-label="Changer de thème">
             <span class="theme-switcher-icon">
                 <i class="fas fa-sun theme-icon-sun"></i>
                 <i class="fas fa-moon theme-icon-moon"></i>
@@ -89,36 +293,11 @@
          JAVASCRIPT
          ======================================== -->
     
-    <!-- Core JavaScript -->
-    <script src="js/core/event-bus.js"></script>
-    <script src="js/core/component-manager.js"></script>
-    <script src="js/core/router.js"></script>
-    <script src="js/core/app.js"></script>
+    <!-- Theme Manager (doit être chargé en premier) -->
+    <script src="js/managers/theme.manager.js"></script>
     
-    <!-- Config -->
-    <script src="js/config/company-info.js"></script>
-    <script src="js/config/app-config.js"></script>
-    
-    <!-- Utils -->
-    <script src="js/utils/dom-utils.js"></script>
-    <script src="js/utils/animation-utils.js"></script>
-    
-    <!-- Components -->
-    <script src="js/components/base-component.js"></script>
-    <script src="js/components/navbar.js"></script>
-    <script src="js/components/footer.js"></script>
-    <script src="js/components/modal.js"></script>
-    <script src="js/components/theme-manager.js"></script>
-    <script src="js/components/cookie-manager.js"></script>
-    
-    <!-- Pages -->
-    <script src="js/pages/base-page.js"></script>
-    <script src="js/pages/home.js"></script>
-    <script src="js/pages/dashboard.js"></script>
-    <script src="js/pages/auth.js"></script>
-    
-    <!-- External Libraries -->
-    <script src="https://assets.calendly.com/assets/external/widget.js" async></script>
+    <!-- Loader centralisé -->
+    <script src="js/loader.js"></script>
     
     <!-- App initialization -->
     <script>
@@ -127,27 +306,40 @@
             version: '2.0.0',
             environment: window.location.hostname === 'localhost' ? 'development' : 'production',
             theme: {
-                default: 'oweo',
-                mode: 'light' // 'light', 'dark', or 'auto'
+                default: 'light',
+                mode: 'light'
             }
         };
         
-        // Initialisation de l'application
+        // Initialisation immédiate du theme pour éviter le flash blanc
+        if (window.ThemeManager) {
+            window.ThemeManager.init().then(() => {
+                console.log('✅ Theme initialized');
+            }).catch(error => {
+                console.error('❌ Theme initialization error:', error);
+            });
+        }
+        
+        // Initialisation de l'application au chargement
         document.addEventListener('DOMContentLoaded', () => {
-            console.log('🚀 Initializing Oweo App v2.0...');
+            console.log('🚀 Starting Oweo App v2.0...');
+            console.log('📍 Location:', window.location.href);
+            console.log('🌐 Protocol:', window.location.protocol);
             
-            // Initialize theme
-            if (window.ThemeManager) {
-                window.ThemeManager.init();
+            // Utiliser le loader pour charger tous les scripts
+            if (window.loadApplication) {
+                window.loadApplication();
+            } else {
+                console.error('❌ Script loader not found');
+                const loadingText = document.querySelector('.loading-text');
+                if (loadingText) {
+                    loadingText.innerHTML = `
+                        Erreur: Loader non trouvé<br>
+                        <small>Vérifiez que js/loader.js existe</small>
+                    `;
+                    loadingText.style.color = '#ef4444';
+                }
             }
-            
-            // Initialize app
-            if (window.OweoApp) {
-                window.app = new window.OweoApp();
-                window.app.init();
-            }
-            
-            console.log('✅ Oweo App initialized successfully');
         });
     </script>
 </body>

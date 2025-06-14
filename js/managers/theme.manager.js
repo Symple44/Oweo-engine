@@ -1,5 +1,5 @@
 // js/managers/theme.manager.js
-// Gestionnaire avancé de thèmes avec personnalisation en temps réel
+// Gestionnaire de thèmes corrigé avec mapping des variables CSS
 
 class ThemeManager {
     constructor() {
@@ -8,7 +8,10 @@ class ThemeManager {
                 name: 'Clair',
                 icon: 'fas fa-sun',
                 colors: {
+                    // Couleurs primaires
                     primary: '#00d4ff',
+                    'primary-light': '#33ddff',
+                    'primary-dark': '#00a8cc',
                     secondary: '#7c3aed',
                     accent: '#ff6b35',
                     success: '#10b981',
@@ -16,18 +19,34 @@ class ThemeManager {
                     error: '#ef4444',
                     info: '#3b82f6',
                     
-                    background: '#ffffff',
-                    surface: '#f8fafc',
-                    card: '#ffffff',
+                    // Arrière-plans
+                    'bg-primary': '#ffffff',
+                    'bg-secondary': '#f9fafb',
+                    'bg-tertiary': '#f3f4f6',
+                    'bg-surface': '#ffffff',
+                    'bg-card': '#ffffff',
+                    'bg-input': '#ffffff',
+                    'bg-hover': '#f9fafb',
                     
-                    text: '#1e293b',
-                    textSecondary: '#475569',
-                    textMuted: '#94a3b8',
+                    // Textes
+                    'text-primary': '#111827',
+                    'text-secondary': '#4b5563',
+                    'text-tertiary': '#6b7280',
+                    'text-muted': '#9ca3af',
+                    'text-on-primary': '#ffffff',
+                    'text-on-accent': '#ffffff',
                     
-                    border: '#e2e8f0',
-                    borderLight: '#f1f5f9',
+                    // Bordures
+                    'border-default': '#e5e7eb',
+                    'border-subtle': '#f3f4f6',
+                    'border-strong': '#d1d5db',
+                    'border-focus': '#00d4ff',
                     
-                    shadow: 'rgba(0, 0, 0, 0.1)'
+                    // Ombres
+                    'shadow': 'rgba(0, 0, 0, 0.1)',
+                    'shadow-sm': '0 1px 2px 0 rgba(0, 0, 0, 0.05)',
+                    'shadow-base': '0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06)',
+                    'shadow-lg': '0 10px 15px -3px rgba(0, 0, 0, 0.1)'
                 }
             },
             
@@ -35,7 +54,10 @@ class ThemeManager {
                 name: 'Sombre',
                 icon: 'fas fa-moon',
                 colors: {
+                    // Couleurs primaires
                     primary: '#00d4ff',
+                    'primary-light': '#66e2ff',
+                    'primary-dark': '#0099cc',
                     secondary: '#a78bfa',
                     accent: '#ff8c5a',
                     success: '#34d399',
@@ -43,45 +65,34 @@ class ThemeManager {
                     error: '#f87171',
                     info: '#60a5fa',
                     
-                    background: '#0f0f23',
-                    surface: '#16213e',
-                    card: '#1a1a2e',
+                    // Arrière-plans
+                    'bg-primary': '#0f0f23',
+                    'bg-secondary': '#16213e',
+                    'bg-tertiary': '#1a1a2e',
+                    'bg-surface': '#16213e',
+                    'bg-card': '#1a1a2e',
+                    'bg-input': '#1f2937',
+                    'bg-hover': '#374151',
                     
-                    text: '#ffffff',
-                    textSecondary: 'rgba(255, 255, 255, 0.8)',
-                    textMuted: 'rgba(255, 255, 255, 0.6)',
+                    // Textes
+                    'text-primary': '#ffffff',
+                    'text-secondary': '#e5e7eb',
+                    'text-tertiary': '#d1d5db',
+                    'text-muted': '#9ca3af',
+                    'text-on-primary': '#111827',
+                    'text-on-accent': '#ffffff',
                     
-                    border: 'rgba(255, 255, 255, 0.1)',
-                    borderLight: 'rgba(255, 255, 255, 0.05)',
+                    // Bordures
+                    'border-default': '#374151',
+                    'border-subtle': '#1f2937',
+                    'border-strong': '#4b5563',
+                    'border-focus': '#00d4ff',
                     
-                    shadow: 'rgba(0, 0, 0, 0.3)'
-                }
-            },
-            
-            oweo: {
-                name: 'Oweo',
-                icon: 'fas fa-star',
-                colors: {
-                    primary: '#00d4ff',
-                    secondary: '#7c3aed',
-                    accent: '#ff6b35',
-                    success: '#10b981',
-                    warning: '#f59e0b',
-                    error: '#ef4444',
-                    info: '#3b82f6',
-                    
-                    background: '#0a0e27',
-                    surface: '#151937',
-                    card: '#1e2445',
-                    
-                    text: '#ffffff',
-                    textSecondary: 'rgba(255, 255, 255, 0.85)',
-                    textMuted: 'rgba(255, 255, 255, 0.65)',
-                    
-                    border: 'rgba(0, 212, 255, 0.2)',
-                    borderLight: 'rgba(0, 212, 255, 0.1)',
-                    
-                    shadow: 'rgba(0, 212, 255, 0.1)'
+                    // Ombres
+                    'shadow': 'rgba(0, 0, 0, 0.3)',
+                    'shadow-sm': '0 1px 2px 0 rgba(0, 0, 0, 0.2)',
+                    'shadow-base': '0 1px 3px 0 rgba(0, 0, 0, 0.3)',
+                    'shadow-lg': '0 10px 15px -3px rgba(0, 0, 0, 0.5)'
                 }
             }
         };
@@ -96,6 +107,31 @@ class ThemeManager {
             customColorsKey: 'oweo_custom_colors',
             transitionDuration: 300,
             autoDetect: true
+        };
+        
+        // Simple storage fallback si StorageManager n'existe pas
+        this.storage = {
+            get: (key) => {
+                try {
+                    return localStorage.getItem(key);
+                } catch (e) {
+                    return null;
+                }
+            },
+            set: (key, value) => {
+                try {
+                    localStorage.setItem(key, value);
+                } catch (e) {
+                    console.warn('Impossible de sauvegarder dans localStorage');
+                }
+            },
+            remove: (key) => {
+                try {
+                    localStorage.removeItem(key);
+                } catch (e) {
+                    console.warn('Impossible de supprimer de localStorage');
+                }
+            }
         };
     }
     
@@ -127,19 +163,23 @@ class ThemeManager {
     }
     
     loadSavedTheme() {
-        const saved = StorageManager.get(this.config.storageKey);
-        if (saved) {
+        const saved = this.storage.get(this.config.storageKey);
+        if (saved && this.themes[saved]) {
             this.currentTheme = saved;
         }
         
-        const customColors = StorageManager.get(this.config.customColorsKey);
+        const customColors = this.storage.get(this.config.customColorsKey);
         if (customColors) {
-            this.customColors = customColors;
+            try {
+                this.customColors = JSON.parse(customColors);
+            } catch (e) {
+                console.error('Erreur lors du chargement des couleurs personnalisées');
+            }
         }
     }
     
     getSavedTheme() {
-        return StorageManager.get(this.config.storageKey);
+        return this.storage.get(this.config.storageKey);
     }
     
     detectSystemTheme() {
@@ -177,7 +217,7 @@ class ThemeManager {
         this.applyTheme(themeName, true);
         
         if (save) {
-            StorageManager.set(this.config.storageKey, themeName);
+            this.storage.set(this.config.storageKey, themeName);
         }
         
         this.emit('themeChanged', {
@@ -199,14 +239,26 @@ class ThemeManager {
             body.style.transition = `all ${this.config.transitionDuration}ms ease-in-out`;
         }
         
-        // Appliquer les couleurs
+        // Appliquer les couleurs avec le bon préfixe
         Object.entries(theme.colors).forEach(([key, value]) => {
             // Utiliser les couleurs personnalisées si disponibles
             const customValue = this.customColors[key];
             const finalValue = customValue || value;
             
-            root.style.setProperty(`--color-${this.kebabCase(key)}`, finalValue);
+            // Garder le nom de la variable tel quel
+            root.style.setProperty(`--${key}`, finalValue);
+            
+            // Pour la compatibilité avec l'ancien système
+            if (key.includes('-')) {
+                root.style.setProperty(`--color-${key}`, finalValue);
+            }
         });
+        
+        // Appliquer des variables spéciales pour les couleurs principales
+        root.style.setProperty('--theme-primary', theme.colors.primary);
+        root.style.setProperty('--theme-primary-light', theme.colors['primary-light']);
+        root.style.setProperty('--theme-primary-dark', theme.colors['primary-dark']);
+        root.style.setProperty('--theme-accent', theme.colors.accent);
         
         // Appliquer les classes
         body.className = body.className.replace(/\btheme-\S+/g, '');
@@ -241,13 +293,10 @@ class ThemeManager {
         this.customColors[colorName] = value;
         
         // Appliquer immédiatement
-        document.documentElement.style.setProperty(
-            `--color-${this.kebabCase(colorName)}`, 
-            value
-        );
+        document.documentElement.style.setProperty(`--${colorName}`, value);
         
         // Sauvegarder
-        StorageManager.set(this.config.customColorsKey, this.customColors);
+        this.storage.set(this.config.customColorsKey, JSON.stringify(this.customColors));
         
         this.emit('colorChanged', { color: colorName, value });
     }
@@ -258,21 +307,18 @@ class ThemeManager {
         // Restaurer la couleur du thème
         const themeColor = this.themes[this.currentTheme]?.colors[colorName];
         if (themeColor) {
-            document.documentElement.style.setProperty(
-                `--color-${this.kebabCase(colorName)}`, 
-                themeColor
-            );
+            document.documentElement.style.setProperty(`--${colorName}`, themeColor);
         }
         
         // Sauvegarder
-        StorageManager.set(this.config.customColorsKey, this.customColors);
+        this.storage.set(this.config.customColorsKey, JSON.stringify(this.customColors));
         
         this.emit('colorReset', { color: colorName });
     }
     
     resetAllColors() {
         this.customColors = {};
-        StorageManager.remove(this.config.customColorsKey);
+        this.storage.remove(this.config.customColorsKey);
         
         // Réappliquer le thème
         this.applyTheme(this.currentTheme, true);
@@ -305,26 +351,6 @@ class ThemeManager {
         }));
     }
     
-    exportTheme() {
-        return {
-            theme: this.currentTheme,
-            customColors: this.customColors,
-            timestamp: new Date().toISOString()
-        };
-    }
-    
-    importTheme(data) {
-        if (data.theme && this.themes[data.theme]) {
-            this.setTheme(data.theme);
-        }
-        
-        if (data.customColors) {
-            Object.entries(data.customColors).forEach(([key, value]) => {
-                this.setColor(key, value);
-            });
-        }
-    }
-    
     // ========================================
     // Contrôles UI
     // ========================================
@@ -336,31 +362,17 @@ class ThemeManager {
             toggleBtn.addEventListener('click', () => this.toggleTheme());
         }
         
+        // Bouton dans le theme switcher
+        const switcherBtn = document.querySelector('.theme-switcher-btn');
+        if (switcherBtn) {
+            switcherBtn.addEventListener('click', () => this.toggleTheme());
+        }
+        
         // Options de thème dans le customizer
         document.querySelectorAll('[data-theme]').forEach(btn => {
             btn.addEventListener('click', (e) => {
                 const theme = e.currentTarget.dataset.theme;
                 this.setTheme(theme);
-            });
-        });
-        
-        // Sélecteurs de couleur
-        document.querySelectorAll('input[type="color"]').forEach(input => {
-            const colorName = input.id.replace('color-', '');
-            
-            // Définir la valeur initiale
-            input.value = this.getCurrentColors()[colorName] || '#000000';
-            
-            // Écouter les changements
-            input.addEventListener('input', (e) => {
-                this.setColor(colorName, e.target.value);
-            });
-        });
-        
-        // Layout switcher
-        document.querySelectorAll('input[name="layout"]').forEach(radio => {
-            radio.addEventListener('change', (e) => {
-                LayoutManager.setLayout(e.target.value);
             });
         });
     }
@@ -380,31 +392,6 @@ class ThemeManager {
         const nextTheme = themes[nextIndex];
         
         this.setTheme(nextTheme);
-    }
-    
-    // ========================================
-    // Customizer Panel
-    // ========================================
-    
-    showCustomizer() {
-        const customizer = document.getElementById('theme-customizer');
-        if (customizer) {
-            customizer.classList.add('active');
-        }
-    }
-    
-    hideCustomizer() {
-        const customizer = document.getElementById('theme-customizer');
-        if (customizer) {
-            customizer.classList.remove('active');
-        }
-    }
-    
-    toggleCustomizer() {
-        const customizer = document.getElementById('theme-customizer');
-        if (customizer) {
-            customizer.classList.toggle('active');
-        }
     }
     
     // ========================================
@@ -442,34 +429,10 @@ class ThemeManager {
             });
         }
         
-        // Émettre aussi via l'EventBus global
+        // Émettre aussi via l'EventBus global si disponible
         if (window.EventBus) {
             window.EventBus.emit(`theme:${event}`, data);
         }
-    }
-    
-    // ========================================
-    // Helpers
-    // ========================================
-    
-    kebabCase(str) {
-        return str
-            .replace(/([a-z])([A-Z])/g, '$1-$2')
-            .replace(/\s+/g, '-')
-            .toLowerCase();
-    }
-    
-    reset() {
-        this.resetAllColors();
-        this.setTheme('light');
-        StorageManager.remove(this.config.storageKey);
-        StorageManager.remove(this.config.customColorsKey);
-    }
-    
-    save() {
-        const theme = this.exportTheme();
-        console.log('Theme saved:', theme);
-        NotificationService.success('Thème sauvegardé avec succès');
     }
 }
 
