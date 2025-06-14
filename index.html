@@ -281,12 +281,18 @@
     
     <!-- Theme switcher (floating) -->
     <div class="theme-switcher theme-switcher-floating">
-        <button class="theme-switcher-btn" id="theme-toggle" aria-label="Changer de thème">
+        <button class="theme-switcher-btn theme-switcher-main" aria-label="Changer de thème">
             <span class="theme-switcher-icon">
                 <i class="fas fa-sun theme-icon-sun"></i>
                 <i class="fas fa-moon theme-icon-moon"></i>
             </span>
+            <span class="theme-indicator"></span>
+            <span class="theme-badge">
+                <i class="fas fa-check"></i>
+            </span>
+            <span class="theme-tooltip">Apparence</span>
         </button>
+        <!-- Le dropdown sera ajouté par JavaScript -->
     </div>
     
     <!-- ========================================

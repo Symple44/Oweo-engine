@@ -1,79 +1,367 @@
 /* ========================================
    css/components/theme-switcher.css - Système de sélecteur de thème Oweo 2.0
-   Mise à jour complète avec dropdown multi-thèmes
+   Version complète améliorée avec animations avancées
    ======================================== */
 
 /* ========================================
-   THEME DROPDOWN AMÉLIORÉ
+   VARIABLES LOCALES
+   ======================================== */
+
+:root {
+  --theme-switcher-size: 56px;
+  --theme-switcher-size-sm: 48px;
+  --dropdown-width: 360px;
+  --dropdown-shadow: 0 20px 40px -10px rgba(0, 0, 0, 0.2);
+  --transition-theme: all 300ms cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-bounce: all 400ms cubic-bezier(0.68, -0.55, 0.265, 1.55);
+}
+
+/* ========================================
+   CONTENEUR PRINCIPAL
+   ======================================== */
+
+.theme-switcher {
+  position: relative;
+  z-index: var(--z-dropdown);
+}
+
+.theme-switcher-floating {
+  position: fixed;
+  bottom: 2rem;
+  right: 2rem;
+  z-index: var(--z-fixed);
+}
+
+/* ========================================
+   BOUTON PRINCIPAL AMÉLIORÉ
+   ======================================== */
+
+.theme-switcher-btn {
+  position: relative;
+  width: var(--theme-switcher-size);
+  height: var(--theme-switcher-size);
+  padding: 0;
+  border: none;
+  border-radius: 50%;
+  background: var(--bg-card);
+  color: var(--text-secondary);
+  cursor: pointer;
+  overflow: hidden;
+  transition: var(--transition-theme);
+  box-shadow: 
+    0 4px 12px rgba(0, 0, 0, 0.1),
+    0 2px 4px rgba(0, 0, 0, 0.05),
+    inset 0 1px 2px rgba(255, 255, 255, 0.1);
+}
+
+/* Effet glassmorphism */
+.theme-switcher-btn::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    135deg,
+    rgba(255, 255, 255, 0.1) 0%,
+    rgba(255, 255, 255, 0.05) 50%,
+    transparent 100%
+  );
+  border-radius: inherit;
+  pointer-events: none;
+}
+
+/* États du bouton */
+.theme-switcher-btn:hover {
+  transform: translateY(-2px) scale(1.05);
+  box-shadow: 
+    0 8px 20px rgba(0, 0, 0, 0.15),
+    0 4px 8px rgba(0, 0, 0, 0.1),
+    inset 0 1px 2px rgba(255, 255, 255, 0.2);
+}
+
+.theme-switcher-btn:active {
+  transform: translateY(0) scale(0.98);
+}
+
+.theme-switcher-btn.active {
+  background: var(--theme-primary);
+  color: var(--text-on-primary);
+  animation: pulse-glow 2s ease-in-out infinite;
+}
+
+@keyframes pulse-glow {
+  0%, 100% {
+    box-shadow: 
+      0 4px 12px rgba(0, 0, 0, 0.1),
+      0 0 20px var(--theme-primary-alpha-20);
+  }
+  50% {
+    box-shadow: 
+      0 4px 12px rgba(0, 0, 0, 0.1),
+      0 0 30px var(--theme-primary-alpha-20);
+  }
+}
+
+/* Animation de changement de thème */
+.theme-switcher-btn.theme-changing {
+  animation: theme-change-spin 400ms ease;
+}
+
+@keyframes theme-change-spin {
+  0% { transform: rotate(0deg) scale(1); }
+  50% { transform: rotate(180deg) scale(0.8); }
+  100% { transform: rotate(360deg) scale(1); }
+}
+
+/* ========================================
+   ICÔNES ANIMÉES
+   ======================================== */
+
+.theme-switcher-icon {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+}
+
+.theme-switcher-icon i {
+  position: absolute;
+  font-size: 1.5rem;
+  transition: all 300ms cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Animation des icônes soleil/lune */
+[data-mode="light"] .theme-icon-sun,
+[data-mode="light"] .fa-sun {
+  opacity: 1;
+  transform: rotate(0deg) scale(1);
+}
+
+[data-mode="light"] .theme-icon-moon,
+[data-mode="light"] .fa-moon {
+  opacity: 0;
+  transform: rotate(90deg) scale(0);
+}
+
+[data-mode="dark"] .theme-icon-sun,
+[data-mode="dark"] .fa-sun {
+  opacity: 0;
+  transform: rotate(-90deg) scale(0);
+}
+
+[data-mode="dark"] .theme-icon-moon,
+[data-mode="dark"] .fa-moon {
+  opacity: 1;
+  transform: rotate(0deg) scale(1);
+}
+
+/* ========================================
+   INDICATEUR DE THÈME PERSONNALISÉ
+   ======================================== */
+
+.theme-indicator {
+  position: absolute;
+  top: -2px;
+  right: -2px;
+  width: 16px;
+  height: 16px;
+  background: var(--theme-accent);
+  border: 3px solid var(--bg-surface);
+  border-radius: 50%;
+  opacity: 0;
+  transform: scale(0);
+  transition: var(--transition-bounce);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+}
+
+.theme-switcher-main.has-custom-theme .theme-indicator {
+  opacity: 1;
+  transform: scale(1);
+  animation: indicator-pulse 2s ease-in-out infinite;
+}
+
+@keyframes indicator-pulse {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.1); }
+}
+
+/* Badge de thème sur le bouton */
+.theme-badge {
+  position: absolute;
+  bottom: -4px;
+  right: -4px;
+  width: 20px;
+  height: 20px;
+  background: var(--bg-surface);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 10px;
+  opacity: 0;
+  transform: scale(0);
+  transition: var(--transition-bounce);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.theme-switcher-main[data-theme-name]:not([data-theme-name="oweo"]) .theme-badge {
+  opacity: 1;
+  transform: scale(1);
+}
+
+/* ========================================
+   DROPDOWN AMÉLIORÉ
    ======================================== */
 
 .theme-switcher-dropdown {
   position: absolute;
-  bottom: calc(100% + var(--space-3));
+  bottom: calc(100% + var(--space-4));
   right: 0;
-  min-width: 320px;
+  width: var(--dropdown-width);
   background: var(--bg-surface);
   border: 1px solid var(--border-default);
   border-radius: var(--radius-xl);
-  box-shadow: var(--shadow-xl);
   opacity: 0;
   visibility: hidden;
-  transform: translateY(10px);
-  transition: all 200ms cubic-bezier(0.4, 0, 0.2, 1);
+  transform: translateY(10px) scale(0.95);
+  transition: all 250ms cubic-bezier(0.4, 0, 0.2, 1);
   z-index: var(--z-dropdown);
   overflow: hidden;
+  backdrop-filter: blur(20px);
+  box-shadow: var(--dropdown-shadow);
+}
+
+/* Effet glassmorphism pour le dropdown */
+.theme-switcher-dropdown::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: rgba(255, 255, 255, 0.05);
+  pointer-events: none;
 }
 
 .theme-switcher-dropdown.active {
   opacity: 1;
   visibility: visible;
-  transform: translateY(0);
+  transform: translateY(0) scale(1);
 }
 
-/* Header du dropdown */
+/* Flèche du dropdown */
+.theme-switcher-dropdown::after {
+  content: '';
+  position: absolute;
+  bottom: -8px;
+  right: 24px;
+  width: 16px;
+  height: 16px;
+  background: var(--bg-surface);
+  border-right: 1px solid var(--border-default);
+  border-bottom: 1px solid var(--border-default);
+  transform: rotate(45deg);
+  z-index: -1;
+}
+
+/* ========================================
+   HEADER DU DROPDOWN
+   ======================================== */
+
 .theme-dropdown-header {
-  padding: var(--space-4) var(--space-5);
+  position: relative;
+  padding: var(--space-5) var(--space-6);
+  background: linear-gradient(135deg, var(--bg-secondary), var(--bg-tertiary));
   border-bottom: 1px solid var(--border-subtle);
-  background: var(--bg-secondary);
+}
+
+.theme-dropdown-header::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: linear-gradient(90deg, 
+    transparent,
+    var(--theme-primary-alpha-20) 50%,
+    transparent
+  );
 }
 
 .theme-dropdown-header h4 {
   margin: 0;
-  font-size: var(--font-size-base);
+  font-size: var(--font-size-lg);
   font-weight: var(--font-weight-semibold);
   color: var(--text-primary);
+  letter-spacing: -0.025em;
 }
 
-/* Sections du dropdown */
+/* ========================================
+   SECTIONS DU DROPDOWN
+   ======================================== */
+
 .theme-dropdown-section {
-  padding: var(--space-4) var(--space-5);
-  border-bottom: 1px solid var(--border-subtle);
+  padding: var(--space-5) var(--space-6);
+  position: relative;
 }
 
-.theme-dropdown-section:last-of-type {
-  border-bottom: none;
+.theme-dropdown-section:not(:last-of-type)::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: var(--space-6);
+  right: var(--space-6);
+  height: 1px;
+  background: var(--border-subtle);
 }
 
 .theme-dropdown-section h5 {
-  margin: 0 0 var(--space-3) 0;
+  margin: 0 0 var(--space-4) 0;
   font-size: var(--font-size-xs);
   font-weight: var(--font-weight-semibold);
   color: var(--text-muted);
   text-transform: uppercase;
   letter-spacing: var(--letter-spacing-wider);
+  opacity: 0.8;
 }
 
-/* Sélecteur de mode */
+/* ========================================
+   SÉLECTEUR DE MODE AVANCÉ
+   ======================================== */
+
 .theme-mode-selector {
+  position: relative;
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: var(--space-2);
   padding: var(--space-2);
   background: var(--bg-secondary);
   border-radius: var(--radius-lg);
+  overflow: hidden;
+}
+
+/* Slider animé de fond */
+.theme-mode-selector::before {
+  content: '';
+  position: absolute;
+  width: calc(50% - var(--space-2));
+  height: calc(100% - var(--space-4));
+  background: var(--bg-surface);
+  border-radius: var(--radius-md);
+  box-shadow: 
+    0 2px 4px rgba(0, 0, 0, 0.1),
+    inset 0 1px 2px rgba(255, 255, 255, 0.1);
+  transition: transform 300ms cubic-bezier(0.4, 0, 0.2, 1);
+  top: var(--space-2);
+  left: var(--space-2);
+}
+
+.theme-mode-selector:has(.theme-mode-btn[data-mode="dark"].active)::before {
+  transform: translateX(calc(100% + var(--space-2)));
 }
 
 .theme-mode-btn {
+  position: relative;
+  z-index: 1;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -87,82 +375,155 @@
   font-weight: var(--font-weight-medium);
   cursor: pointer;
   transition: all 200ms ease;
+  overflow: hidden;
+}
+
+/* Effet de hover avec ripple */
+.theme-mode-btn::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle, var(--theme-primary-alpha-20) 0%, transparent 70%);
+  opacity: 0;
+  transform: scale(0);
+  transition: all 300ms ease;
+}
+
+.theme-mode-btn:hover::after {
+  opacity: 1;
+  transform: scale(1);
 }
 
 .theme-mode-btn:hover {
-  background: var(--bg-tertiary);
   color: var(--text-primary);
 }
 
 .theme-mode-btn.active {
-  background: var(--bg-surface);
   color: var(--theme-primary);
-  box-shadow: var(--shadow-sm);
+  font-weight: var(--font-weight-semibold);
 }
 
-.theme-mode-btn i {
-  font-size: var(--font-size-base);
+.theme-mode-btn.active i {
+  transform: scale(1.1);
+  filter: drop-shadow(0 2px 4px var(--theme-primary-alpha-20));
 }
 
-/* Options de thème */
+/* ========================================
+   OPTIONS DE THÈME AMÉLIORÉES
+   ======================================== */
+
 .theme-options {
   display: flex;
   flex-direction: column;
-  gap: var(--space-2);
+  gap: var(--space-3);
 }
 
 .theme-option {
+  position: relative;
   display: flex;
   align-items: center;
   gap: var(--space-3);
   width: 100%;
   padding: var(--space-3);
   background: transparent;
-  border: 1px solid transparent;
+  border: 2px solid transparent;
   border-radius: var(--radius-lg);
-  text-align: left;
   cursor: pointer;
-  transition: all 200ms ease;
+  transition: all 250ms ease;
+  overflow: hidden;
+}
+
+/* Effet de fond au hover */
+.theme-option::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, transparent, var(--bg-secondary));
+  opacity: 0;
+  transition: opacity 200ms ease;
+}
+
+.theme-option:hover::before {
+  opacity: 1;
 }
 
 .theme-option:hover {
-  background: var(--bg-secondary);
   border-color: var(--border-subtle);
+  transform: translateX(4px);
 }
 
+/* État actif avec animation */
 .theme-option.active {
   background: var(--theme-primary-alpha-10);
   border-color: var(--theme-primary);
+  animation: option-select 300ms ease;
 }
 
+@keyframes option-select {
+  0% { transform: scale(0.95); }
+  50% { transform: scale(1.02); }
+  100% { transform: scale(1); }
+}
+
+/* Icône du thème */
 .theme-option-icon {
-  width: 40px;
-  height: 40px;
+  position: relative;
+  width: 44px;
+  height: 44px;
   display: flex;
   align-items: center;
   justify-content: center;
   background: var(--bg-secondary);
   border-radius: var(--radius-lg);
   color: var(--text-secondary);
-  font-size: var(--font-size-lg);
+  font-size: var(--font-size-xl);
   flex-shrink: 0;
+  transition: all 250ms ease;
+  overflow: hidden;
 }
 
+/* Effet de brillance sur l'icône active */
 .theme-option.active .theme-option-icon {
   background: var(--theme-primary);
   color: var(--text-on-primary);
+  transform: rotate(360deg) scale(1.05);
+  box-shadow: 0 4px 12px var(--theme-primary-alpha-20);
 }
 
+.theme-option.active .theme-option-icon::after {
+  content: '';
+  position: absolute;
+  inset: -50%;
+  background: linear-gradient(
+    45deg,
+    transparent 30%,
+    rgba(255, 255, 255, 0.3) 50%,
+    transparent 70%
+  );
+  animation: icon-shine 2s ease-in-out infinite;
+}
+
+@keyframes icon-shine {
+  0% { transform: translateX(-100%) translateY(-100%); }
+  100% { transform: translateX(100%) translateY(100%); }
+}
+
+/* Contenu de l'option */
 .theme-option-content {
   flex: 1;
   min-width: 0;
 }
 
 .theme-option-name {
-  font-size: var(--font-size-sm);
+  font-size: var(--font-size-base);
   font-weight: var(--font-weight-medium);
   color: var(--text-primary);
   margin-bottom: var(--space-1);
+  transition: color 200ms ease;
+}
+
+.theme-option.active .theme-option-name {
+  color: var(--theme-primary);
 }
 
 .theme-option-description {
@@ -171,28 +532,50 @@
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+  opacity: 0.8;
+  transition: opacity 200ms ease;
 }
 
+.theme-option:hover .theme-option-description {
+  opacity: 1;
+}
+
+/* Check animé */
 .theme-option-check {
-  width: 20px;
-  height: 20px;
+  width: 24px;
+  height: 24px;
   display: flex;
   align-items: center;
   justify-content: center;
   color: var(--theme-primary);
   opacity: 0;
-  transition: opacity 200ms ease;
+  transform: scale(0) rotate(-180deg);
+  transition: all 300ms cubic-bezier(0.68, -0.55, 0.265, 1.55);
 }
 
 .theme-option.active .theme-option-check {
   opacity: 1;
+  transform: scale(1) rotate(0);
 }
 
-/* Footer du dropdown */
+.theme-option.active .theme-option-check i {
+  animation: check-pop 400ms ease;
+}
+
+@keyframes check-pop {
+  0% { transform: scale(0); }
+  50% { transform: scale(1.3); }
+  100% { transform: scale(1); }
+}
+
+/* ========================================
+   FOOTER DU DROPDOWN
+   ======================================== */
+
 .theme-dropdown-footer {
-  padding: var(--space-3) var(--space-5);
-  border-top: 1px solid var(--border-subtle);
+  padding: var(--space-4) var(--space-6);
   background: var(--bg-secondary);
+  border-top: 1px solid var(--border-subtle);
 }
 
 .theme-reset-btn {
@@ -201,64 +584,104 @@
   justify-content: center;
   gap: var(--space-2);
   width: 100%;
-  padding: var(--space-2) var(--space-4);
+  padding: var(--space-3) var(--space-4);
   background: transparent;
-  border: 1px solid var(--border-default);
+  border: 2px dashed var(--border-default);
   border-radius: var(--radius-lg);
   color: var(--text-secondary);
   font-size: var(--font-size-sm);
   font-weight: var(--font-weight-medium);
   cursor: pointer;
   transition: all 200ms ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.theme-reset-btn::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: var(--bg-tertiary);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 300ms ease;
+}
+
+.theme-reset-btn:hover::before {
+  transform: scaleX(1);
 }
 
 .theme-reset-btn:hover {
-  background: var(--bg-surface);
   border-color: var(--border-strong);
   color: var(--text-primary);
+  border-style: solid;
 }
 
-/* Animation du bouton principal quand actif */
-.theme-switcher-main.active {
-  background: var(--theme-primary) !important;
-  color: var(--text-on-primary) !important;
-  transform: scale(0.95);
-}
-
-/* ========================================
-   INDICATEUR DE THÈME ACTIF
-   ======================================== */
-
-.theme-indicator {
-  position: absolute;
-  top: -4px;
-  right: -4px;
-  width: 12px;
-  height: 12px;
-  background: var(--theme-accent);
-  border: 2px solid var(--bg-surface);
-  border-radius: var(--radius-full);
-  opacity: 0;
-  transform: scale(0);
-  transition: all 200ms ease;
-}
-
-.theme-switcher-main.has-custom-theme .theme-indicator {
-  opacity: 1;
-  transform: scale(1);
+.theme-reset-btn span,
+.theme-reset-btn i {
+  position: relative;
+  z-index: 1;
 }
 
 /* ========================================
-   RESPONSIVE
+   ANIMATIONS SPÉCIALES PAR THÈME
    ======================================== */
 
+/* Thème Oweo */
+[data-theme="oweo"] .theme-switcher-btn {
+  background: linear-gradient(135deg, var(--theme-primary), var(--theme-accent));
+}
+
+[data-theme="oweo"] .theme-switcher-btn:hover {
+  box-shadow: 
+    0 8px 20px var(--theme-primary-alpha-20),
+    0 4px 8px var(--theme-accent-alpha-20);
+}
+
+/* Thème Modern */
+[data-theme="modern"] .theme-switcher-btn {
+  background: var(--theme-primary);
+  box-shadow: 
+    0 4px 12px var(--theme-primary-alpha-20),
+    inset 0 -2px 4px rgba(0, 0, 0, 0.1);
+}
+
+/* Thème Classic */
+[data-theme="classic"] .theme-switcher-btn {
+  background: var(--bg-surface);
+  border: 2px solid var(--theme-primary);
+  color: var(--theme-primary);
+}
+
+/* ========================================
+   RESPONSIVE AMÉLIORÉ
+   ======================================== */
+
+/* Tablette */
+@media (max-width: 768px) {
+  :root {
+    --dropdown-width: 320px;
+  }
+  
+  .theme-switcher-floating {
+    bottom: 1.5rem;
+    right: 1.5rem;
+  }
+  
+  .theme-switcher-btn {
+    width: var(--theme-switcher-size-sm);
+    height: var(--theme-switcher-size-sm);
+  }
+}
+
+/* Mobile */
 @media (max-width: 640px) {
   .theme-switcher-dropdown {
     position: fixed;
     bottom: 0;
     left: 0;
     right: 0;
-    min-width: auto;
+    width: 100%;
     border-radius: var(--radius-xl) var(--radius-xl) 0 0;
     transform: translateY(100%);
     max-height: 80vh;
@@ -269,84 +692,142 @@
     transform: translateY(0);
   }
   
+  .theme-switcher-dropdown::after {
+    display: none;
+  }
+  
   /* Backdrop mobile */
   .theme-switcher-dropdown::before {
     content: '';
     position: fixed;
     inset: 0;
     background: rgba(0, 0, 0, 0.5);
-    z-index: -1;
-    opacity: 0;
-    transition: opacity 200ms ease;
-    pointer-events: none;
+    backdrop-filter: blur(5px);
+    z-index: -2;
   }
   
-  .theme-switcher-dropdown.active::before {
-    opacity: 1;
-    pointer-events: auto;
+  /* Handle de glissement */
+  .theme-dropdown-header::before {
+    content: '';
+    position: absolute;
+    top: 8px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 40px;
+    height: 4px;
+    background: var(--border-strong);
+    border-radius: var(--radius-full);
   }
 }
 
 /* ========================================
-   ANIMATIONS SUPPLÉMENTAIRES
+   ACCESSIBILITÉ
    ======================================== */
 
-/* Pulse pour attirer l'attention */
-@keyframes theme-pulse {
-  0% {
-    box-shadow: 0 0 0 0 var(--theme-primary-alpha-20);
+/* Focus visible */
+.theme-switcher-btn:focus-visible,
+.theme-mode-btn:focus-visible,
+.theme-option:focus-visible,
+.theme-reset-btn:focus-visible {
+  outline: 2px solid var(--theme-primary);
+  outline-offset: 2px;
+}
+
+/* Réduction de mouvement */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
   }
-  70% {
-    box-shadow: 0 0 0 10px transparent;
+}
+
+/* ========================================
+   MODE SOMBRE - AJUSTEMENTS
+   ======================================== */
+
+[data-mode="dark"] .theme-switcher-dropdown {
+  background: var(--bg-surface);
+  box-shadow: 
+    0 20px 40px rgba(0, 0, 0, 0.4),
+    0 0 0 1px rgba(255, 255, 255, 0.1);
+}
+
+[data-mode="dark"] .theme-switcher-btn {
+  box-shadow: 
+    0 4px 12px rgba(0, 0, 0, 0.3),
+    0 0 0 1px rgba(255, 255, 255, 0.1);
+}
+
+[data-mode="dark"] .theme-mode-selector::before {
+  background: var(--bg-tertiary);
+  box-shadow: 
+    0 2px 4px rgba(0, 0, 0, 0.2),
+    inset 0 1px 2px rgba(255, 255, 255, 0.05);
+}
+
+/* ========================================
+   EFFETS PREMIUM
+   ======================================== */
+
+/* Effet de particules au clic */
+@keyframes particle {
+  0% {
+    opacity: 1;
+    transform: translate(0, 0) scale(0);
   }
   100% {
-    box-shadow: 0 0 0 0 transparent;
+    opacity: 0;
+    transform: translate(var(--x), var(--y)) scale(1);
   }
 }
 
-.theme-switcher-main:not(.active) {
-  animation: theme-pulse 3s infinite;
-}
-
-/* Effet de ripple au clic */
-.theme-option::after {
+.theme-switcher-btn::after {
+  --x: 0;
+  --y: 0;
   content: '';
   position: absolute;
   top: 50%;
   left: 50%;
-  width: 0;
-  height: 0;
-  border-radius: var(--radius-full);
-  background: var(--theme-primary-alpha-20);
-  transform: translate(-50%, -50%);
-  transition: width 300ms ease, height 300ms ease;
-}
-
-.theme-option:active::after {
   width: 100%;
   height: 100%;
+  background: radial-gradient(circle, var(--theme-primary-alpha-20) 0%, transparent 70%);
+  transform: translate(-50%, -50%) scale(0);
+  opacity: 0;
+  pointer-events: none;
+}
+
+.theme-switcher-btn:active::after {
+  animation: particle 600ms ease;
 }
 
 /* ========================================
-   THÈMES PERSONNALISÉS
+   TOOLTIP DE THÈME
    ======================================== */
 
-/* Styles spécifiques pour le thème Modern */
-[data-theme="modern"] {
-  --theme-primary: #6366f1;
-  --theme-primary-light: #818cf8;
-  --theme-primary-dark: #4f46e5;
-  --theme-accent: #ec4899;
-  --theme-accent-light: #f472b6;
-  --theme-accent-dark: #db2777;
+.theme-tooltip {
+  position: absolute;
+  bottom: calc(100% + 8px);
+  left: 50%;
+  transform: translateX(-50%);
+  padding: var(--space-2) var(--space-3);
+  background: var(--bg-tertiary);
+  color: var(--text-primary);
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-medium);
+  border-radius: var(--radius-md);
+  white-space: nowrap;
+  opacity: 0;
+  visibility: hidden;
+  transition: all 200ms ease;
+  pointer-events: none;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
 }
 
-/* Styles spécifiques pour le thème Classic */
-[data-theme="classic"] {
-  --theme-primary: #2563eb;
-  --theme-primary-light: #3b82f6;
-  --theme-primary-dark: #1d4ed8;
-  --theme-accent: #059669;
-  --theme-accent-light: #10b981;
-  --theme-accent-dark: #047857;
+.theme-switcher-btn:hover .theme-tooltip {
+  opacity: 1;
+  visibility: visible;
+  transform: translateX(-50%) translateY(-4px);
 }

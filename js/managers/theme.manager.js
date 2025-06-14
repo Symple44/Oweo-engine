@@ -28,6 +28,7 @@ class ThemeManager {
         this.currentTheme = 'oweo';
         this.currentMode = 'light';
         this.listeners = new Map();
+        this.dropdownInstance = null;
         
         // Configuration
         this.config = {
@@ -60,11 +61,11 @@ class ThemeManager {
         // Écouter les changements système
         this.watchSystemPreference();
         
-        // Initialiser les contrôles
-        this.initializeControls();
-        
-        // Mettre à jour l'indicateur du bouton principal
-        this.updateMainButtonIndicator();
+        // Initialiser les contrôles avec un petit délai pour s'assurer que le DOM est prêt
+        setTimeout(() => {
+            this.initializeControls();
+            this.updateMainButtonIndicator();
+        }, 100);
         
         return this;
     }
@@ -81,6 +82,8 @@ class ThemeManager {
         if (savedMode && (savedMode === 'light' || savedMode === 'dark')) {
             this.currentMode = savedMode;
         }
+        
+        console.log('📦 Préférences chargées:', { theme: this.currentTheme, mode: this.currentMode });
     }
     
     getSavedMode() {
@@ -118,6 +121,11 @@ class ThemeManager {
             return;
         }
         
+        console.log(`🎨 Changement de thème: ${this.currentTheme} → ${themeName}`);
+        
+        // Sauvegarder l'ancien thème pour la transition
+        const oldTheme = this.currentTheme;
+        
         // Ajouter une animation au bouton principal
         const mainButton = document.querySelector('.theme-switcher-main');
         if (mainButton) {
@@ -127,16 +135,25 @@ class ThemeManager {
             }, 300);
         }
         
+        // Mettre à jour le thème courant
         this.currentTheme = themeName;
+        
+        // Appliquer le nouveau thème
         this.applyTheme(themeName, true);
         
+        // Sauvegarder si demandé
         if (save) {
             localStorage.setItem(this.config.storageKey, themeName);
         }
         
-        this.updateDropdown();
+        // Mettre à jour l'interface avec un petit délai pour s'assurer que les transitions CSS sont appliquées
+        setTimeout(() => {
+            this.updateAllUI();
+        }, 50);
         
+        // Émettre l'événement
         this.emit('themeChanged', {
+            oldTheme: oldTheme,
             theme: themeName,
             mode: this.currentMode
         });
@@ -148,6 +165,9 @@ class ThemeManager {
             return;
         }
         
+        console.log(`🌓 Changement de mode: ${this.currentMode} → ${mode}`);
+        
+        const oldMode = this.currentMode;
         this.currentMode = mode;
         this.applyMode(mode, true);
         
@@ -155,7 +175,13 @@ class ThemeManager {
             localStorage.setItem(this.config.modeKey, mode);
         }
         
+        // Mettre à jour l'interface
+        setTimeout(() => {
+            this.updateAllUI();
+        }, 50);
+        
         this.emit('modeChanged', {
+            oldMode: oldMode,
             theme: this.currentTheme,
             mode: mode
         });
@@ -190,9 +216,6 @@ class ThemeManager {
                 body.style.transition = '';
             }, this.config.transitionDuration);
         }
-        
-        // Mettre à jour l'indicateur du bouton principal
-        this.updateMainButtonIndicator();
     }
     
     applyMode(mode, animate = true) {
@@ -215,9 +238,6 @@ class ThemeManager {
         body.classList.remove('mode-light', 'mode-dark');
         body.classList.add(`mode-${mode}`);
         
-        // Mettre à jour les icônes
-        this.updateThemeIcons();
-        
         // Retirer la transition après l'animation
         if (animate) {
             setTimeout(() => {
@@ -228,40 +248,131 @@ class ThemeManager {
     }
     
     // ========================================
-    // Méthodes utilitaires
+    // Mise à jour de l'interface
     // ========================================
     
-    toggleMode() {
-        const newMode = this.currentMode === 'light' ? 'dark' : 'light';
-        this.setMode(newMode);
+    updateAllUI() {
+        this.updateDropdown();
+        this.updateMainButtonIndicator();
+        this.updateThemeIcons();
     }
     
-    toggleTheme() {
-        // Cycler à travers les thèmes
-        const themeNames = Object.keys(this.themes);
-        const currentIndex = themeNames.indexOf(this.currentTheme);
-        const nextIndex = (currentIndex + 1) % themeNames.length;
-        this.setTheme(themeNames[nextIndex]);
+    updateDropdown() {
+        const dropdown = this.dropdownInstance || document.querySelector('.theme-switcher-dropdown');
+        if (!dropdown) return;
+        
+        console.log('🔄 Mise à jour du dropdown pour:', { theme: this.currentTheme, mode: this.currentMode });
+        
+        // Update mode buttons
+        dropdown.querySelectorAll('.theme-mode-btn').forEach(btn => {
+            const isActive = btn.dataset.mode === this.currentMode;
+            btn.classList.toggle('active', isActive);
+            
+            // S'assurer que l'état actif est visible
+            if (isActive) {
+                btn.style.setProperty('background', 'var(--bg-surface)', 'important');
+                btn.style.setProperty('color', 'var(--theme-primary)', 'important');
+            } else {
+                btn.style.removeProperty('background');
+                btn.style.removeProperty('color');
+            }
+        });
+        
+        // Update theme options
+        dropdown.querySelectorAll('.theme-option').forEach(btn => {
+            const isActive = btn.dataset.theme === this.currentTheme;
+            btn.classList.toggle('active', isActive);
+            
+            // Mise à jour visuelle explicite
+            if (isActive) {
+                btn.style.setProperty('background', 'var(--theme-primary-alpha-10)', 'important');
+                btn.style.setProperty('border-color', 'var(--theme-primary)', 'important');
+                
+                // S'assurer que l'icône et le check sont visibles
+                const icon = btn.querySelector('.theme-option-icon');
+                const check = btn.querySelector('.theme-option-check');
+                
+                if (icon) {
+                    icon.style.setProperty('background', 'var(--theme-primary)', 'important');
+                    icon.style.setProperty('color', 'var(--text-on-primary)', 'important');
+                }
+                
+                if (check) {
+                    check.style.setProperty('opacity', '1', 'important');
+                }
+            } else {
+                btn.style.removeProperty('background');
+                btn.style.removeProperty('border-color');
+                
+                const icon = btn.querySelector('.theme-option-icon');
+                const check = btn.querySelector('.theme-option-check');
+                
+                if (icon) {
+                    icon.style.removeProperty('background');
+                    icon.style.removeProperty('color');
+                }
+                
+                if (check) {
+                    check.style.removeProperty('opacity');
+                }
+            }
+        });
     }
     
-    getCurrentTheme() {
-        return this.currentTheme;
+    updateMainButtonIndicator() {
+        const mainButton = document.querySelector('.theme-switcher-main');
+        if (!mainButton) return;
+        
+        console.log('🔄 Mise à jour du bouton principal');
+        
+        // Retirer toutes les classes de thème
+        mainButton.classList.remove('theme-oweo', 'theme-modern', 'theme-classic');
+        
+        // Ajouter la classe du thème actuel
+        mainButton.classList.add(`theme-${this.currentTheme}`);
+        
+        // Ajouter un indicateur si ce n'est pas le thème par défaut
+        if (this.currentTheme !== 'oweo') {
+            mainButton.classList.add('has-custom-theme');
+            
+            // Créer ou mettre à jour l'indicateur
+            let indicator = mainButton.querySelector('.theme-indicator');
+            if (!indicator) {
+                indicator = document.createElement('span');
+                indicator.className = 'theme-indicator';
+                mainButton.appendChild(indicator);
+            }
+            indicator.style.display = 'block';
+        } else {
+            mainButton.classList.remove('has-custom-theme');
+            const indicator = mainButton.querySelector('.theme-indicator');
+            if (indicator) {
+                indicator.style.display = 'none';
+            }
+        }
+        
+        // Mettre à jour les icônes du mode
+        this.updateThemeIcons();
     }
     
-    getCurrentMode() {
-        return this.currentMode;
-    }
-    
-    getThemes() {
-        return this.themes;
-    }
-    
-    isDarkMode() {
-        return this.currentMode === 'dark';
-    }
-    
-    isLightMode() {
-        return this.currentMode === 'light';
+    updateThemeIcons() {
+        // Gérer l'affichage des icônes selon le mode
+        const containers = document.querySelectorAll('.theme-switcher-icon, .theme-switcher-btn');
+        
+        containers.forEach(container => {
+            const sunIcon = container.querySelector('.fa-sun, .theme-icon-sun, .theme-icon-light');
+            const moonIcon = container.querySelector('.fa-moon, .theme-icon-moon, .theme-icon-dark');
+            
+            if (sunIcon && moonIcon) {
+                if (this.currentMode === 'light') {
+                    sunIcon.style.display = 'block';
+                    moonIcon.style.display = 'none';
+                } else {
+                    sunIcon.style.display = 'none';
+                    moonIcon.style.display = 'block';
+                }
+            }
+        });
     }
     
     // ========================================
@@ -287,7 +398,7 @@ class ThemeManager {
         
         // Gérer le clic en dehors du dropdown
         document.addEventListener('click', (e) => {
-            const dropdown = document.querySelector('.theme-switcher-dropdown');
+            const dropdown = this.dropdownInstance;
             const button = document.querySelector('.theme-switcher-main');
             
             if (dropdown && button && !dropdown.contains(e.target) && !button.contains(e.target)) {
@@ -304,25 +415,39 @@ class ThemeManager {
         
         mainButton.classList.add('theme-switcher-main');
         
-        // Créer le dropdown
-        const dropdown = document.createElement('div');
-        dropdown.className = 'theme-switcher-dropdown';
+        // Vérifier si le dropdown existe déjà
+        let dropdown = document.querySelector('.theme-switcher-dropdown');
+        if (!dropdown) {
+            // Créer le dropdown
+            dropdown = document.createElement('div');
+            dropdown.className = 'theme-switcher-dropdown';
+            
+            // Ajouter le dropdown après le bouton
+            const container = mainButton.parentElement;
+            container.appendChild(dropdown);
+        }
+        
+        // Mettre à jour le contenu
         dropdown.innerHTML = this.getDropdownHTML();
         
-        // Ajouter le dropdown après le bouton
-        const container = mainButton.parentElement;
-        container.appendChild(dropdown);
+        // Stocker la référence
+        this.dropdownInstance = dropdown;
         
         // Gérer le clic sur le bouton principal
-        mainButton.addEventListener('click', (e) => {
+        mainButton.removeEventListener('click', this.handleMainButtonClick); // Éviter les doublons
+        this.handleMainButtonClick = (e) => {
             e.preventDefault();
             e.stopPropagation();
             dropdown.classList.toggle('active');
             mainButton.classList.toggle('active');
-        });
+        };
+        mainButton.addEventListener('click', this.handleMainButtonClick);
         
         // Gérer les clics dans le dropdown
         this.setupDropdownEvents(dropdown);
+        
+        // Mettre à jour l'état initial
+        this.updateDropdown();
     }
     
     getDropdownHTML() {
@@ -380,8 +505,8 @@ class ThemeManager {
             btn.addEventListener('click', (e) => {
                 e.stopPropagation();
                 const mode = btn.dataset.mode;
+                console.log('🔘 Clic sur mode:', mode);
                 this.setMode(mode);
-                this.updateDropdown();
             });
         });
         
@@ -390,6 +515,7 @@ class ThemeManager {
             btn.addEventListener('click', (e) => {
                 e.stopPropagation();
                 const theme = btn.dataset.theme;
+                console.log('🔘 Clic sur thème:', theme);
                 this.setTheme(theme);
             });
         });
@@ -399,125 +525,46 @@ class ThemeManager {
         if (resetBtn) {
             resetBtn.addEventListener('click', (e) => {
                 e.stopPropagation();
+                console.log('🔘 Clic sur réinitialiser');
                 this.reset();
             });
         }
     }
     
-    updateDropdown() {
-        const dropdown = document.querySelector('.theme-switcher-dropdown');
-        if (!dropdown) return;
-        
-        // Update mode buttons
-        dropdown.querySelectorAll('.theme-mode-btn').forEach(btn => {
-            btn.classList.toggle('active', btn.dataset.mode === this.currentMode);
-        });
-        
-        // Update theme options
-        dropdown.querySelectorAll('.theme-option').forEach(btn => {
-            btn.classList.toggle('active', btn.dataset.theme === this.currentTheme);
-        });
+    // ========================================
+    // Méthodes utilitaires
+    // ========================================
+    
+    toggleMode() {
+        const newMode = this.currentMode === 'light' ? 'dark' : 'light';
+        this.setMode(newMode);
     }
     
-    updateThemeIcons() {
-        // Gérer l'affichage des icônes selon le mode
-        const sunIcons = document.querySelectorAll('.theme-icon-sun, .theme-icon-light, .fa-sun:not(.theme-mode-btn .fa-sun)');
-        const moonIcons = document.querySelectorAll('.theme-icon-moon, .theme-icon-dark, .fa-moon:not(.theme-mode-btn .fa-moon)');
-        
-        if (this.currentMode === 'light') {
-            sunIcons.forEach(icon => {
-                icon.style.opacity = '1';
-                icon.style.transform = 'rotate(0deg) scale(1)';
-            });
-            moonIcons.forEach(icon => {
-                icon.style.opacity = '0';
-                icon.style.transform = 'rotate(180deg) scale(0)';
-            });
-        } else {
-            sunIcons.forEach(icon => {
-                icon.style.opacity = '0';
-                icon.style.transform = 'rotate(-180deg) scale(0)';
-            });
-            moonIcons.forEach(icon => {
-                icon.style.opacity = '1';
-                icon.style.transform = 'rotate(0deg) scale(1)';
-            });
-        }
-        
-        // Mettre à jour l'indicateur de thème sur le bouton principal
-        this.updateMainButtonIndicator();
-        
-        // Mettre à jour l'attribut aria-label
-        const buttons = document.querySelectorAll('.theme-switcher-btn, #theme-toggle');
-        buttons.forEach(btn => {
-            btn.setAttribute('aria-label', 'Changer l\'apparence');
-        });
+    toggleTheme() {
+        const themeNames = Object.keys(this.themes);
+        const currentIndex = themeNames.indexOf(this.currentTheme);
+        const nextIndex = (currentIndex + 1) % themeNames.length;
+        this.setTheme(themeNames[nextIndex]);
     }
     
-    updateMainButtonIndicator() {
-        const mainButton = document.querySelector('.theme-switcher-main');
-        if (!mainButton) return;
-        
-        // Retirer toutes les classes de thème
-        mainButton.classList.remove('theme-oweo', 'theme-modern', 'theme-classic');
-        
-        // Ajouter la classe du thème actuel
-        mainButton.classList.add(`theme-${this.currentTheme}`);
-        
-        // Ajouter un indicateur si ce n'est pas le thème par défaut
-        if (this.currentTheme !== 'oweo') {
-            mainButton.classList.add('has-custom-theme');
-        } else {
-            mainButton.classList.remove('has-custom-theme');
-        }
-        
-        // Mettre à jour le nom du thème pour le tooltip
-        const themeName = this.themes[this.currentTheme]?.name || this.currentTheme;
-        mainButton.setAttribute('data-theme-name', themeName);
-        
-        // Mettre à jour la couleur du bouton selon le thème
-        const themeColors = {
-            oweo: 'var(--theme-primary)',
-            modern: '#6366f1',
-            classic: '#2563eb'
-        };
-        
-        // Appliquer un style inline pour la couleur d'accent
-        if (this.currentTheme !== 'oweo') {
-            mainButton.style.setProperty('--button-accent', themeColors[this.currentTheme]);
-        } else {
-            mainButton.style.removeProperty('--button-accent');
-        }
-        
-        // Changer l'icône du bouton selon le thème (optionnel)
-        const iconContainer = mainButton.querySelector('.theme-switcher-icon');
-        if (iconContainer && this.currentTheme !== 'oweo') {
-            // Ajouter une petite icône de thème à côté des icônes soleil/lune
-            const themeIcon = mainButton.querySelector('.theme-custom-icon');
-            if (themeIcon) {
-                themeIcon.remove();
-            }
-            
-            const newIcon = document.createElement('i');
-            newIcon.className = `${this.themes[this.currentTheme].icon} theme-custom-icon`;
-            newIcon.style.cssText = `
-                position: absolute;
-                bottom: -2px;
-                right: -2px;
-                font-size: 10px;
-                background: var(--bg-surface);
-                padding: 2px;
-                border-radius: var(--radius-full);
-                color: ${themeColors[this.currentTheme]};
-            `;
-            iconContainer.appendChild(newIcon);
-        } else {
-            // Supprimer l'icône personnalisée si on revient au thème par défaut
-            const customIcon = mainButton.querySelector('.theme-custom-icon');
-            if (customIcon) {
-                customIcon.remove();
-            }
-        }
+    getCurrentTheme() {
+        return this.currentTheme;
+    }
+    
+    getCurrentMode() {
+        return this.currentMode;
+    }
+    
+    getThemes() {
+        return this.themes;
+    }
+    
+    isDarkMode() {
+        return this.currentMode === 'dark';
+    }
+    
+    isLightMode() {
+        return this.currentMode === 'light';
     }
     
     reset() {
@@ -537,7 +584,11 @@ class ThemeManager {
         // Appliquer
         this.applyTheme(this.currentTheme, true);
         this.applyMode(this.currentMode, true);
-        this.updateDropdown();
+        
+        // Mettre à jour l'interface
+        setTimeout(() => {
+            this.updateAllUI();
+        }, 50);
         
         this.emit('reset', {
             theme: this.currentTheme,
@@ -570,6 +621,8 @@ class ThemeManager {
     }
     
     emit(event, data) {
+        console.log(`📢 Event: theme:${event}`, data);
+        
         if (this.listeners.has(event)) {
             this.listeners.get(event).forEach(callback => {
                 try {
