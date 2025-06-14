@@ -1,0 +1,577 @@
+/* ========================================
+   css/layout/sidebar.css - Sidebar Oweo 2.0
+   ======================================== */
+
+/* ========================================
+   SIDEBAR BASE
+   ======================================== */
+
+.sidebar {
+  position: relative;
+  width: var(--sidebar-width);
+  background: var(--bg-surface);
+  border-right: 1px solid var(--border-default);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  transition: all 300ms cubic-bezier(0.4, 0, 0.2, 1);
+  z-index: var(--z-fixed);
+}
+
+/* Dark mode */
+[data-mode="dark"] .sidebar {
+  background: var(--bg-tertiary);
+  border-right-color: var(--border-subtle);
+}
+
+/* ========================================
+   ÉTATS DE LA SIDEBAR
+   ======================================== */
+
+/* Collapsed */
+.sidebar--collapsed {
+  width: 80px;
+}
+
+.sidebar--collapsed .sidebar-header-title,
+.sidebar--collapsed .sidebar-nav-text,
+.sidebar--collapsed .sidebar-section-title {
+  opacity: 0;
+  visibility: hidden;
+}
+
+.sidebar--collapsed .sidebar-nav-item {
+  justify-content: center;
+}
+
+.sidebar--collapsed .sidebar-toggle-icon {
+  transform: rotate(180deg);
+}
+
+/* Hidden (mobile) */
+.sidebar--hidden {
+  transform: translateX(-100%);
+}
+
+/* Overlay mode (mobile) */
+.sidebar--overlay {
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  box-shadow: var(--shadow-xl);
+}
+
+/* ========================================
+   STRUCTURE DE LA SIDEBAR
+   ======================================== */
+
+/* Header */
+.sidebar-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: var(--space-4);
+  border-bottom: 1px solid var(--border-subtle);
+  flex-shrink: 0;
+}
+
+.sidebar-header-brand {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  text-decoration: none;
+  color: var(--text-primary);
+  overflow: hidden;
+}
+
+.sidebar-header-logo {
+  width: 32px;
+  height: 32px;
+  flex-shrink: 0;
+}
+
+.sidebar-header-title {
+  font-size: var(--font-size-lg);
+  font-weight: var(--font-weight-bold);
+  white-space: nowrap;
+  transition: all 300ms ease;
+}
+
+/* Toggle button */
+.sidebar-toggle {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  background: transparent;
+  border: none;
+  border-radius: var(--radius-lg);
+  color: var(--text-tertiary);
+  cursor: pointer;
+  transition: all 200ms ease;
+  flex-shrink: 0;
+}
+
+.sidebar-toggle:hover {
+  background: var(--bg-secondary);
+  color: var(--text-primary);
+}
+
+.sidebar-toggle-icon {
+  transition: transform 300ms ease;
+}
+
+/* ========================================
+   SIDEBAR NAVIGATION
+   ======================================== */
+
+/* Nav container */
+.sidebar-nav {
+  flex: 1;
+  overflow-y: auto;
+  overflow-x: hidden;
+  padding: var(--space-4) 0;
+  scrollbar-width: thin;
+}
+
+.sidebar-nav::-webkit-scrollbar {
+  width: 4px;
+}
+
+.sidebar-nav::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.sidebar-nav::-webkit-scrollbar-thumb {
+  background: var(--border-strong);
+  border-radius: var(--radius-full);
+}
+
+/* Nav sections */
+.sidebar-section {
+  padding: 0 var(--space-3);
+  margin-bottom: var(--space-6);
+}
+
+.sidebar-section:last-child {
+  margin-bottom: 0;
+}
+
+.sidebar-section-title {
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-semibold);
+  text-transform: uppercase;
+  letter-spacing: var(--letter-spacing-wider);
+  color: var(--text-muted);
+  padding: var(--space-2) var(--space-3);
+  margin-bottom: var(--space-2);
+  white-space: nowrap;
+  overflow: hidden;
+  transition: all 300ms ease;
+}
+
+/* Nav list */
+.sidebar-nav-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+}
+
+/* Nav items */
+.sidebar-nav-item {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  padding: var(--space-3);
+  color: var(--text-secondary);
+  text-decoration: none;
+  border-radius: var(--radius-lg);
+  transition: all 200ms ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.sidebar-nav-item:hover {
+  background: var(--bg-secondary);
+  color: var(--text-primary);
+}
+
+.sidebar-nav-item.active {
+  background: var(--theme-primary-alpha-10);
+  color: var(--theme-primary);
+  font-weight: var(--font-weight-medium);
+}
+
+.sidebar-nav-item.active::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 50%;
+  width: 3px;
+  height: 70%;
+  background: var(--theme-primary);
+  transform: translateY(-50%);
+  border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+}
+
+/* Nav icon */
+.sidebar-nav-icon {
+  width: 20px;
+  height: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  font-size: var(--font-size-lg);
+}
+
+/* Nav text */
+.sidebar-nav-text {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  transition: all 300ms ease;
+}
+
+/* Nav badge */
+.sidebar-nav-badge {
+  margin-left: auto;
+  padding: 2px 6px;
+  background: var(--theme-primary);
+  color: var(--text-on-primary);
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-semibold);
+  border-radius: var(--radius-full);
+  min-width: 20px;
+  text-align: center;
+}
+
+.sidebar-nav-item:hover .sidebar-nav-badge {
+  background: var(--theme-primary-dark);
+}
+
+/* ========================================
+   SIDEBAR DROPDOWN
+   ======================================== */
+
+.sidebar-dropdown {
+  position: relative;
+}
+
+.sidebar-dropdown-toggle {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: transparent;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  text-align: left;
+  color: inherit;
+}
+
+.sidebar-dropdown-toggle::after {
+  content: '';
+  width: 0;
+  height: 0;
+  border-left: 4px solid transparent;
+  border-right: 4px solid transparent;
+  border-top: 4px solid currentColor;
+  margin-left: auto;
+  transition: transform 200ms ease;
+  opacity: 0.5;
+}
+
+.sidebar-dropdown.active .sidebar-dropdown-toggle::after {
+  transform: rotate(180deg);
+}
+
+.sidebar-dropdown-menu {
+  display: none;
+  padding-left: var(--space-8);
+  margin-top: var(--space-2);
+}
+
+.sidebar-dropdown.active .sidebar-dropdown-menu {
+  display: block;
+}
+
+.sidebar-dropdown-item {
+  display: flex;
+  align-items: center;
+  padding: var(--space-2) var(--space-3);
+  color: var(--text-tertiary);
+  text-decoration: none;
+  font-size: var(--font-size-sm);
+  border-radius: var(--radius-md);
+  transition: all 200ms ease;
+}
+
+.sidebar-dropdown-item:hover {
+  background: var(--bg-secondary);
+  color: var(--text-primary);
+}
+
+.sidebar-dropdown-item.active {
+  color: var(--theme-primary);
+  font-weight: var(--font-weight-medium);
+}
+
+/* ========================================
+   SIDEBAR FOOTER
+   ======================================== */
+
+.sidebar-footer {
+  padding: var(--space-4);
+  border-top: 1px solid var(--border-subtle);
+  flex-shrink: 0;
+}
+
+/* User menu */
+.sidebar-user {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  padding: var(--space-3);
+  border-radius: var(--radius-lg);
+  cursor: pointer;
+  transition: background 200ms ease;
+  overflow: hidden;
+}
+
+.sidebar-user:hover {
+  background: var(--bg-secondary);
+}
+
+.sidebar-user-avatar {
+  width: 32px;
+  height: 32px;
+  border-radius: var(--radius-full);
+  overflow: hidden;
+  flex-shrink: 0;
+}
+
+.sidebar-user-avatar img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.sidebar-user-info {
+  flex: 1;
+  min-width: 0;
+  transition: all 300ms ease;
+}
+
+.sidebar-user-name {
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-medium);
+  color: var(--text-primary);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.sidebar-user-role {
+  font-size: var(--font-size-xs);
+  color: var(--text-muted);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* ========================================
+   SIDEBAR SEARCH
+   ======================================== */
+
+.sidebar-search {
+  padding: var(--space-4);
+  border-bottom: 1px solid var(--border-subtle);
+}
+
+.sidebar-search-input {
+  width: 100%;
+  padding: var(--space-2) var(--space-3);
+  background: var(--bg-secondary);
+  border: 1px solid var(--border-default);
+  border-radius: var(--radius-lg);
+  color: var(--text-primary);
+  font-size: var(--font-size-sm);
+  transition: all 200ms ease;
+}
+
+.sidebar-search-input::placeholder {
+  color: var(--text-muted);
+}
+
+.sidebar-search-input:focus {
+  outline: none;
+  border-color: var(--theme-primary);
+  background: var(--bg-primary);
+}
+
+/* ========================================
+   SIDEBAR WIDGETS
+   ======================================== */
+
+.sidebar-widget {
+  padding: var(--space-4);
+  margin: var(--space-4);
+  background: var(--bg-secondary);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-lg);
+}
+
+.sidebar-widget-title {
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-semibold);
+  color: var(--text-primary);
+  margin-bottom: var(--space-3);
+}
+
+.sidebar-widget-content {
+  font-size: var(--font-size-sm);
+  color: var(--text-secondary);
+  line-height: var(--line-height-relaxed);
+}
+
+/* Progress widget */
+.sidebar-progress {
+  margin-top: var(--space-3);
+}
+
+.sidebar-progress-bar {
+  height: 6px;
+  background: var(--bg-tertiary);
+  border-radius: var(--radius-full);
+  overflow: hidden;
+}
+
+.sidebar-progress-fill {
+  height: 100%;
+  background: var(--theme-primary);
+  border-radius: var(--radius-full);
+  transition: width 300ms ease;
+}
+
+.sidebar-progress-text {
+  display: flex;
+  justify-content: space-between;
+  margin-top: var(--space-2);
+  font-size: var(--font-size-xs);
+  color: var(--text-muted);
+}
+
+/* ========================================
+   SIDEBAR MOBILE
+   ======================================== */
+
+/* Backdrop */
+.sidebar-backdrop {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: calc(var(--z-fixed) - 1);
+  opacity: 0;
+  transition: opacity 300ms ease;
+}
+
+.sidebar-backdrop.active {
+  display: block;
+  opacity: 1;
+}
+
+/* Mobile toggle */
+.sidebar-mobile-toggle {
+  display: none;
+  position: fixed;
+  bottom: var(--space-6);
+  left: var(--space-6);
+  width: 56px;
+  height: 56px;
+  background: var(--theme-primary);
+  color: var(--text-on-primary);
+  border: none;
+  border-radius: var(--radius-full);
+  box-shadow: var(--shadow-lg);
+  cursor: pointer;
+  z-index: var(--z-fixed);
+  transition: all 200ms ease;
+}
+
+@media (max-width: 768px) {
+  .sidebar-mobile-toggle {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+}
+
+.sidebar-mobile-toggle:hover {
+  transform: scale(1.1);
+  box-shadow: var(--shadow-xl);
+}
+
+/* ========================================
+   RESPONSIVE
+   ======================================== */
+
+@media (max-width: 768px) {
+  .sidebar {
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    transform: translateX(-100%);
+  }
+  
+  .sidebar.active {
+    transform: translateX(0);
+  }
+  
+  .sidebar--collapsed {
+    width: var(--sidebar-width);
+  }
+}
+
+/* ========================================
+   SIDEBAR THEMES
+   ======================================== */
+
+/* Light sidebar on dark background */
+.sidebar--light {
+  background: white;
+  color: var(--color-gray-800);
+}
+
+.sidebar--light .sidebar-nav-item {
+  color: var(--color-gray-600);
+}
+
+.sidebar--light .sidebar-nav-item:hover {
+  background: var(--color-gray-100);
+  color: var(--color-gray-900);
+}
+
+/* Dark sidebar */
+.sidebar--dark {
+  background: var(--color-gray-900);
+  color: var(--color-gray-100);
+  border-right-color: var(--color-gray-800);
+}
+
+.sidebar--dark .sidebar-nav-item {
+  color: var(--color-gray-400);
+}
+
+.sidebar--dark .sidebar-nav-item:hover {
+  background: var(--color-gray-800);
+  color: var(--color-gray-100);
+}

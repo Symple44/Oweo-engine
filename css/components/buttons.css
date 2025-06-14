@@ -1,0 +1,588 @@
+/* ========================================
+   css/components/buttons.css - Système de boutons Oweo 2.0
+   ======================================== */
+
+/* ========================================
+   BOUTON DE BASE
+   ======================================== */
+
+.btn {
+  /* Base */
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-2);
+  
+  /* Spacing */
+  padding: var(--space-3) var(--space-6);
+  
+  /* Typography */
+  font-family: inherit;
+  font-size: var(--font-size-base);
+  font-weight: var(--font-weight-semibold);
+  line-height: 1;
+  text-align: center;
+  text-decoration: none;
+  white-space: nowrap;
+  
+  /* Visual */
+  background-color: transparent;
+  color: var(--text-primary);
+  border: 2px solid transparent;
+  border-radius: var(--radius-lg);
+  
+  /* Behavior */
+  cursor: pointer;
+  user-select: none;
+  transition: all 200ms cubic-bezier(0.4, 0, 0.2, 1);
+  
+  /* Reset */
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+}
+
+/* États */
+.btn:hover {
+  transform: translateY(-1px);
+  box-shadow: var(--shadow-md);
+}
+
+.btn:focus {
+  outline: none;
+}
+
+.btn:focus-visible {
+  outline: 2px solid var(--theme-primary);
+  outline-offset: 2px;
+}
+
+.btn:active {
+  transform: translateY(0);
+  box-shadow: var(--shadow-sm);
+}
+
+.btn:disabled,
+.btn.disabled {
+  cursor: not-allowed;
+  opacity: 0.5;
+  transform: none;
+  box-shadow: none;
+}
+
+/* ========================================
+   VARIANTES DE COULEUR
+   ======================================== */
+
+/* Primary */
+.btn--primary {
+  background-color: var(--theme-primary);
+  color: var(--text-on-primary);
+  border-color: var(--theme-primary);
+}
+
+.btn--primary:hover {
+  background-color: var(--theme-primary-dark);
+  border-color: var(--theme-primary-dark);
+}
+
+.btn--primary:active {
+  background-color: var(--theme-primary-dark);
+}
+
+/* Secondary */
+.btn--secondary {
+  background-color: var(--bg-secondary);
+  color: var(--text-primary);
+  border-color: var(--border-default);
+}
+
+.btn--secondary:hover {
+  background-color: var(--bg-tertiary);
+  border-color: var(--border-strong);
+}
+
+/* Accent */
+.btn--accent {
+  background-color: var(--theme-accent);
+  color: var(--text-on-accent);
+  border-color: var(--theme-accent);
+}
+
+.btn--accent:hover {
+  background-color: var(--theme-accent-dark);
+  border-color: var(--theme-accent-dark);
+}
+
+/* Success */
+.btn--success {
+  background-color: var(--color-success);
+  color: white;
+  border-color: var(--color-success);
+}
+
+.btn--success:hover {
+  background-color: var(--color-success-dark);
+  border-color: var(--color-success-dark);
+}
+
+/* Warning */
+.btn--warning {
+  background-color: var(--color-warning);
+  color: white;
+  border-color: var(--color-warning);
+}
+
+.btn--warning:hover {
+  background-color: var(--color-warning-dark);
+  border-color: var(--color-warning-dark);
+}
+
+/* Error/Danger */
+.btn--error,
+.btn--danger {
+  background-color: var(--color-error);
+  color: white;
+  border-color: var(--color-error);
+}
+
+.btn--error:hover,
+.btn--danger:hover {
+  background-color: var(--color-error-dark);
+  border-color: var(--color-error-dark);
+}
+
+/* Info */
+.btn--info {
+  background-color: var(--color-info);
+  color: white;
+  border-color: var(--color-info);
+}
+
+.btn--info:hover {
+  background-color: var(--color-info-dark);
+  border-color: var(--color-info-dark);
+}
+
+/* ========================================
+   VARIANTES DE STYLE
+   ======================================== */
+
+/* Outline */
+.btn--outline {
+  background-color: transparent;
+  border-width: 2px;
+}
+
+.btn--outline.btn--primary {
+  color: var(--theme-primary);
+  border-color: var(--theme-primary);
+}
+
+.btn--outline.btn--primary:hover {
+  background-color: var(--theme-primary);
+  color: var(--text-on-primary);
+}
+
+.btn--outline.btn--secondary {
+  color: var(--text-primary);
+  border-color: var(--border-default);
+}
+
+.btn--outline.btn--secondary:hover {
+  background-color: var(--bg-secondary);
+  border-color: var(--border-strong);
+}
+
+.btn--outline.btn--accent {
+  color: var(--theme-accent);
+  border-color: var(--theme-accent);
+}
+
+.btn--outline.btn--accent:hover {
+  background-color: var(--theme-accent);
+  color: var(--text-on-accent);
+}
+
+/* Ghost */
+.btn--ghost {
+  background-color: transparent;
+  border-color: transparent;
+  color: var(--text-primary);
+}
+
+.btn--ghost:hover {
+  background-color: var(--bg-secondary);
+}
+
+.btn--ghost.btn--primary {
+  color: var(--theme-primary);
+}
+
+.btn--ghost.btn--primary:hover {
+  background-color: var(--theme-primary-alpha-10);
+}
+
+.btn--ghost.btn--accent {
+  color: var(--theme-accent);
+}
+
+.btn--ghost.btn--accent:hover {
+  background-color: var(--theme-accent-alpha-10);
+}
+
+/* Link */
+.btn--link {
+  background-color: transparent;
+  border-color: transparent;
+  color: var(--theme-primary);
+  padding-left: 0;
+  padding-right: 0;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+.btn--link:hover {
+  color: var(--theme-primary-dark);
+  box-shadow: none;
+}
+
+/* ========================================
+   TAILLES
+   ======================================== */
+
+/* Extra small */
+.btn--xs {
+  padding: var(--space-1) var(--space-3);
+  font-size: var(--font-size-xs);
+  border-radius: var(--radius-md);
+}
+
+/* Small */
+.btn--sm {
+  padding: var(--space-2) var(--space-4);
+  font-size: var(--font-size-sm);
+}
+
+/* Large */
+.btn--lg {
+  padding: var(--space-4) var(--space-8);
+  font-size: var(--font-size-lg);
+  border-radius: var(--radius-xl);
+}
+
+/* Extra large */
+.btn--xl {
+  padding: var(--space-5) var(--space-10);
+  font-size: var(--font-size-xl);
+  border-radius: var(--radius-xl);
+}
+
+/* ========================================
+   VARIANTES SPÉCIALES
+   ======================================== */
+
+/* Full width */
+.btn--block {
+  display: flex;
+  width: 100%;
+}
+
+/* Rounded */
+.btn--rounded {
+  border-radius: var(--radius-full);
+}
+
+/* Square */
+.btn--square {
+  border-radius: 0;
+}
+
+/* Icon only */
+.btn--icon {
+  padding: var(--space-3);
+  width: 40px;
+  height: 40px;
+}
+
+.btn--icon.btn--xs {
+  padding: var(--space-1);
+  width: 28px;
+  height: 28px;
+}
+
+.btn--icon.btn--sm {
+  padding: var(--space-2);
+  width: 32px;
+  height: 32px;
+}
+
+.btn--icon.btn--lg {
+  padding: var(--space-4);
+  width: 48px;
+  height: 48px;
+}
+
+.btn--icon.btn--xl {
+  padding: var(--space-5);
+  width: 56px;
+  height: 56px;
+}
+
+/* Loading */
+.btn--loading {
+  position: relative;
+  color: transparent;
+}
+
+.btn--loading::after {
+  content: '';
+  position: absolute;
+  width: 16px;
+  height: 16px;
+  top: 50%;
+  left: 50%;
+  margin-left: -8px;
+  margin-top: -8px;
+  border: 2px solid currentColor;
+  border-right-color: transparent;
+  border-radius: 50%;
+  animation: btn-loading 0.75s linear infinite;
+}
+
+@keyframes btn-loading {
+  to { transform: rotate(360deg); }
+}
+
+/* ========================================
+   BOUTONS AVEC ICÔNES
+   ======================================== */
+
+.btn-icon {
+  display: inline-flex;
+  font-size: 1.125em;
+  opacity: 0.8;
+  transition: opacity 200ms ease;
+}
+
+.btn:hover .btn-icon {
+  opacity: 1;
+}
+
+/* Icône à gauche */
+.btn-icon--left {
+  margin-right: var(--space-2);
+  margin-left: calc(-1 * var(--space-1));
+}
+
+/* Icône à droite */
+.btn-icon--right {
+  margin-left: var(--space-2);
+  margin-right: calc(-1 * var(--space-1));
+}
+
+/* ========================================
+   GROUPES DE BOUTONS
+   ======================================== */
+
+.btn-group {
+  display: inline-flex;
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+}
+
+.btn-group .btn {
+  border-radius: 0;
+  margin-right: -2px;
+}
+
+.btn-group .btn:first-child {
+  border-top-left-radius: var(--radius-lg);
+  border-bottom-left-radius: var(--radius-lg);
+}
+
+.btn-group .btn:last-child {
+  border-top-right-radius: var(--radius-lg);
+  border-bottom-right-radius: var(--radius-lg);
+  margin-right: 0;
+}
+
+.btn-group .btn:hover,
+.btn-group .btn:focus {
+  z-index: 1;
+}
+
+/* Groupe vertical */
+.btn-group--vertical {
+  flex-direction: column;
+}
+
+.btn-group--vertical .btn {
+  margin-right: 0;
+  margin-bottom: -2px;
+}
+
+.btn-group--vertical .btn:first-child {
+  border-radius: 0;
+  border-top-left-radius: var(--radius-lg);
+  border-top-right-radius: var(--radius-lg);
+}
+
+.btn-group--vertical .btn:last-child {
+  border-radius: 0;
+  border-bottom-left-radius: var(--radius-lg);
+  border-bottom-right-radius: var(--radius-lg);
+  margin-bottom: 0;
+}
+
+/* ========================================
+   BOUTONS FLOTTANTS
+   ======================================== */
+
+.btn-fab {
+  position: fixed;
+  bottom: var(--space-6);
+  right: var(--space-6);
+  width: 56px;
+  height: 56px;
+  padding: 0;
+  border-radius: var(--radius-full);
+  box-shadow: var(--shadow-lg);
+  z-index: var(--z-fixed);
+}
+
+.btn-fab:hover {
+  box-shadow: var(--shadow-xl);
+  transform: translateY(-2px);
+}
+
+/* Mini FAB */
+.btn-fab--mini {
+  width: 40px;
+  height: 40px;
+}
+
+/* ========================================
+   BOUTONS SPÉCIAUX
+   ======================================== */
+
+/* Gradient */
+.btn--gradient {
+  background: linear-gradient(135deg, var(--theme-primary), var(--theme-accent));
+  border: none;
+  color: white;
+}
+
+.btn--gradient:hover {
+  background: linear-gradient(135deg, var(--theme-primary-dark), var(--theme-accent-dark));
+}
+
+/* Glow */
+.btn--glow {
+  box-shadow: 0 0 20px var(--theme-primary-alpha-20);
+}
+
+.btn--glow:hover {
+  box-shadow: 0 0 30px var(--theme-primary-alpha-20), var(--shadow-lg);
+}
+
+/* 3D */
+.btn--3d {
+  box-shadow: 0 4px 0 var(--theme-primary-dark);
+  transform: translateY(-2px);
+}
+
+.btn--3d:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 5px 0 var(--theme-primary-dark);
+}
+
+.btn--3d:active {
+  transform: translateY(0);
+  box-shadow: 0 1px 0 var(--theme-primary-dark);
+}
+
+/* ========================================
+   ANIMATIONS
+   ======================================== */
+
+/* Pulse */
+.btn--pulse {
+  animation: btn-pulse 2s infinite;
+}
+
+@keyframes btn-pulse {
+  0% { box-shadow: 0 0 0 0 var(--theme-primary-alpha-20); }
+  70% { box-shadow: 0 0 0 10px transparent; }
+  100% { box-shadow: 0 0 0 0 transparent; }
+}
+
+/* Shake */
+.btn--shake:hover {
+  animation: btn-shake 0.5s;
+}
+
+@keyframes btn-shake {
+  0%, 100% { transform: translateX(0); }
+  25% { transform: translateX(-5px); }
+  75% { transform: translateX(5px); }
+}
+
+/* ========================================
+   ÉTATS SPÉCIAUX
+   ======================================== */
+
+/* Selected */
+.btn.is-selected {
+  background-color: var(--theme-primary);
+  color: var(--text-on-primary);
+  border-color: var(--theme-primary);
+}
+
+/* Active */
+.btn.is-active {
+  background-color: var(--theme-primary-dark);
+  color: var(--text-on-primary);
+  border-color: var(--theme-primary-dark);
+  box-shadow: inset 0 2px 4px rgba(0,0,0,0.1);
+}
+
+/* Busy */
+.btn.is-busy {
+  pointer-events: none;
+  opacity: 0.7;
+}
+
+/* ========================================
+   RESPONSIVE
+   ======================================== */
+
+@media (max-width: 640px) {
+  .btn--responsive {
+    width: 100%;
+    padding: var(--space-4) var(--space-6);
+  }
+  
+  .btn-group--responsive {
+    flex-direction: column;
+    width: 100%;
+  }
+  
+  .btn-group--responsive .btn {
+    width: 100%;
+    margin-right: 0;
+    margin-bottom: -2px;
+    border-radius: 0;
+  }
+  
+  .btn-group--responsive .btn:first-child {
+    border-top-left-radius: var(--radius-lg);
+    border-top-right-radius: var(--radius-lg);
+  }
+  
+  .btn-group--responsive .btn:last-child {
+    border-bottom-left-radius: var(--radius-lg);
+    border-bottom-right-radius: var(--radius-lg);
+    margin-bottom: 0;
+  }
+}

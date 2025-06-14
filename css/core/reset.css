@@ -1,0 +1,363 @@
+/* ========================================
+   css/core/reset.css - Reset CSS moderne Oweo 2.0
+   Basé sur modern-normalize avec ajustements personnalisés
+   ======================================== */
+
+/* ========================================
+   RESET DE BASE
+   ======================================== */
+
+/* Box sizing sur tous les éléments */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+/* Reset des marges */
+* {
+  margin: 0;
+}
+
+/* Configuration HTML de base */
+html {
+  /* Améliore la cohérence du rendu des polices */
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  
+  /* Empêche les ajustements de taille de police après changement d'orientation iOS */
+  -webkit-text-size-adjust: 100%;
+  
+  /* Définit la hauteur de ligne par défaut */
+  line-height: 1.5;
+  
+  /* Active le kerning et les ligatures */
+  text-rendering: optimizeLegibility;
+  
+  /* Scroll fluide natif */
+  scroll-behavior: smooth;
+}
+
+/* Configuration du body */
+body {
+  min-height: 100vh;
+  font-family: var(--font-family-base);
+  font-size: var(--font-size-base);
+  line-height: var(--line-height-normal);
+  color: var(--text-primary);
+  background-color: var(--bg-primary);
+}
+
+/* ========================================
+   TYPOGRAPHIE
+   ======================================== */
+
+/* Reset des titres */
+h1, h2, h3, h4, h5, h6 {
+  font-size: inherit;
+  font-weight: inherit;
+}
+
+/* Améliore la lisibilité du texte */
+p, h1, h2, h3, h4, h5, h6 {
+  overflow-wrap: break-word;
+  hyphens: auto;
+}
+
+/* Empêche les éléments vides de créer de l'espace */
+p:empty {
+  display: none;
+}
+
+/* ========================================
+   LIENS
+   ======================================== */
+
+/* Style de base des liens */
+a {
+  color: inherit;
+  text-decoration: inherit;
+}
+
+/* Focus visible pour l'accessibilité */
+a:focus-visible {
+  outline: 2px solid var(--theme-primary);
+  outline-offset: 2px;
+}
+
+/* ========================================
+   LISTES
+   ======================================== */
+
+/* Reset des listes */
+ul, ol {
+  list-style: none;
+  padding: 0;
+}
+
+/* ========================================
+   FORMULAIRES
+   ======================================== */
+
+/* Hérite des polices pour les contrôles de formulaire */
+input,
+button,
+textarea,
+select {
+  font: inherit;
+  color: inherit;
+}
+
+/* Reset des styles par défaut des boutons */
+button {
+  cursor: pointer;
+  background: none;
+  border: none;
+  padding: 0;
+  line-height: inherit;
+}
+
+/* Désactive le resize par défaut des textarea */
+textarea {
+  resize: vertical;
+}
+
+/* Style de focus cohérent */
+input:focus-visible,
+textarea:focus-visible,
+select:focus-visible {
+  outline: 2px solid var(--theme-primary);
+  outline-offset: 2px;
+}
+
+/* Supprime les spinners dans Chrome, Safari, Edge */
+input[type="number"]::-webkit-inner-spin-button,
+input[type="number"]::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+/* Supprime les spinners dans Firefox */
+input[type="number"] {
+  -moz-appearance: textfield;
+}
+
+/* Améliore l'apparence des éléments désactivés */
+:disabled {
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
+/* ========================================
+   MÉDIAS
+   ======================================== */
+
+/* Les images et vidéos sont responsives par défaut */
+img,
+picture,
+video,
+canvas,
+svg {
+  display: block;
+  max-width: 100%;
+  height: auto;
+}
+
+/* Empêche les images de dépasser leur conteneur */
+img {
+  object-fit: cover;
+}
+
+/* ========================================
+   TABLEAUX
+   ======================================== */
+
+/* Collapse les bordures des tableaux */
+table {
+  border-collapse: collapse;
+  border-spacing: 0;
+}
+
+/* ========================================
+   ÉLÉMENTS INTERACTIFS
+   ======================================== */
+
+/* Style cohérent pour summary */
+summary {
+  cursor: pointer;
+  list-style: none;
+}
+
+/* Supprime le marqueur par défaut */
+summary::-webkit-details-marker {
+  display: none;
+}
+
+/* Focus visible sur les éléments interactifs */
+[tabindex]:focus-visible {
+  outline: 2px solid var(--theme-primary);
+  outline-offset: 2px;
+}
+
+/* ========================================
+   ACCESSIBILITÉ
+   ======================================== */
+
+/* Classe pour cacher visuellement mais garder accessible */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border-width: 0;
+}
+
+/* Animation réduite pour l'accessibilité */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* ========================================
+   ÉLÉMENTS SPÉCIFIQUES
+   ======================================== */
+
+/* Code et pré-formaté */
+code,
+kbd,
+samp,
+pre {
+  font-family: var(--font-family-mono);
+  font-size: 0.875em;
+}
+
+/* Blockquote */
+blockquote {
+  margin: 0;
+  padding: 0;
+}
+
+/* Éléments de citation */
+cite {
+  font-style: normal;
+}
+
+/* Abréviations */
+abbr[title] {
+  text-decoration: underline dotted;
+  cursor: help;
+}
+
+/* Marque de texte */
+mark {
+  background-color: var(--color-warning-light);
+  color: var(--color-black);
+  padding: 0.125em 0.25em;
+}
+
+/* Ligne horizontale */
+hr {
+  height: 0;
+  color: inherit;
+  border-top-width: 1px;
+  border-color: var(--border-default);
+  margin: var(--space-8) 0;
+}
+
+/* ========================================
+   CORRECTIONS NAVIGATEURS
+   ======================================== */
+
+/* Corrige la hauteur de ligne dans Firefox */
+button,
+input {
+  line-height: normal;
+}
+
+/* Corrige l'héritage de couleur dans Firefox */
+button,
+select {
+  text-transform: none;
+}
+
+/* Corrige l'apparence dans Safari */
+[type='search'] {
+  -webkit-appearance: textfield;
+}
+
+/* Supprime le bouton cancel dans Safari */
+::-webkit-search-cancel-button {
+  -webkit-appearance: none;
+}
+
+/* Corrige le style de fichier input */
+::-webkit-file-upload-button {
+  -webkit-appearance: button;
+  font: inherit;
+}
+
+/* ========================================
+   CLASSES D'AIDE AU RESET
+   ======================================== */
+
+/* Reset de bouton */
+.reset-button {
+  appearance: none;
+  background: none;
+  border: none;
+  padding: 0;
+  margin: 0;
+  cursor: pointer;
+  font: inherit;
+  color: inherit;
+  text-align: inherit;
+}
+
+/* Reset de liste */
+.reset-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+/* Reset de lien */
+.reset-link {
+  color: inherit;
+  text-decoration: none;
+}
+
+/* ========================================
+   ÉLÉMENTS PERSONNALISÉS
+   ======================================== */
+
+/* Dialog natif */
+dialog {
+  padding: 0;
+  border: none;
+  background: var(--bg-surface);
+  color: var(--text-primary);
+}
+
+dialog::backdrop {
+  background-color: rgba(0, 0, 0, 0.5);
+}
+
+/* Progress */
+progress {
+  vertical-align: baseline;
+}
+
+/* Meter */
+meter {
+  vertical-align: baseline;
+}

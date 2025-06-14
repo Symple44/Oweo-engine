@@ -1,0 +1,106 @@
+/* ========================================
+   css/main.css - Fichier principal d'import Oweo 2.0
+   Import de tous les modules CSS dans le bon ordre
+   ======================================== */
+
+/* ========================================
+   1. CORE - Fondations du système
+   ======================================== */
+
+/* Reset et normalisation */
+@import url('core/reset.css');
+
+/* Variables CSS globales */
+@import url('core/variables.css');
+
+/* Système typographique */
+@import url('core/typography.css');
+
+/* Système de grille */
+@import url('core/grid.css');
+
+/* Classes utilitaires */
+@import url('core/utilities.css');
+
+/* ========================================
+   2. LAYOUT - Structure de mise en page
+   ======================================== */
+
+/* Structure générale */
+@import url('layout/layout.css');
+
+/* Navigation principale */
+@import url('layout/navbar.css');
+
+/* Barre latérale */
+@import url('layout/sidebar.css');
+
+/* Pied de page */
+@import url('layout/footer.css');
+
+/* Barre de recherche */
+@import url('layout/search-bar.css');
+
+/* ========================================
+   3. COMPONENTS - Composants réutilisables
+   ======================================== */
+
+/* Boutons */
+@import url('components/buttons.css');
+
+/* Cartes */
+@import url('components/cards.css');
+
+/* Formulaires */
+@import url('components/forms.css');
+
+/* Modales */
+@import url('components/modals.css');
+
+/* Notifications */
+@import url('components/notifications.css');
+
+/* Bannière de cookies */
+@import url('components/cookies.css');
+
+/* Sélecteur de thème */
+@import url('components/theme-switcher.css');
+
+/* ========================================
+   4. PAGES - Styles spécifiques aux pages
+   ======================================== */
+
+/* Page d'accueil */
+@import url('pages/home.css');
+
+/* Dashboard */
+@import url('pages/dashboard.css');
+
+/* Authentification */
+@import url('pages/auth.css');
+
+/* ========================================
+   5. THEMES - Variantes de thème
+   ======================================== */
+
+/* Thème clair */
+@import url('themes/light.css');
+
+/* Thème sombre */
+@import url('themes/dark.css');
+
+/* Thème signature Oweo */
+@import url('themes/oweo.css');
+
+/* ========================================
+   6. VENDORS - Bibliothèques tierces (optionnel)
+   ======================================== */
+
+/* Ajoutez ici les imports de bibliothèques CSS externes si nécessaire */
+
+/* ========================================
+   7. OVERRIDES - Surcharges personnalisées
+   ======================================== */
+
+/* Styles personnalisés qui doivent surcharger les autres */
+/* Gardez cette section minimale */

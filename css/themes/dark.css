@@ -1,0 +1,310 @@
+/* ========================================
+   css/themes/dark.css - Thème sombre Oweo 2.0
+   ======================================== */
+
+/* ========================================
+   MODE SOMBRE
+   ======================================== */
+
+[data-mode="dark"] {
+  /* ========================================
+     COULEURS D'ARRIÈRE-PLAN
+     ======================================== */
+  
+  --bg-primary: var(--color-gray-900);
+  --bg-secondary: var(--color-gray-800);
+  --bg-tertiary: var(--color-gray-700);
+  --bg-surface: var(--color-gray-800);
+  --bg-card: var(--color-gray-800);
+  --bg-input: var(--color-gray-800);
+  --bg-hover: var(--color-gray-700);
+  
+  /* ========================================
+     COULEURS DE TEXTE
+     ======================================== */
+  
+  --text-primary: var(--color-gray-100);
+  --text-secondary: var(--color-gray-400);
+  --text-tertiary: var(--color-gray-500);
+  --text-muted: var(--color-gray-600);
+  --text-on-primary: var(--color-white);
+  --text-on-accent: var(--color-white);
+  
+  /* ========================================
+     BORDURES
+     ======================================== */
+  
+  --border-default: var(--color-gray-700);
+  --border-subtle: var(--color-gray-800);
+  --border-strong: var(--color-gray-600);
+  --border-focus: var(--theme-primary);
+  
+  /* ========================================
+     OMBRES
+     ======================================== */
+  
+  --shadow-xs: 0 1px 2px 0 rgba(0, 0, 0, 0.2);
+  --shadow-sm: 0 1px 3px 0 rgba(0, 0, 0, 0.3), 0 1px 2px 0 rgba(0, 0, 0, 0.2);
+  --shadow-base: 0 4px 6px -1px rgba(0, 0, 0, 0.3), 0 2px 4px -1px rgba(0, 0, 0, 0.2);
+  --shadow-md: 0 10px 15px -3px rgba(0, 0, 0, 0.3), 0 4px 6px -2px rgba(0, 0, 0, 0.2);
+  --shadow-lg: 0 20px 25px -5px rgba(0, 0, 0, 0.3), 0 10px 10px -5px rgba(0, 0, 0, 0.2);
+  --shadow-xl: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+  --shadow-2xl: 0 25px 50px -12px rgba(0, 0, 0, 0.7);
+  --shadow-inner: inset 0 2px 4px 0 rgba(0, 0, 0, 0.2);
+  
+  /* ========================================
+     COULEURS SPÉCIFIQUES AUX COMPOSANTS
+     ======================================== */
+  
+  /* Navbar */
+  --navbar-bg: var(--color-gray-800);
+  --navbar-border: var(--color-gray-700);
+  --navbar-text: var(--color-gray-300);
+  --navbar-text-hover: var(--theme-primary);
+  --navbar-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.3);
+  
+  /* Sidebar */
+  --sidebar-bg: var(--color-gray-800);
+  --sidebar-border: var(--color-gray-700);
+  --sidebar-text: var(--color-gray-400);
+  --sidebar-text-hover: var(--color-gray-100);
+  --sidebar-active-bg: var(--theme-primary-alpha-20);
+  --sidebar-active-text: var(--theme-primary-light);
+  
+  /* Cards */
+  --card-bg: var(--color-gray-800);
+  --card-border: var(--color-gray-700);
+  --card-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.3);
+  --card-shadow-hover: 0 10px 15px -3px rgba(0, 0, 0, 0.4);
+  
+  /* Buttons */
+  --btn-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.2);
+  --btn-shadow-hover: 0 4px 6px -1px rgba(0, 0, 0, 0.3);
+  
+  /* Forms */
+  --input-bg: var(--color-gray-800);
+  --input-border: var(--color-gray-600);
+  --input-border-focus: var(--theme-primary);
+  --input-shadow-focus: 0 0 0 3px var(--theme-primary-alpha-20);
+  
+  /* Modals */
+  --modal-bg: var(--color-gray-800);
+  --modal-backdrop: rgba(0, 0, 0, 0.7);
+  --modal-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+  
+  /* Code blocks */
+  --code-bg: var(--color-gray-900);
+  --code-border: var(--color-gray-700);
+  --code-text: var(--color-gray-300);
+  
+  /* Scrollbar */
+  --scrollbar-track: var(--color-gray-800);
+  --scrollbar-thumb: var(--color-gray-600);
+  --scrollbar-thumb-hover: var(--color-gray-500);
+  
+  /* ========================================
+     AJUSTEMENTS DE COULEURS
+     ======================================== */
+  
+  /* Ajuster les couleurs primaires pour une meilleure lisibilité */
+  --theme-primary-alpha-10: hsla(var(--oweo-primary-hue), 84%, 60%, 0.1);
+  --theme-primary-alpha-20: hsla(var(--oweo-primary-hue), 84%, 60%, 0.2);
+  --theme-accent-alpha-10: hsla(var(--oweo-accent-hue), 84%, 60%, 0.1);
+  --theme-accent-alpha-20: hsla(var(--oweo-accent-hue), 84%, 60%, 0.2);
+  
+  /* ========================================
+     EFFETS ET ÉTATS
+     ======================================== */
+  
+  /* Hover states */
+  --hover-opacity: 0.9;
+  --hover-bg: var(--color-gray-700);
+  
+  /* Active states */
+  --active-opacity: 0.7;
+  --active-bg: var(--color-gray-600);
+  
+  /* Disabled states */
+  --disabled-opacity: 0.4;
+  --disabled-bg: var(--color-gray-700);
+  --disabled-text: var(--color-gray-600);
+  
+  /* Selection */
+  --selection-bg: var(--theme-primary-alpha-20);
+  --selection-text: var(--theme-primary-light);
+  
+  /* ========================================
+     OVERLAYS ET TRANSPARENCES
+     ======================================== */
+  
+  --overlay-light: rgba(255, 255, 255, 0.1);
+  --overlay-dark: rgba(0, 0, 0, 0.7);
+  --overlay-primary: var(--theme-primary-alpha-20);
+  --overlay-accent: var(--theme-accent-alpha-20);
+  
+  /* ========================================
+     GRAPHIQUES ET VISUALISATIONS
+     ======================================== */
+  
+  --chart-grid: var(--color-gray-700);
+  --chart-axis: var(--color-gray-600);
+  --chart-text: var(--color-gray-400);
+  --chart-tooltip-bg: var(--color-gray-700);
+  --chart-tooltip-text: var(--color-gray-100);
+  
+  /* ========================================
+     GRADIENTS
+     ======================================== */
+  
+  --gradient-primary: linear-gradient(135deg, var(--theme-primary), var(--theme-accent));
+  --gradient-secondary: linear-gradient(135deg, var(--color-gray-700), var(--color-gray-800));
+  --gradient-surface: linear-gradient(180deg, var(--color-gray-800), var(--color-gray-900));
+}
+
+/* ========================================
+   AJUSTEMENTS VISUELS
+   ======================================== */
+
+/* Réduire la luminosité des images */
+[data-mode="dark"] img:not(.no-filter) {
+  filter: brightness(0.8);
+}
+
+[data-mode="dark"] img:hover:not(.no-filter) {
+  filter: brightness(0.9);
+}
+
+/* Inverser les icônes monochromes */
+[data-mode="dark"] .invert-in-dark {
+  filter: invert(1);
+}
+
+/* ========================================
+   SÉLECTION DE TEXTE
+   ======================================== */
+
+[data-mode="dark"] ::selection {
+  background: var(--selection-bg);
+  color: var(--selection-text);
+}
+
+/* ========================================
+   SCROLLBARS PERSONNALISÉES
+   ======================================== */
+
+[data-mode="dark"] ::-webkit-scrollbar {
+  width: 12px;
+  height: 12px;
+}
+
+[data-mode="dark"] ::-webkit-scrollbar-track {
+  background: var(--scrollbar-track);
+  border-radius: var(--radius-full);
+}
+
+[data-mode="dark"] ::-webkit-scrollbar-thumb {
+  background: var(--scrollbar-thumb);
+  border-radius: var(--radius-full);
+  border: 3px solid var(--scrollbar-track);
+}
+
+[data-mode="dark"] ::-webkit-scrollbar-thumb:hover {
+  background: var(--scrollbar-thumb-hover);
+}
+
+/* Firefox */
+[data-mode="dark"] {
+  scrollbar-width: thin;
+  scrollbar-color: var(--scrollbar-thumb) var(--scrollbar-track);
+}
+
+/* ========================================
+   FOCUS VISIBLE
+   ======================================== */
+
+[data-mode="dark"] *:focus-visible {
+  outline: 2px solid var(--theme-primary);
+  outline-offset: 2px;
+}
+
+/* ========================================
+   PLACEHOLDER
+   ======================================== */
+
+[data-mode="dark"] ::placeholder {
+  color: var(--color-gray-600);
+  opacity: 1;
+}
+
+/* ========================================
+   ANIMATIONS SPÉCIFIQUES AU THÈME
+   ======================================== */
+
+[data-mode="dark"] {
+  --skeleton-base: var(--color-gray-700);
+  --skeleton-shine: var(--color-gray-600);
+  --pulse-color: var(--theme-primary-alpha-20);
+}
+
+/* ========================================
+   SYNTAXE DE CODE
+   ======================================== */
+
+[data-mode="dark"] {
+  --syntax-comment: #6b7280;
+  --syntax-keyword: #c084fc;
+  --syntax-string: #86efac;
+  --syntax-number: #fbbf24;
+  --syntax-function: #60a5fa;
+  --syntax-variable: #f87171;
+  --syntax-operator: #e5e7eb;
+}
+
+/* ========================================
+   ÉLÉMENTS SPÉCIFIQUES
+   ======================================== */
+
+/* Badges et tags */
+[data-mode="dark"] .badge,
+[data-mode="dark"] .tag {
+  filter: brightness(0.8);
+}
+
+/* Tables */
+[data-mode="dark"] table {
+  border-color: var(--color-gray-700);
+}
+
+[data-mode="dark"] th {
+  background: var(--color-gray-800);
+  border-color: var(--color-gray-700);
+}
+
+[data-mode="dark"] td {
+  border-color: var(--color-gray-700);
+}
+
+[data-mode="dark"] tr:hover {
+  background: var(--color-gray-800);
+}
+
+/* Liens */
+[data-mode="dark"] a {
+  color: var(--theme-primary-light);
+}
+
+[data-mode="dark"] a:hover {
+  color: var(--theme-primary);
+}
+
+/* ========================================
+   COMPATIBILITÉ
+   ======================================== */
+
+/* Mode automatique basé sur les préférences système */
+@media (prefers-color-scheme: dark) {
+  [data-mode="auto"] {
+    /* Hérite toutes les variables du mode sombre */
+    @extend [data-mode="dark"];
+  }
+}

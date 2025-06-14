@@ -1,0 +1,529 @@
+/* ========================================
+   css/components/notifications.css - Système de notifications Oweo 2.0
+   ======================================== */
+
+/* ========================================
+   CONTENEUR DE NOTIFICATIONS
+   ======================================== */
+
+.notifications-container {
+  position: fixed;
+  z-index: var(--z-notification);
+  pointer-events: none;
+  padding: var(--space-4);
+}
+
+/* Positions */
+.notifications-container--top-right {
+  top: 0;
+  right: 0;
+}
+
+.notifications-container--top-left {
+  top: 0;
+  left: 0;
+}
+
+.notifications-container--top-center {
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.notifications-container--bottom-right {
+  bottom: 0;
+  right: 0;
+}
+
+.notifications-container--bottom-left {
+  bottom: 0;
+  left: 0;
+}
+
+.notifications-container--bottom-center {
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+/* ========================================
+   NOTIFICATION DE BASE
+   ======================================== */
+
+.notification {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-3);
+  min-width: 300px;
+  max-width: 500px;
+  padding: var(--space-4);
+  margin-bottom: var(--space-3);
+  background: var(--bg-surface);
+  border: 1px solid var(--border-default);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-lg);
+  pointer-events: auto;
+  transition: all 300ms cubic-bezier(0.4, 0, 0.2, 1);
+  opacity: 0;
+  transform: translateX(100%);
+}
+
+/* Animations d'entrée selon la position */
+.notifications-container--top-left .notification,
+.notifications-container--bottom-left .notification {
+  transform: translateX(-100%);
+}
+
+.notifications-container--top-center .notification,
+.notifications-container--bottom-center .notification {
+  transform: translateY(-20px);
+}
+
+.notification.show {
+  opacity: 1;
+  transform: translateX(0) translateY(0);
+}
+
+/* Animation de sortie */
+.notification.hide {
+  opacity: 0;
+  transform: translateX(100%);
+}
+
+.notifications-container--top-left .notification.hide,
+.notifications-container--bottom-left .notification.hide {
+  transform: translateX(-100%);
+}
+
+/* ========================================
+   STRUCTURE DE LA NOTIFICATION
+   ======================================== */
+
+/* Icône */
+.notification-icon {
+  flex-shrink: 0;
+  width: 24px;
+  height: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--radius-full);
+  font-size: var(--font-size-sm);
+}
+
+/* Contenu */
+.notification-content {
+  flex: 1;
+  min-width: 0;
+}
+
+.notification-title {
+  font-size: var(--font-size-base);
+  font-weight: var(--font-weight-semibold);
+  color: var(--text-primary);
+  margin-bottom: var(--space-1);
+  line-height: 1.2;
+}
+
+.notification-message {
+  font-size: var(--font-size-sm);
+  color: var(--text-secondary);
+  line-height: var(--line-height-relaxed);
+}
+
+/* Actions */
+.notification-actions {
+  display: flex;
+  gap: var(--space-2);
+  margin-top: var(--space-3);
+}
+
+.notification-action {
+  padding: var(--space-1) var(--space-3);
+  background: transparent;
+  border: 1px solid var(--border-default);
+  border-radius: var(--radius-md);
+  color: var(--text-primary);
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-medium);
+  cursor: pointer;
+  transition: all 200ms ease;
+  text-decoration: none;
+}
+
+.notification-action:hover {
+  background: var(--bg-secondary);
+}
+
+/* Bouton de fermeture */
+.notification-close {
+  flex-shrink: 0;
+  width: 24px;
+  height: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: transparent;
+  border: none;
+  border-radius: var(--radius-md);
+  color: var(--text-tertiary);
+  cursor: pointer;
+  transition: all 200ms ease;
+  padding: 0;
+  margin-left: var(--space-2);
+}
+
+.notification-close:hover {
+  background: var(--bg-secondary);
+  color: var(--text-primary);
+}
+
+/* ========================================
+   VARIANTES DE NOTIFICATION
+   ======================================== */
+
+/* Success */
+.notification--success {
+  background: rgba(16, 185, 129, 0.1);
+  border-color: rgba(16, 185, 129, 0.3);
+}
+
+.notification--success .notification-icon {
+  background: var(--color-success);
+  color: white;
+}
+
+.notification--success .notification-action {
+  color: var(--color-success);
+  border-color: var(--color-success);
+}
+
+.notification--success .notification-action:hover {
+  background: rgba(16, 185, 129, 0.1);
+}
+
+/* Warning */
+.notification--warning {
+  background: rgba(245, 158, 11, 0.1);
+  border-color: rgba(245, 158, 11, 0.3);
+}
+
+.notification--warning .notification-icon {
+  background: var(--color-warning);
+  color: white;
+}
+
+.notification--warning .notification-action {
+  color: var(--color-warning);
+  border-color: var(--color-warning);
+}
+
+.notification--warning .notification-action:hover {
+  background: rgba(245, 158, 11, 0.1);
+}
+
+/* Error */
+.notification--error {
+  background: rgba(239, 68, 68, 0.1);
+  border-color: rgba(239, 68, 68, 0.3);
+}
+
+.notification--error .notification-icon {
+  background: var(--color-error);
+  color: white;
+}
+
+.notification--error .notification-action {
+  color: var(--color-error);
+  border-color: var(--color-error);
+}
+
+.notification--error .notification-action:hover {
+  background: rgba(239, 68, 68, 0.1);
+}
+
+/* Info */
+.notification--info {
+  background: rgba(59, 130, 246, 0.1);
+  border-color: rgba(59, 130, 246, 0.3);
+}
+
+.notification--info .notification-icon {
+  background: var(--color-info);
+  color: white;
+}
+
+.notification--info .notification-action {
+  color: var(--color-info);
+  border-color: var(--color-info);
+}
+
+.notification--info .notification-action:hover {
+  background: rgba(59, 130, 246, 0.1);
+}
+
+/* ========================================
+   STYLES DE NOTIFICATION
+   ======================================== */
+
+/* Minimal */
+.notification--minimal {
+  border: none;
+  box-shadow: var(--shadow-sm);
+}
+
+/* Filled */
+.notification--filled {
+  color: white;
+}
+
+.notification--filled.notification--success {
+  background: var(--color-success);
+  border-color: var(--color-success);
+}
+
+.notification--filled.notification--warning {
+  background: var(--color-warning);
+  border-color: var(--color-warning);
+}
+
+.notification--filled.notification--error {
+  background: var(--color-error);
+  border-color: var(--color-error);
+}
+
+.notification--filled.notification--info {
+  background: var(--color-info);
+  border-color: var(--color-info);
+}
+
+.notification--filled .notification-title,
+.notification--filled .notification-message,
+.notification--filled .notification-close {
+  color: white;
+}
+
+.notification--filled .notification-action {
+  background: rgba(255, 255, 255, 0.2);
+  border-color: rgba(255, 255, 255, 0.3);
+  color: white;
+}
+
+.notification--filled .notification-action:hover {
+  background: rgba(255, 255, 255, 0.3);
+}
+
+/* ========================================
+   TOAST NOTIFICATIONS
+   ======================================== */
+
+.toast {
+  min-width: 250px;
+  max-width: 400px;
+  padding: var(--space-3) var(--space-4);
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+}
+
+.toast .notification-content {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+.toast .notification-title {
+  margin-bottom: 0;
+  font-size: var(--font-size-sm);
+}
+
+.toast .notification-message {
+  display: none;
+}
+
+/* Toast simple (sans icône) */
+.toast--simple {
+  justify-content: center;
+  text-align: center;
+}
+
+.toast--simple .notification-icon {
+  display: none;
+}
+
+/* ========================================
+   NOTIFICATION AVEC PROGRESS
+   ======================================== */
+
+.notification-progress {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: var(--bg-tertiary);
+  border-radius: 0 0 var(--radius-lg) var(--radius-lg);
+  overflow: hidden;
+}
+
+.notification-progress-bar {
+  height: 100%;
+  background: var(--theme-primary);
+  transition: width linear;
+  transform-origin: left;
+}
+
+.notification--success .notification-progress-bar {
+  background: var(--color-success);
+}
+
+.notification--warning .notification-progress-bar {
+  background: var(--color-warning);
+}
+
+.notification--error .notification-progress-bar {
+  background: var(--color-error);
+}
+
+.notification--info .notification-progress-bar {
+  background: var(--color-info);
+}
+
+/* ========================================
+   NOTIFICATION AVEC IMAGE
+   ======================================== */
+
+.notification-image {
+  width: 48px;
+  height: 48px;
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  flex-shrink: 0;
+}
+
+.notification-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* ========================================
+   NOTIFICATION GROUPÉE
+   ======================================== */
+
+.notification-group {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+  margin-bottom: var(--space-3);
+}
+
+.notification-group .notification {
+  margin-bottom: 0;
+  border-radius: 0;
+  border-bottom: none;
+}
+
+.notification-group .notification:first-child {
+  border-radius: var(--radius-lg) var(--radius-lg) 0 0;
+}
+
+.notification-group .notification:last-child {
+  border-radius: 0 0 var(--radius-lg) var(--radius-lg);
+  border-bottom: 1px solid var(--border-default);
+}
+
+/* ========================================
+   ANIMATIONS SPÉCIALES
+   ======================================== */
+
+/* Shake */
+@keyframes notification-shake {
+  0%, 100% { transform: translateX(0); }
+  10%, 30%, 50%, 70%, 90% { transform: translateX(-2px); }
+  20%, 40%, 60%, 80% { transform: translateX(2px); }
+}
+
+.notification--shake {
+  animation: notification-shake 0.5s ease;
+}
+
+/* Bounce */
+@keyframes notification-bounce {
+  0% { transform: scale(0.8); opacity: 0; }
+  50% { transform: scale(1.05); }
+  100% { transform: scale(1); opacity: 1; }
+}
+
+.notification--bounce {
+  animation: notification-bounce 0.4s ease;
+}
+
+/* Slide */
+.notification--slide {
+  transition: all 500ms cubic-bezier(0.68, -0.55, 0.265, 1.55);
+}
+
+/* ========================================
+   RESPONSIVE
+   ======================================== */
+
+@media (max-width: 640px) {
+  .notifications-container {
+    left: 0;
+    right: 0;
+    padding: var(--space-2);
+  }
+  
+  .notification {
+    min-width: auto;
+    max-width: 100%;
+    width: 100%;
+  }
+  
+  .notifications-container--top-left,
+  .notifications-container--top-right,
+  .notifications-container--top-center {
+    top: 0;
+    transform: none;
+  }
+  
+  .notifications-container--bottom-left,
+  .notifications-container--bottom-right,
+  .notifications-container--bottom-center {
+    bottom: 0;
+    transform: none;
+  }
+}
+
+/* ========================================
+   ACCESSIBILITÉ
+   ======================================== */
+
+.notification[role="alert"] {
+  /* Les notifications importantes sont annoncées par les lecteurs d'écran */
+}
+
+.notification[aria-live="polite"] {
+  /* Les notifications normales sont annoncées poliment */
+}
+
+.notification[aria-live="assertive"] {
+  /* Les notifications urgentes interrompent le lecteur d'écran */
+}
+
+/* Focus visible */
+.notification:focus-within {
+  outline: 2px solid var(--theme-primary);
+  outline-offset: 2px;
+}
+
+/* ========================================
+   PRINT
+   ======================================== */
+
+@media print {
+  .notifications-container {
+    display: none;
+  }
+}
