@@ -1,5 +1,5 @@
 // js/core/app.js
-// Application principale Oweo - version simplifiée et corrigée
+// Application principale Oweo - version corrigée
 
 class OweoApp {
     constructor() {
@@ -54,11 +54,12 @@ class OweoApp {
         console.log('🔧 Initializing services...');
         
         const services = [
-            { name: 'StorageManager', instance: window.StorageManager },
-            { name: 'ThemeManager', instance: window.ThemeManager },
-            { name: 'NotificationService', instance: window.NotificationService },
-            { name: 'AuthManager', instance: window.AuthManager },
-            { name: 'LayoutManager', instance: window.LayoutManager }
+            { name: 'StorageManager', instance: window.StorageManager, required: true },
+            { name: 'CookieManager', instance: window.CookieManager, required: false },
+            { name: 'ThemeManager', instance: window.ThemeManager, required: true },
+            { name: 'NotificationService', instance: window.NotificationService, required: false },
+            { name: 'AuthManager', instance: window.AuthManager, required: false },
+            { name: 'LayoutManager', instance: window.LayoutManager, required: false }
         ];
         
         for (const service of services) {
@@ -69,7 +70,7 @@ class OweoApp {
                 } catch (error) {
                     console.warn(`  ⚠️ Failed to initialize ${service.name}:`, error);
                 }
-            } else {
+            } else if (service.required !== false) {
                 console.warn(`  ⚠️ ${service.name} not found or has no init method`);
             }
         }
@@ -192,8 +193,8 @@ class OweoApp {
     }
 }
 
-// Exposer globalement
-window.OweoApp = new OweoApp();
+// Exposer la CLASSE globalement, pas l'instance
+window.OweoApp = OweoApp;
 
 // Export pour les modules
 if (typeof module !== 'undefined' && module.exports) {

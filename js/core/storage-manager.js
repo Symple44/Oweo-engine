@@ -1,5 +1,5 @@
 // js/core/storage-manager.js
-// Gestionnaire de stockage centralisé
+// Gestionnaire de stockage centralisé - Version corrigée
 
 class StorageManager {
     constructor() {
@@ -98,18 +98,43 @@ class StorageManager {
                 return defaultValue;
             }
             
-            const data = JSON.parse(serialized);
-            
-            // Vérifier la validité
-            if (this.isValid(data)) {
-                // Mettre en cache
-                this.cache.set(key, data);
-                return data.value;
-            } else {
-                // Supprimer si expiré
-                this.remove(key);
-                return defaultValue;
+            // Gérer les anciennes valeurs non-JSON (compatibilité)
+            let data;
+            try {
+                data = JSON.parse(serialized);
+            } catch (jsonError) {
+                // Si ce n'est pas du JSON valide, c'est probablement une ancienne valeur
+                console.warn(`StorageManager: Migrating old value for key '${key}'`);
+                
+                // Migrer vers le nouveau format
+                data = {
+                    value: serialized,
+                    timestamp: Date.now(),
+                    ttl: null
+                };
+                
+                // Sauvegarder au nouveau format
+                this.set(key, serialized);
             }
+            
+            // Vérifier si c'est le nouveau format avec value/timestamp
+            if (data && typeof data === 'object' && 'value' in data) {
+                // Nouveau format
+                if (this.isValid(data)) {
+                    // Mettre en cache
+                    this.cache.set(key, data);
+                    return data.value;
+                } else {
+                    // Supprimer si expiré
+                    this.remove(key);
+                    return defaultValue;
+                }
+            } else {
+                // Ancien format ou format invalide
+                console.warn(`StorageManager: Invalid data format for key '${key}', returning as-is`);
+                return data || defaultValue;
+            }
+            
         } catch (error) {
             console.error('StorageManager: Error getting data:', error);
             return defaultValue;
@@ -169,7 +194,12 @@ class StorageManager {
      * Vérifier si une donnée est valide (non expirée)
      */
     isValid(data) {
-        if (!data || !data.timestamp) {
+        if (!data || typeof data !== 'object') {
+            return false;
+        }
+        
+        // Si pas de timestamp, considérer comme invalide (ancien format)
+        if (!('timestamp' in data)) {
             return false;
         }
         
@@ -208,9 +238,21 @@ class StorageManager {
         const oldKeys = ['theme', 'user', 'settings'];
         oldKeys.forEach(key => {
             if (this.storage.getItem(key)) {
-                this.storage.removeItem(key);
+                console.log(`🧹 Migrating old key: ${key}`);
+                const value = this.storage.getItem(key);
+                this.set(key, value); // Sauvegarder avec le nouveau format
+                this.storage.removeItem(key); // Supprimer l'ancienne clé
             }
         });
+        
+        // Nettoyer spécifiquement l'ancien format du thème
+        const oldThemeKey = 'oweo_theme';
+        const oldThemeValue = this.storage.getItem(oldThemeKey);
+        if (oldThemeValue && !oldThemeValue.startsWith('{')) {
+            console.log('🧹 Migrating old theme format');
+            this.storage.removeItem(oldThemeKey);
+            // Le ThemeManager définira la nouvelle valeur
+        }
     }
     
     /**
@@ -220,7 +262,11 @@ class StorageManager {
         // Précharger certaines clés importantes
         const importantKeys = ['theme', 'user_preferences', 'auth_token'];
         importantKeys.forEach(key => {
-            this.get(key); // Cela va mettre en cache
+            try {
+                this.get(key); // Cela va mettre en cache et migrer si nécessaire
+            } catch (error) {
+                console.warn(`Failed to load cache for key: ${key}`, error);
+            }
         });
     }
     
