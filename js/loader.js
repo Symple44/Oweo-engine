@@ -12,34 +12,32 @@ class ScriptLoader {
     detectBaseUrl() {
         // Si on est en local (file://), utiliser des chemins relatifs
         if (window.location.protocol === 'file:') {
-            return 'js';
+            return './js';
         }
         
-        // Pour HTTP(S), détecter le chemin de base depuis l'URL actuelle
+        // Pour HTTP(S), obtenir le répertoire actuel
         const currentPath = window.location.pathname;
         
-        // Trouver le répertoire contenant index.html
-        let basePath = '';
+        // Extraire le répertoire (enlever le fichier s'il y en a un)
+        let directory = '';
         
-        // Si l'URL se termine par index.html, l'enlever
-        if (currentPath.endsWith('index.html')) {
-            basePath = currentPath.substring(0, currentPath.lastIndexOf('/'));
-        } 
-        // Si l'URL se termine par /, c'est déjà le bon répertoire
-        else if (currentPath.endsWith('/')) {
-            basePath = currentPath.slice(0, -1);
-        }
-        // Sinon, on suppose que c'est déjà le bon chemin
-        else {
-            basePath = currentPath;
+        if (currentPath.endsWith('.html') || currentPath.includes('.html')) {
+            // Si c'est un fichier HTML, prendre le répertoire parent
+            directory = currentPath.substring(0, currentPath.lastIndexOf('/'));
+        } else if (currentPath.endsWith('/')) {
+            // Si ça se termine par /, enlever le slash final
+            directory = currentPath.slice(0, -1);
+        } else {
+            // Sinon, c'est probablement déjà un répertoire
+            directory = currentPath;
         }
         
         // Construire le chemin vers le dossier js
-        const jsPath = basePath + '/js';
+        const jsPath = directory + '/js';
         
         console.log('📁 Detected paths:', {
             currentPath,
-            basePath,
+            directory,
             jsPath,
             protocol: window.location.protocol,
             host: window.location.host
