@@ -1,5 +1,5 @@
 /* ========================================
-   css/themes/light.css - Thème clair Oweo 2.0
+   css/themes/light.css - Thème clair Oweo 2.0 corrigé
    ======================================== */
 
 /* ========================================
@@ -40,7 +40,7 @@
   --border-focus: var(--theme-primary);
   
   /* ========================================
-     OMBRES
+     OMBRES (Override des valeurs par défaut)
      ======================================== */
   
   --shadow-xs: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
@@ -51,6 +51,9 @@
   --shadow-xl: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
   --shadow-2xl: 0 25px 50px -12px rgba(0, 0, 0, 0.35);
   --shadow-inner: inset 0 2px 4px 0 rgba(0, 0, 0, 0.06);
+  
+  /* Variables de compatibilité avec theme.manager.js */
+  --shadow: var(--shadow-base);
   
   /* ========================================
      COULEURS SPÉCIFIQUES AUX COMPOSANTS
@@ -149,6 +152,17 @@
   --gradient-primary: linear-gradient(135deg, var(--theme-primary), var(--theme-accent));
   --gradient-secondary: linear-gradient(135deg, var(--color-gray-100), var(--color-gray-200));
   --gradient-surface: linear-gradient(180deg, var(--color-white), var(--color-gray-50));
+}
+
+/* ========================================
+   AJUSTEMENTS SPÉCIFIQUES AU MODE CLAIR
+   ======================================== */
+
+/* Body en mode clair */
+body[data-mode="light"],
+.mode-light {
+  color: var(--text-primary);
+  background-color: var(--bg-primary);
 }
 
 /* ========================================

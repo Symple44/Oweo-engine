@@ -1,5 +1,5 @@
 /* ========================================
-   css/core/variables.css - Système de variables CSS Oweo 2.0
+   css/core/variables.css - Variables CSS corrigées pour Oweo 2.0
    ======================================== */
 
 :root {
@@ -12,6 +12,7 @@
   --oweo-accent-hue: 25;
   --oweo-tertiary-hue: 349;
   
+  /* Couleurs principales avec noms cohérents */
   --color-primary: hsl(var(--oweo-primary-hue), 84%, 50%);
   --color-primary-light: hsl(var(--oweo-primary-hue), 84%, 60%);
   --color-primary-dark: hsl(var(--oweo-primary-hue), 84%, 40%);
@@ -27,6 +28,17 @@
   --color-tertiary: hsl(var(--oweo-tertiary-hue), 84%, 50%);
   --color-tertiary-light: hsl(var(--oweo-tertiary-hue), 84%, 60%);
   --color-tertiary-dark: hsl(var(--oweo-tertiary-hue), 84%, 40%);
+  
+  /* Variables pour compatibilité avec theme.manager.js */
+  --primary: hsl(var(--oweo-primary-hue), 84%, 50%);
+  --primary-light: hsl(var(--oweo-primary-hue), 84%, 60%);
+  --primary-dark: hsl(var(--oweo-primary-hue), 84%, 40%);
+  --secondary: #7c3aed;
+  --accent: hsl(var(--oweo-accent-hue), 84%, 50%);
+  --success: #10b981;
+  --warning: #f59e0b;
+  --error: #ef4444;
+  --info: #3b82f6;
   
   /* ========================================
      COULEURS NEUTRES
@@ -53,27 +65,32 @@
   --color-success: #10b981;
   --color-success-light: #34d399;
   --color-success-dark: #059669;
+  --color-success-alpha-10: rgba(16, 185, 129, 0.1);
   
   --color-warning: #f59e0b;
   --color-warning-light: #fbbf24;
   --color-warning-dark: #d97706;
+  --color-warning-alpha-10: rgba(245, 158, 11, 0.1);
+  --color-warning-alpha-20: rgba(245, 158, 11, 0.2);
   
   --color-error: #ef4444;
   --color-error-light: #f87171;
   --color-error-dark: #dc2626;
+  --color-error-alpha-10: rgba(239, 68, 68, 0.1);
   
   --color-info: #3b82f6;
   --color-info-light: #60a5fa;
   --color-info-dark: #2563eb;
+  --color-info-alpha-10: rgba(59, 130, 246, 0.1);
   
   /* ========================================
-     COULEURS DE THÈME (seront modifiées par les thèmes)
+     COULEURS DE THÈME (utilisées par les composants)
      ======================================== */
   
   --theme-primary: var(--color-primary);
   --theme-primary-light: var(--color-primary-light);
   --theme-primary-dark: var(--color-primary-dark);
-  --theme-primary-alpha-5: var(--color-primary-alpha-10);
+  --theme-primary-alpha-5: hsla(var(--oweo-primary-hue), 84%, 50%, 0.05);
   --theme-primary-alpha-10: var(--color-primary-alpha-10);
   --theme-primary-alpha-20: var(--color-primary-alpha-20);
   
@@ -83,29 +100,10 @@
   --theme-accent-alpha-10: var(--color-accent-alpha-10);
   --theme-accent-alpha-20: var(--color-accent-alpha-20);
   
-  /* ========================================
-     COULEURS D'INTERFACE
-     ======================================== */
-  
-  --bg-primary: var(--color-white);
-  --bg-secondary: var(--color-gray-50);
-  --bg-tertiary: var(--color-gray-100);
-  --bg-surface: var(--color-white);
-  --bg-card: var(--color-white);
-  --bg-input: var(--color-white);
-  --bg-hover: var(--color-gray-50);
-  
-  --text-primary: var(--color-gray-900);
-  --text-secondary: var(--color-gray-600);
-  --text-tertiary: var(--color-gray-500);
-  --text-muted: var(--color-gray-400);
-  --text-on-primary: var(--color-white);
-  --text-on-accent: var(--color-white);
-  
-  --border-default: var(--color-gray-200);
-  --border-subtle: var(--color-gray-100);
-  --border-strong: var(--color-gray-300);
-  --border-focus: var(--theme-primary);
+  --theme-tertiary: var(--color-tertiary);
+  --theme-tertiary-light: var(--color-tertiary-light);
+  --theme-tertiary-dark: var(--color-tertiary-dark);
+  --theme-tertiary-alpha-5: hsla(var(--oweo-tertiary-hue), 84%, 50%, 0.05);
   
   /* ========================================
      SPACING SYSTEM (4px base)
@@ -121,6 +119,7 @@
   --space-8: 2rem;      /* 32px */
   --space-10: 2.5rem;   /* 40px */
   --space-12: 3rem;     /* 48px */
+  --space-14: 3.5rem;   /* 56px */
   --space-16: 4rem;     /* 64px */
   --space-20: 5rem;     /* 80px */
   --space-24: 6rem;     /* 96px */
@@ -224,7 +223,7 @@
   --border-width-8: 8px;
   
   /* ========================================
-     SHADOWS
+     SHADOWS - Valeurs par défaut
      ======================================== */
   
   --shadow-xs: 0 1px 2px 0 rgba(0, 0, 0, 0.05);

@@ -1,137 +1,18 @@
 // js/managers/theme.manager.js
-// Gestionnaire de thèmes corrigé avec mapping des variables CSS
+// Gestionnaire de thèmes adapté à la structure CSS existante
 
 class ThemeManager {
     constructor() {
-        this.themes = {
-            light: {
-                name: 'Clair',
-                icon: 'fas fa-sun',
-                colors: {
-                    // Couleurs primaires
-                    primary: '#00d4ff',
-                    'primary-light': '#33ddff',
-                    'primary-dark': '#00a8cc',
-                    secondary: '#7c3aed',
-                    accent: '#ff6b35',
-                    success: '#10b981',
-                    warning: '#f59e0b',
-                    error: '#ef4444',
-                    info: '#3b82f6',
-                    
-                    // Arrière-plans
-                    'bg-primary': '#ffffff',
-                    'bg-secondary': '#f9fafb',
-                    'bg-tertiary': '#f3f4f6',
-                    'bg-surface': '#ffffff',
-                    'bg-card': '#ffffff',
-                    'bg-input': '#ffffff',
-                    'bg-hover': '#f9fafb',
-                    
-                    // Textes
-                    'text-primary': '#111827',
-                    'text-secondary': '#4b5563',
-                    'text-tertiary': '#6b7280',
-                    'text-muted': '#9ca3af',
-                    'text-on-primary': '#ffffff',
-                    'text-on-accent': '#ffffff',
-                    
-                    // Bordures
-                    'border-default': '#e5e7eb',
-                    'border-subtle': '#f3f4f6',
-                    'border-strong': '#d1d5db',
-                    'border-focus': '#00d4ff',
-                    
-                    // Ombres
-                    'shadow': 'rgba(0, 0, 0, 0.1)',
-                    'shadow-sm': '0 1px 2px 0 rgba(0, 0, 0, 0.05)',
-                    'shadow-base': '0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06)',
-                    'shadow-lg': '0 10px 15px -3px rgba(0, 0, 0, 0.1)'
-                }
-            },
-            
-            dark: {
-                name: 'Sombre',
-                icon: 'fas fa-moon',
-                colors: {
-                    // Couleurs primaires
-                    primary: '#00d4ff',
-                    'primary-light': '#66e2ff',
-                    'primary-dark': '#0099cc',
-                    secondary: '#a78bfa',
-                    accent: '#ff8c5a',
-                    success: '#34d399',
-                    warning: '#fbbf24',
-                    error: '#f87171',
-                    info: '#60a5fa',
-                    
-                    // Arrière-plans
-                    'bg-primary': '#0f0f23',
-                    'bg-secondary': '#16213e',
-                    'bg-tertiary': '#1a1a2e',
-                    'bg-surface': '#16213e',
-                    'bg-card': '#1a1a2e',
-                    'bg-input': '#1f2937',
-                    'bg-hover': '#374151',
-                    
-                    // Textes
-                    'text-primary': '#ffffff',
-                    'text-secondary': '#e5e7eb',
-                    'text-tertiary': '#d1d5db',
-                    'text-muted': '#9ca3af',
-                    'text-on-primary': '#111827',
-                    'text-on-accent': '#ffffff',
-                    
-                    // Bordures
-                    'border-default': '#374151',
-                    'border-subtle': '#1f2937',
-                    'border-strong': '#4b5563',
-                    'border-focus': '#00d4ff',
-                    
-                    // Ombres
-                    'shadow': 'rgba(0, 0, 0, 0.3)',
-                    'shadow-sm': '0 1px 2px 0 rgba(0, 0, 0, 0.2)',
-                    'shadow-base': '0 1px 3px 0 rgba(0, 0, 0, 0.3)',
-                    'shadow-lg': '0 10px 15px -3px rgba(0, 0, 0, 0.5)'
-                }
-            }
-        };
-        
-        this.currentTheme = 'light';
-        this.customColors = {};
+        this.currentTheme = 'oweo';
+        this.currentMode = 'light';
         this.listeners = new Map();
         
         // Configuration
         this.config = {
             storageKey: 'oweo_theme',
-            customColorsKey: 'oweo_custom_colors',
-            transitionDuration: 300,
-            autoDetect: true
-        };
-        
-        // Simple storage fallback si StorageManager n'existe pas
-        this.storage = {
-            get: (key) => {
-                try {
-                    return localStorage.getItem(key);
-                } catch (e) {
-                    return null;
-                }
-            },
-            set: (key, value) => {
-                try {
-                    localStorage.setItem(key, value);
-                } catch (e) {
-                    console.warn('Impossible de sauvegarder dans localStorage');
-                }
-            },
-            remove: (key) => {
-                try {
-                    localStorage.removeItem(key);
-                } catch (e) {
-                    console.warn('Impossible de supprimer de localStorage');
-                }
-            }
+            modeKey: 'oweo_mode',
+            autoDetect: true,
+            transitionDuration: 300
         };
     }
     
@@ -142,19 +23,20 @@ class ThemeManager {
     async init() {
         console.log('🎨 Initialisation ThemeManager');
         
-        // Charger le thème sauvegardé
-        this.loadSavedTheme();
+        // Charger les préférences sauvegardées
+        this.loadSavedPreferences();
         
-        // Détecter les préférences système
-        if (this.config.autoDetect && !this.getSavedTheme()) {
-            this.detectSystemTheme();
+        // Détecter les préférences système si nécessaire
+        if (this.config.autoDetect && !this.getSavedMode()) {
+            this.detectSystemPreference();
         }
         
-        // Appliquer le thème initial
+        // Appliquer le thème et le mode
         this.applyTheme(this.currentTheme, false);
+        this.applyMode(this.currentMode, false);
         
         // Écouter les changements système
-        this.watchSystemTheme();
+        this.watchSystemPreference();
         
         // Initialiser les contrôles
         this.initializeControls();
@@ -162,74 +44,83 @@ class ThemeManager {
         return this;
     }
     
-    loadSavedTheme() {
-        const saved = this.storage.get(this.config.storageKey);
-        if (saved && this.themes[saved]) {
-            this.currentTheme = saved;
+    loadSavedPreferences() {
+        // Charger le thème
+        const savedTheme = localStorage.getItem(this.config.storageKey);
+        if (savedTheme) {
+            this.currentTheme = savedTheme;
         }
         
-        const customColors = this.storage.get(this.config.customColorsKey);
-        if (customColors) {
-            try {
-                this.customColors = JSON.parse(customColors);
-            } catch (e) {
-                console.error('Erreur lors du chargement des couleurs personnalisées');
-            }
+        // Charger le mode
+        const savedMode = localStorage.getItem(this.config.modeKey);
+        if (savedMode && (savedMode === 'light' || savedMode === 'dark')) {
+            this.currentMode = savedMode;
         }
     }
     
-    getSavedTheme() {
-        return this.storage.get(this.config.storageKey);
+    getSavedMode() {
+        return localStorage.getItem(this.config.modeKey);
     }
     
-    detectSystemTheme() {
+    detectSystemPreference() {
         if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
-            this.currentTheme = 'dark';
+            this.currentMode = 'dark';
         } else {
-            this.currentTheme = 'light';
+            this.currentMode = 'light';
         }
     }
     
-    watchSystemTheme() {
+    watchSystemPreference() {
         if (!window.matchMedia) return;
         
         const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
         
         mediaQuery.addEventListener('change', (e) => {
-            if (this.config.autoDetect && !this.getSavedTheme()) {
-                const theme = e.matches ? 'dark' : 'light';
-                this.setTheme(theme);
+            if (this.config.autoDetect && !this.getSavedMode()) {
+                const mode = e.matches ? 'dark' : 'light';
+                this.setMode(mode, false);
             }
         });
     }
     
     // ========================================
-    // Application des thèmes
+    // Application des thèmes et modes
     // ========================================
     
     setTheme(themeName, save = true) {
-        if (!this.themes[themeName]) {
-            console.warn(`Theme "${themeName}" not found`);
-            return;
-        }
-        
         this.currentTheme = themeName;
         this.applyTheme(themeName, true);
         
         if (save) {
-            this.storage.set(this.config.storageKey, themeName);
+            localStorage.setItem(this.config.storageKey, themeName);
         }
         
         this.emit('themeChanged', {
             theme: themeName,
-            colors: this.getCurrentColors()
+            mode: this.currentMode
+        });
+    }
+    
+    setMode(mode, save = true) {
+        if (mode !== 'light' && mode !== 'dark') {
+            console.warn(`Mode invalide: ${mode}`);
+            return;
+        }
+        
+        this.currentMode = mode;
+        this.applyMode(mode, true);
+        
+        if (save) {
+            localStorage.setItem(this.config.modeKey, mode);
+        }
+        
+        this.emit('modeChanged', {
+            theme: this.currentTheme,
+            mode: mode
         });
     }
     
     applyTheme(themeName, animate = true) {
-        const theme = this.themes[themeName];
-        if (!theme) return;
-        
         const root = document.documentElement;
         const body = document.body;
         
@@ -239,35 +130,13 @@ class ThemeManager {
             body.style.transition = `all ${this.config.transitionDuration}ms ease-in-out`;
         }
         
-        // Appliquer les couleurs avec le bon préfixe
-        Object.entries(theme.colors).forEach(([key, value]) => {
-            // Utiliser les couleurs personnalisées si disponibles
-            const customValue = this.customColors[key];
-            const finalValue = customValue || value;
-            
-            // Garder le nom de la variable tel quel
-            root.style.setProperty(`--${key}`, finalValue);
-            
-            // Pour la compatibilité avec l'ancien système
-            if (key.includes('-')) {
-                root.style.setProperty(`--color-${key}`, finalValue);
-            }
-        });
-        
-        // Appliquer des variables spéciales pour les couleurs principales
-        root.style.setProperty('--theme-primary', theme.colors.primary);
-        root.style.setProperty('--theme-primary-light', theme.colors['primary-light']);
-        root.style.setProperty('--theme-primary-dark', theme.colors['primary-dark']);
-        root.style.setProperty('--theme-accent', theme.colors.accent);
+        // Appliquer les attributs
+        root.setAttribute('data-theme', themeName);
+        body.setAttribute('data-theme', themeName);
         
         // Appliquer les classes
         body.className = body.className.replace(/\btheme-\S+/g, '');
         body.classList.add(`theme-${themeName}`);
-        body.classList.add(`mode-${this.getMode(themeName)}`);
-        
-        // Mettre à jour les attributs
-        root.setAttribute('data-theme', themeName);
-        root.setAttribute('data-mode', this.getMode(themeName));
         
         // Retirer la transition après l'animation
         if (animate) {
@@ -276,79 +145,67 @@ class ThemeManager {
                 body.style.transition = '';
             }, this.config.transitionDuration);
         }
-        
-        // Mettre à jour l'icône du thème
-        this.updateThemeIcon(themeName);
     }
     
-    getMode(themeName) {
-        return themeName === 'light' ? 'light' : 'dark';
-    }
-    
-    // ========================================
-    // Personnalisation des couleurs
-    // ========================================
-    
-    setColor(colorName, value) {
-        this.customColors[colorName] = value;
+    applyMode(mode, animate = true) {
+        const root = document.documentElement;
+        const body = document.body;
         
-        // Appliquer immédiatement
-        document.documentElement.style.setProperty(`--${colorName}`, value);
-        
-        // Sauvegarder
-        this.storage.set(this.config.customColorsKey, JSON.stringify(this.customColors));
-        
-        this.emit('colorChanged', { color: colorName, value });
-    }
-    
-    resetColor(colorName) {
-        delete this.customColors[colorName];
-        
-        // Restaurer la couleur du thème
-        const themeColor = this.themes[this.currentTheme]?.colors[colorName];
-        if (themeColor) {
-            document.documentElement.style.setProperty(`--${colorName}`, themeColor);
+        // Ajouter la transition si animation
+        if (animate) {
+            const elements = [root, body];
+            elements.forEach(el => {
+                el.style.transition = `background-color ${this.config.transitionDuration}ms ease-in-out, color ${this.config.transitionDuration}ms ease-in-out`;
+            });
         }
         
-        // Sauvegarder
-        this.storage.set(this.config.customColorsKey, JSON.stringify(this.customColors));
+        // Appliquer les attributs
+        root.setAttribute('data-mode', mode);
+        body.setAttribute('data-mode', mode);
         
-        this.emit('colorReset', { color: colorName });
-    }
-    
-    resetAllColors() {
-        this.customColors = {};
-        this.storage.remove(this.config.customColorsKey);
+        // Appliquer les classes
+        body.classList.remove('mode-light', 'mode-dark');
+        body.classList.add(`mode-${mode}`);
         
-        // Réappliquer le thème
-        this.applyTheme(this.currentTheme, true);
+        // Mettre à jour les icônes
+        this.updateThemeIcons();
         
-        this.emit('allColorsReset');
+        // Retirer la transition après l'animation
+        if (animate) {
+            setTimeout(() => {
+                document.documentElement.style.transition = '';
+                document.body.style.transition = '';
+            }, this.config.transitionDuration);
+        }
     }
     
     // ========================================
     // Méthodes utilitaires
     // ========================================
     
+    toggleMode() {
+        const newMode = this.currentMode === 'light' ? 'dark' : 'light';
+        this.setMode(newMode);
+    }
+    
+    toggleTheme() {
+        this.toggleMode(); // Pour l'instant, on toggle juste le mode
+    }
+    
     getCurrentTheme() {
         return this.currentTheme;
     }
     
-    getCurrentColors() {
-        const themeColors = this.themes[this.currentTheme]?.colors || {};
-        return {
-            ...themeColors,
-            ...this.customColors
-        };
+    getCurrentMode() {
+        return this.currentMode;
     }
     
-    getAvailableThemes() {
-        return Object.entries(this.themes).map(([key, theme]) => ({
-            id: key,
-            name: theme.name,
-            icon: theme.icon,
-            active: key === this.currentTheme
-        }));
+    isDarkMode() {
+        return this.currentMode === 'dark';
+    }
+    
+    isLightMode() {
+        return this.currentMode === 'light';
     }
     
     // ========================================
@@ -356,42 +213,71 @@ class ThemeManager {
     // ========================================
     
     initializeControls() {
-        // Bouton de bascule du thème
-        const toggleBtn = document.getElementById('theme-toggle');
-        if (toggleBtn) {
-            toggleBtn.addEventListener('click', () => this.toggleTheme());
-        }
+        // Boutons de thème
+        const themeButtons = document.querySelectorAll(
+            '.theme-switcher-btn, #theme-toggle, [data-theme-toggle]'
+        );
         
-        // Bouton dans le theme switcher
-        const switcherBtn = document.querySelector('.theme-switcher-btn');
-        if (switcherBtn) {
-            switcherBtn.addEventListener('click', () => this.toggleTheme());
-        }
+        themeButtons.forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                e.preventDefault();
+                this.toggleMode();
+            });
+        });
         
-        // Options de thème dans le customizer
+        // Options de thème spécifiques
         document.querySelectorAll('[data-theme]').forEach(btn => {
             btn.addEventListener('click', (e) => {
                 const theme = e.currentTarget.dataset.theme;
-                this.setTheme(theme);
+                if (theme) {
+                    this.setTheme(theme);
+                }
+            });
+        });
+        
+        // Options de mode spécifiques
+        document.querySelectorAll('[data-mode-switch]').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                const mode = e.currentTarget.dataset.modeSwitch;
+                if (mode) {
+                    this.setMode(mode);
+                }
             });
         });
     }
     
-    updateThemeIcon(themeName) {
-        const icon = document.querySelector('[data-theme-icon]');
-        if (icon) {
-            const theme = this.themes[themeName];
-            icon.className = theme?.icon || 'fas fa-palette';
-        }
-    }
-    
-    toggleTheme() {
-        const themes = Object.keys(this.themes);
-        const currentIndex = themes.indexOf(this.currentTheme);
-        const nextIndex = (currentIndex + 1) % themes.length;
-        const nextTheme = themes[nextIndex];
+    updateThemeIcons() {
+        // Gérer l'affichage des icônes selon le mode
+        const sunIcons = document.querySelectorAll('.theme-icon-sun, .theme-icon-light, .fa-sun');
+        const moonIcons = document.querySelectorAll('.theme-icon-moon, .theme-icon-dark, .fa-moon');
         
-        this.setTheme(nextTheme);
+        if (this.currentMode === 'light') {
+            sunIcons.forEach(icon => {
+                icon.style.opacity = '1';
+                icon.style.transform = 'rotate(0deg) scale(1)';
+            });
+            moonIcons.forEach(icon => {
+                icon.style.opacity = '0';
+                icon.style.transform = 'rotate(180deg) scale(0)';
+            });
+        } else {
+            sunIcons.forEach(icon => {
+                icon.style.opacity = '0';
+                icon.style.transform = 'rotate(-180deg) scale(0)';
+            });
+            moonIcons.forEach(icon => {
+                icon.style.opacity = '1';
+                icon.style.transform = 'rotate(0deg) scale(1)';
+            });
+        }
+        
+        // Mettre à jour l'attribut aria-label
+        const buttons = document.querySelectorAll('.theme-switcher-btn, #theme-toggle');
+        buttons.forEach(btn => {
+            btn.setAttribute('aria-label', 
+                this.currentMode === 'light' ? 'Activer le mode sombre' : 'Activer le mode clair'
+            );
+        });
     }
     
     // ========================================
