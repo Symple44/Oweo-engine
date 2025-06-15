@@ -1,213 +1,101 @@
 /* ========================================
-   css/components/theme-switcher.css - Système de sélecteur de thème Oweo 2.0
-   Version complète améliorée avec animations avancées
+   css/components/theme-switcher.css - Sélecteur de thème moderne Oweo 2.0
+   Style amélioré compatible avec la structure existante
    ======================================== */
 
 /* ========================================
-   VARIABLES LOCALES
-   ======================================== */
-
-:root {
-  --theme-switcher-size: 56px;
-  --theme-switcher-size-sm: 48px;
-  --dropdown-width: 360px;
-  --dropdown-shadow: 0 20px 40px -10px rgba(0, 0, 0, 0.2);
-  --transition-theme: all 300ms cubic-bezier(0.4, 0, 0.2, 1);
-  --transition-bounce: all 400ms cubic-bezier(0.68, -0.55, 0.265, 1.55);
-}
-
-/* ========================================
-   CONTENEUR PRINCIPAL
+   BOUTON PRINCIPAL
    ======================================== */
 
 .theme-switcher {
-  position: relative;
-  z-index: var(--z-dropdown);
-}
-
-.theme-switcher-floating {
   position: fixed;
   bottom: 2rem;
   right: 2rem;
   z-index: var(--z-fixed);
 }
 
-/* ========================================
-   BOUTON PRINCIPAL AMÉLIORÉ
-   ======================================== */
-
 .theme-switcher-btn {
   position: relative;
-  width: var(--theme-switcher-size);
-  height: var(--theme-switcher-size);
-  padding: 0;
-  border: none;
-  border-radius: 50%;
-  background: var(--bg-card);
-  color: var(--text-secondary);
-  cursor: pointer;
-  overflow: hidden;
-  transition: var(--transition-theme);
-  box-shadow: 
-    0 4px 12px rgba(0, 0, 0, 0.1),
-    0 2px 4px rgba(0, 0, 0, 0.05),
-    inset 0 1px 2px rgba(255, 255, 255, 0.1);
-}
-
-/* Effet glassmorphism */
-.theme-switcher-btn::before {
-  content: '';
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(
-    135deg,
-    rgba(255, 255, 255, 0.1) 0%,
-    rgba(255, 255, 255, 0.05) 50%,
-    transparent 100%
-  );
-  border-radius: inherit;
-  pointer-events: none;
-}
-
-/* États du bouton */
-.theme-switcher-btn:hover {
-  transform: translateY(-2px) scale(1.05);
-  box-shadow: 
-    0 8px 20px rgba(0, 0, 0, 0.15),
-    0 4px 8px rgba(0, 0, 0, 0.1),
-    inset 0 1px 2px rgba(255, 255, 255, 0.2);
-}
-
-.theme-switcher-btn:active {
-  transform: translateY(0) scale(0.98);
-}
-
-.theme-switcher-btn.active {
-  background: var(--theme-primary);
-  color: var(--text-on-primary);
-  animation: pulse-glow 2s ease-in-out infinite;
-}
-
-@keyframes pulse-glow {
-  0%, 100% {
-    box-shadow: 
-      0 4px 12px rgba(0, 0, 0, 0.1),
-      0 0 20px var(--theme-primary-alpha-20);
-  }
-  50% {
-    box-shadow: 
-      0 4px 12px rgba(0, 0, 0, 0.1),
-      0 0 30px var(--theme-primary-alpha-20);
-  }
-}
-
-/* Animation de changement de thème */
-.theme-switcher-btn.theme-changing {
-  animation: theme-change-spin 400ms ease;
-}
-
-@keyframes theme-change-spin {
-  0% { transform: rotate(0deg) scale(1); }
-  50% { transform: rotate(180deg) scale(0.8); }
-  100% { transform: rotate(360deg) scale(1); }
-}
-
-/* ========================================
-   ICÔNES ANIMÉES
-   ======================================== */
-
-.theme-switcher-icon {
-  position: relative;
+  width: 48px;
+  height: 48px;
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 100%;
-  height: 100%;
+  background: var(--bg-surface);
+  border: 1px solid var(--border-subtle);
+  border-radius: 50%;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  cursor: pointer;
+  transition: all 300ms cubic-bezier(0.4, 0, 0.2, 1);
+  color: var(--text-secondary);
+  overflow: hidden;
+}
+
+/* Masquer tout texte dans le bouton */
+.theme-switcher-btn span {
+  display: none !important;
+}
+
+.theme-switcher-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.12);
+  border-color: var(--theme-primary-alpha-20);
+}
+
+.theme-switcher-btn:active {
+  transform: scale(0.95);
+}
+
+/* Animation du bouton principal quand actif */
+.theme-switcher-main.active {
+  background: var(--theme-primary) !important;
+  color: var(--text-on-primary) !important;
+}
+
+/* Style épuré pour le bouton principal */
+.theme-switcher-main,
+.theme-switcher-floating .theme-switcher-btn {
+  padding: 0 !important;
+  font-size: 0 !important; /* Cache tout texte */
+  line-height: 0 !important;
+}
+
+/* S'assurer que seules les icônes sont centrées */
+.theme-switcher-main > *:not(.theme-switcher-icon),
+.theme-switcher-btn > *:not(.theme-switcher-icon) {
+  display: none !important;
+}
+
+/* Icônes animées */
+.theme-switcher-icon {
+  position: relative;
+  width: 20px;
+  height: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .theme-switcher-icon i {
   position: absolute;
-  font-size: 1.5rem;
-  transition: all 300ms cubic-bezier(0.4, 0, 0.2, 1);
+  font-size: 18px;
+  transition: all 300ms cubic-bezier(0.68, -0.55, 0.265, 1.55);
 }
 
-/* Animation des icônes soleil/lune */
-[data-mode="light"] .theme-icon-sun,
-[data-mode="light"] .fa-sun {
-  opacity: 1;
-  transform: rotate(0deg) scale(1);
+/* S'assurer que seules les icônes sont visibles */
+.theme-switcher-btn > span:not(.theme-switcher-icon) {
+  display: none !important;
 }
 
-[data-mode="light"] .theme-icon-moon,
-[data-mode="light"] .fa-moon {
+/* Animation des icônes selon le mode */
+[data-mode="light"] .theme-icon-moon {
+  transform: translateY(30px) rotate(180deg);
   opacity: 0;
-  transform: rotate(90deg) scale(0);
 }
 
-[data-mode="dark"] .theme-icon-sun,
-[data-mode="dark"] .fa-sun {
+[data-mode="dark"] .theme-icon-sun {
+  transform: translateY(-30px) rotate(-180deg);
   opacity: 0;
-  transform: rotate(-90deg) scale(0);
-}
-
-[data-mode="dark"] .theme-icon-moon,
-[data-mode="dark"] .fa-moon {
-  opacity: 1;
-  transform: rotate(0deg) scale(1);
-}
-
-/* ========================================
-   INDICATEUR DE THÈME PERSONNALISÉ
-   ======================================== */
-
-.theme-indicator {
-  position: absolute;
-  top: -2px;
-  right: -2px;
-  width: 16px;
-  height: 16px;
-  background: var(--theme-accent);
-  border: 3px solid var(--bg-surface);
-  border-radius: 50%;
-  opacity: 0;
-  transform: scale(0);
-  transition: var(--transition-bounce);
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
-}
-
-.theme-switcher-main.has-custom-theme .theme-indicator {
-  opacity: 1;
-  transform: scale(1);
-  animation: indicator-pulse 2s ease-in-out infinite;
-}
-
-@keyframes indicator-pulse {
-  0%, 100% { transform: scale(1); }
-  50% { transform: scale(1.1); }
-}
-
-/* Badge de thème sur le bouton */
-.theme-badge {
-  position: absolute;
-  bottom: -4px;
-  right: -4px;
-  width: 20px;
-  height: 20px;
-  background: var(--bg-surface);
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 10px;
-  opacity: 0;
-  transform: scale(0);
-  transition: var(--transition-bounce);
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-}
-
-.theme-switcher-main[data-theme-name]:not([data-theme-name="oweo"]) .theme-badge {
-  opacity: 1;
-  transform: scale(1);
 }
 
 /* ========================================
@@ -216,29 +104,19 @@
 
 .theme-switcher-dropdown {
   position: absolute;
-  bottom: calc(100% + var(--space-4));
+  bottom: calc(100% + 16px);
   right: 0;
-  width: var(--dropdown-width);
+  min-width: 280px;
   background: var(--bg-surface);
-  border: 1px solid var(--border-default);
-  border-radius: var(--radius-xl);
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  border-radius: 16px;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.12);
   opacity: 0;
   visibility: hidden;
   transform: translateY(10px) scale(0.95);
   transition: all 250ms cubic-bezier(0.4, 0, 0.2, 1);
   z-index: var(--z-dropdown);
   overflow: hidden;
-  backdrop-filter: blur(20px);
-  box-shadow: var(--dropdown-shadow);
-}
-
-/* Effet glassmorphism pour le dropdown */
-.theme-switcher-dropdown::before {
-  content: '';
-  position: absolute;
-  inset: 0;
-  background: rgba(255, 255, 255, 0.05);
-  pointer-events: none;
 }
 
 .theme-switcher-dropdown.active {
@@ -247,310 +125,203 @@
   transform: translateY(0) scale(1);
 }
 
-/* Flèche du dropdown */
-.theme-switcher-dropdown::after {
-  content: '';
-  position: absolute;
-  bottom: -8px;
-  right: 24px;
-  width: 16px;
-  height: 16px;
-  background: var(--bg-surface);
-  border-right: 1px solid var(--border-default);
-  border-bottom: 1px solid var(--border-default);
-  transform: rotate(45deg);
-  z-index: -1;
-}
-
-/* ========================================
-   HEADER DU DROPDOWN
-   ======================================== */
-
+/* Header du dropdown simplifié */
 .theme-dropdown-header {
-  position: relative;
-  padding: var(--space-5) var(--space-6);
-  background: linear-gradient(135deg, var(--bg-secondary), var(--bg-tertiary));
-  border-bottom: 1px solid var(--border-subtle);
-}
-
-.theme-dropdown-header::after {
-  content: '';
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  height: 1px;
-  background: linear-gradient(90deg, 
-    transparent,
-    var(--theme-primary-alpha-20) 50%,
-    transparent
-  );
+  padding: 20px 20px 16px;
+  background: var(--bg-primary);
 }
 
 .theme-dropdown-header h4 {
   margin: 0;
-  font-size: var(--font-size-lg);
-  font-weight: var(--font-weight-semibold);
+  font-size: 16px;
+  font-weight: 600;
   color: var(--text-primary);
-  letter-spacing: -0.025em;
 }
 
-/* ========================================
-   SECTIONS DU DROPDOWN
-   ======================================== */
-
+/* Sections du dropdown */
 .theme-dropdown-section {
-  padding: var(--space-5) var(--space-6);
-  position: relative;
+  padding: 0 20px 20px;
 }
 
-.theme-dropdown-section:not(:last-of-type)::after {
-  content: '';
-  position: absolute;
-  bottom: 0;
-  left: var(--space-6);
-  right: var(--space-6);
-  height: 1px;
-  background: var(--border-subtle);
+.theme-dropdown-section:last-of-type {
+  padding-bottom: 20px;
 }
 
 .theme-dropdown-section h5 {
-  margin: 0 0 var(--space-4) 0;
-  font-size: var(--font-size-xs);
-  font-weight: var(--font-weight-semibold);
-  color: var(--text-muted);
+  margin: 0 0 12px 0;
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--text-tertiary);
   text-transform: uppercase;
-  letter-spacing: var(--letter-spacing-wider);
-  opacity: 0.8;
+  letter-spacing: 0.05em;
+  opacity: 0.7;
 }
 
 /* ========================================
-   SÉLECTEUR DE MODE AVANCÉ
-   ======================================== */
+   SÉLECTEUR DE MODE MODERNE
+   ========================================== */
 
 .theme-mode-selector {
   position: relative;
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: var(--space-2);
-  padding: var(--space-2);
+  display: flex;
   background: var(--bg-secondary);
-  border-radius: var(--radius-lg);
-  overflow: hidden;
+  border-radius: 12px;
+  padding: 3px;
+  gap: 0;
 }
 
-/* Slider animé de fond */
+/* Indicateur glissant */
 .theme-mode-selector::before {
   content: '';
   position: absolute;
-  width: calc(50% - var(--space-2));
-  height: calc(100% - var(--space-4));
+  width: calc(50% - 3px);
+  height: calc(100% - 6px);
   background: var(--bg-surface);
-  border-radius: var(--radius-md);
-  box-shadow: 
-    0 2px 4px rgba(0, 0, 0, 0.1),
-    inset 0 1px 2px rgba(255, 255, 255, 0.1);
-  transition: transform 300ms cubic-bezier(0.4, 0, 0.2, 1);
-  top: var(--space-2);
-  left: var(--space-2);
+  border-radius: 9px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  transition: transform 250ms cubic-bezier(0.4, 0, 0.2, 1);
+  transform: translateX(0);
 }
 
-.theme-mode-selector:has(.theme-mode-btn[data-mode="dark"].active)::before {
-  transform: translateX(calc(100% + var(--space-2)));
+[data-mode="dark"] .theme-mode-selector::before {
+  transform: translateX(calc(100% + 3px));
 }
 
 .theme-mode-btn {
-  position: relative;
-  z-index: 1;
+  flex: 1;
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: var(--space-2);
-  padding: var(--space-3);
+  gap: 8px;
+  padding: 10px 16px;
   background: transparent;
   border: none;
-  border-radius: var(--radius-md);
-  color: var(--text-secondary);
-  font-size: var(--font-size-sm);
-  font-weight: var(--font-weight-medium);
+  border-radius: 9px;
+  color: var(--text-tertiary);
+  font-size: 13px;
+  font-weight: 500;
   cursor: pointer;
-  transition: all 200ms ease;
-  overflow: hidden;
-}
-
-/* Effet de hover avec ripple */
-.theme-mode-btn::after {
-  content: '';
-  position: absolute;
-  inset: 0;
-  background: radial-gradient(circle, var(--theme-primary-alpha-20) 0%, transparent 70%);
-  opacity: 0;
-  transform: scale(0);
-  transition: all 300ms ease;
-}
-
-.theme-mode-btn:hover::after {
-  opacity: 1;
-  transform: scale(1);
+  position: relative;
+  z-index: 1;
+  transition: color 200ms ease;
 }
 
 .theme-mode-btn:hover {
-  color: var(--text-primary);
+  color: var(--text-secondary);
 }
 
 .theme-mode-btn.active {
-  color: var(--theme-primary);
-  font-weight: var(--font-weight-semibold);
+  color: var(--text-primary);
 }
 
-.theme-mode-btn.active i {
-  transform: scale(1.1);
-  filter: drop-shadow(0 2px 4px var(--theme-primary-alpha-20));
+.theme-mode-btn i {
+  font-size: 16px;
 }
 
 /* ========================================
-   OPTIONS DE THÈME AMÉLIORÉES
-   ======================================== */
+   OPTIONS DE THÈME MODERNES
+   ========================================== */
 
 .theme-options {
   display: flex;
   flex-direction: column;
-  gap: var(--space-3);
+  gap: 8px;
 }
 
 .theme-option {
-  position: relative;
   display: flex;
   align-items: center;
-  gap: var(--space-3);
+  gap: 12px;
   width: 100%;
-  padding: var(--space-3);
-  background: transparent;
+  padding: 12px;
+  background: var(--bg-primary);
   border: 2px solid transparent;
-  border-radius: var(--radius-lg);
+  border-radius: 12px;
+  text-align: left;
   cursor: pointer;
-  transition: all 250ms ease;
+  transition: all 200ms ease;
+  position: relative;
   overflow: hidden;
 }
 
-/* Effet de fond au hover */
 .theme-option::before {
   content: '';
   position: absolute;
-  inset: 0;
-  background: linear-gradient(135deg, transparent, var(--bg-secondary));
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: var(--theme-primary-alpha-5);
   opacity: 0;
   transition: opacity 200ms ease;
+}
+
+.theme-option:hover {
+  background: var(--bg-secondary);
+  transform: translateX(4px);
 }
 
 .theme-option:hover::before {
   opacity: 1;
 }
 
-.theme-option:hover {
-  border-color: var(--border-subtle);
-  transform: translateX(4px);
-}
-
-/* État actif avec animation */
 .theme-option.active {
   background: var(--theme-primary-alpha-10);
   border-color: var(--theme-primary);
-  animation: option-select 300ms ease;
 }
 
-@keyframes option-select {
-  0% { transform: scale(0.95); }
-  50% { transform: scale(1.02); }
-  100% { transform: scale(1); }
-}
-
-/* Icône du thème */
 .theme-option-icon {
-  position: relative;
-  width: 44px;
-  height: 44px;
+  width: 36px;
+  height: 36px;
   display: flex;
   align-items: center;
   justify-content: center;
   background: var(--bg-secondary);
-  border-radius: var(--radius-lg);
+  border-radius: 10px;
   color: var(--text-secondary);
-  font-size: var(--font-size-xl);
+  font-size: 18px;
   flex-shrink: 0;
-  transition: all 250ms ease;
-  overflow: hidden;
+  transition: all 200ms ease;
 }
 
-/* Effet de brillance sur l'icône active */
+.theme-option:hover .theme-option-icon {
+  background: var(--bg-tertiary);
+}
+
 .theme-option.active .theme-option-icon {
   background: var(--theme-primary);
   color: var(--text-on-primary);
-  transform: rotate(360deg) scale(1.05);
-  box-shadow: 0 4px 12px var(--theme-primary-alpha-20);
+  transform: scale(0.9);
 }
 
-.theme-option.active .theme-option-icon::after {
-  content: '';
-  position: absolute;
-  inset: -50%;
-  background: linear-gradient(
-    45deg,
-    transparent 30%,
-    rgba(255, 255, 255, 0.3) 50%,
-    transparent 70%
-  );
-  animation: icon-shine 2s ease-in-out infinite;
-}
-
-@keyframes icon-shine {
-  0% { transform: translateX(-100%) translateY(-100%); }
-  100% { transform: translateX(100%) translateY(100%); }
-}
-
-/* Contenu de l'option */
 .theme-option-content {
   flex: 1;
   min-width: 0;
 }
 
 .theme-option-name {
-  font-size: var(--font-size-base);
-  font-weight: var(--font-weight-medium);
+  font-size: 14px;
+  font-weight: 500;
   color: var(--text-primary);
-  margin-bottom: var(--space-1);
-  transition: color 200ms ease;
-}
-
-.theme-option.active .theme-option-name {
-  color: var(--theme-primary);
+  margin-bottom: 2px;
 }
 
 .theme-option-description {
-  font-size: var(--font-size-xs);
+  font-size: 12px;
   color: var(--text-tertiary);
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
   opacity: 0.8;
-  transition: opacity 200ms ease;
 }
 
-.theme-option:hover .theme-option-description {
-  opacity: 1;
-}
-
-/* Check animé */
 .theme-option-check {
-  width: 24px;
-  height: 24px;
+  width: 20px;
+  height: 20px;
   display: flex;
   align-items: center;
   justify-content: center;
   color: var(--theme-primary);
   opacity: 0;
   transform: scale(0) rotate(-180deg);
-  transition: all 300ms cubic-bezier(0.68, -0.55, 0.265, 1.55);
+  transition: all 200ms cubic-bezier(0.68, -0.55, 0.265, 1.55);
 }
 
 .theme-option.active .theme-option-check {
@@ -558,22 +329,12 @@
   transform: scale(1) rotate(0);
 }
 
-.theme-option.active .theme-option-check i {
-  animation: check-pop 400ms ease;
-}
-
-@keyframes check-pop {
-  0% { transform: scale(0); }
-  50% { transform: scale(1.3); }
-  100% { transform: scale(1); }
-}
-
 /* ========================================
    FOOTER DU DROPDOWN
-   ======================================== */
+   ========================================== */
 
 .theme-dropdown-footer {
-  padding: var(--space-4) var(--space-6);
+  padding: 16px 20px;
   background: var(--bg-secondary);
   border-top: 1px solid var(--border-subtle);
 }
@@ -582,109 +343,116 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: var(--space-2);
+  gap: 8px;
   width: 100%;
-  padding: var(--space-3) var(--space-4);
+  padding: 10px 16px;
   background: transparent;
-  border: 2px dashed var(--border-default);
-  border-radius: var(--radius-lg);
+  border: 1px dashed var(--border-default);
+  border-radius: 10px;
   color: var(--text-secondary);
-  font-size: var(--font-size-sm);
-  font-weight: var(--font-weight-medium);
+  font-size: 13px;
+  font-weight: 500;
   cursor: pointer;
   transition: all 200ms ease;
-  position: relative;
-  overflow: hidden;
-}
-
-.theme-reset-btn::before {
-  content: '';
-  position: absolute;
-  inset: 0;
-  background: var(--bg-tertiary);
-  transform: scaleX(0);
-  transform-origin: left;
-  transition: transform 300ms ease;
-}
-
-.theme-reset-btn:hover::before {
-  transform: scaleX(1);
 }
 
 .theme-reset-btn:hover {
-  border-color: var(--border-strong);
-  color: var(--text-primary);
-  border-style: solid;
-}
-
-.theme-reset-btn span,
-.theme-reset-btn i {
-  position: relative;
-  z-index: 1;
-}
-
-/* ========================================
-   ANIMATIONS SPÉCIALES PAR THÈME
-   ======================================== */
-
-/* Thème Oweo */
-[data-theme="oweo"] .theme-switcher-btn {
-  background: linear-gradient(135deg, var(--theme-primary), var(--theme-accent));
-}
-
-[data-theme="oweo"] .theme-switcher-btn:hover {
-  box-shadow: 
-    0 8px 20px var(--theme-primary-alpha-20),
-    0 4px 8px var(--theme-accent-alpha-20);
-}
-
-/* Thème Modern */
-[data-theme="modern"] .theme-switcher-btn {
-  background: var(--theme-primary);
-  box-shadow: 
-    0 4px 12px var(--theme-primary-alpha-20),
-    inset 0 -2px 4px rgba(0, 0, 0, 0.1);
-}
-
-/* Thème Classic */
-[data-theme="classic"] .theme-switcher-btn {
   background: var(--bg-surface);
-  border: 2px solid var(--theme-primary);
-  color: var(--theme-primary);
+  border-style: solid;
+  color: var(--text-primary);
 }
 
 /* ========================================
-   RESPONSIVE AMÉLIORÉ
-   ======================================== */
+   INDICATEUR DE THÈME ACTIF
+   ========================================== */
 
-/* Tablette */
-@media (max-width: 768px) {
-  :root {
-    --dropdown-width: 320px;
+.theme-indicator {
+  position: absolute;
+  top: -2px;
+  right: -2px;
+  width: 8px;
+  height: 8px;
+  background: var(--theme-accent);
+  border: 2px solid var(--bg-surface);
+  border-radius: 50%;
+  opacity: 0;
+  transform: scale(0);
+  transition: all 200ms ease;
+}
+
+.theme-switcher-main.has-custom-theme .theme-indicator {
+  opacity: 1;
+  transform: scale(1);
+}
+
+/* ========================================
+   ANIMATIONS
+   ========================================== */
+
+/* Effet de pulse subtil */
+@keyframes theme-pulse {
+  0% {
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
   }
-  
-  .theme-switcher-floating {
+  50% {
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+  }
+  100% {
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+  }
+}
+
+.theme-switcher-btn {
+  animation: theme-pulse 3s ease-in-out infinite;
+}
+
+.theme-switcher-btn:hover,
+.theme-switcher-main.active {
+  animation: none;
+}
+
+/* Transition de changement de thème */
+.theme-changing {
+  animation: theme-change 300ms ease;
+}
+
+@keyframes theme-change {
+  0%, 100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(0.95);
+  }
+}
+
+/* ========================================
+   RESPONSIVE
+   ========================================== */
+
+@media (max-width: 640px) {
+  .theme-switcher {
     bottom: 1.5rem;
     right: 1.5rem;
   }
   
   .theme-switcher-btn {
-    width: var(--theme-switcher-size-sm);
-    height: var(--theme-switcher-size-sm);
+    width: 44px;
+    height: 44px;
   }
-}
-
-/* Mobile */
-@media (max-width: 640px) {
+  
+  .theme-switcher-icon i {
+    font-size: 16px;
+  }
+  
   .theme-switcher-dropdown {
     position: fixed;
     bottom: 0;
     left: 0;
     right: 0;
-    width: 100%;
-    border-radius: var(--radius-xl) var(--radius-xl) 0 0;
+    min-width: auto;
+    border-radius: 24px 24px 0 0;
     transform: translateY(100%);
-    max-height: 80vh;
+    max-height: 60vh;
     overflow-y: auto;
   }
   
@@ -692,142 +460,97 @@
     transform: translateY(0);
   }
   
-  .theme-switcher-dropdown::after {
-    display: none;
-  }
-  
   /* Backdrop mobile */
   .theme-switcher-dropdown::before {
     content: '';
     position: fixed;
     inset: 0;
-    background: rgba(0, 0, 0, 0.5);
-    backdrop-filter: blur(5px);
-    z-index: -2;
+    background: rgba(0, 0, 0, 0.3);
+    z-index: -1;
+    opacity: 0;
+    transition: opacity 200ms ease;
+    pointer-events: none;
   }
   
-  /* Handle de glissement */
+  .theme-switcher-dropdown.active::before {
+    opacity: 1;
+    pointer-events: auto;
+  }
+  
+  /* Poignée de glissement mobile */
   .theme-dropdown-header::before {
     content: '';
     position: absolute;
     top: 8px;
     left: 50%;
     transform: translateX(-50%);
-    width: 40px;
+    width: 36px;
     height: 4px;
     background: var(--border-strong);
-    border-radius: var(--radius-full);
+    border-radius: 2px;
+    opacity: 0.5;
   }
 }
 
 /* ========================================
-   ACCESSIBILITÉ
-   ======================================== */
-
-/* Focus visible */
-.theme-switcher-btn:focus-visible,
-.theme-mode-btn:focus-visible,
-.theme-option:focus-visible,
-.theme-reset-btn:focus-visible {
-  outline: 2px solid var(--theme-primary);
-  outline-offset: 2px;
-}
-
-/* Réduction de mouvement */
-@media (prefers-reduced-motion: reduce) {
-  *,
-  *::before,
-  *::after {
-    animation-duration: 0.01ms !important;
-    animation-iteration-count: 1 !important;
-    transition-duration: 0.01ms !important;
-  }
-}
-
-/* ========================================
-   MODE SOMBRE - AJUSTEMENTS
-   ======================================== */
+   THÈME SOMBRE - AJUSTEMENTS
+   ========================================== */
 
 [data-mode="dark"] .theme-switcher-dropdown {
   background: var(--bg-surface);
-  box-shadow: 
-    0 20px 40px rgba(0, 0, 0, 0.4),
-    0 0 0 1px rgba(255, 255, 255, 0.1);
+  border-color: rgba(255, 255, 255, 0.1);
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.4);
 }
 
-[data-mode="dark"] .theme-switcher-btn {
-  box-shadow: 
-    0 4px 12px rgba(0, 0, 0, 0.3),
-    0 0 0 1px rgba(255, 255, 255, 0.1);
+[data-mode="dark"] .theme-option {
+  background: var(--bg-secondary);
+}
+
+[data-mode="dark"] .theme-option:hover {
+  background: var(--bg-tertiary);
+}
+
+[data-mode="dark"] .theme-mode-selector {
+  background: var(--bg-tertiary);
 }
 
 [data-mode="dark"] .theme-mode-selector::before {
-  background: var(--bg-tertiary);
-  box-shadow: 
-    0 2px 4px rgba(0, 0, 0, 0.2),
-    inset 0 1px 2px rgba(255, 255, 255, 0.05);
+  background: var(--bg-secondary);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
 }
 
 /* ========================================
-   EFFETS PREMIUM
+   FORCER LE STYLE MINIMALISTE (HAUTE PRIORITÉ)
    ======================================== */
 
-/* Effet de particules au clic */
-@keyframes particle {
-  0% {
-    opacity: 1;
-    transform: translate(0, 0) scale(0);
-  }
-  100% {
-    opacity: 0;
-    transform: translate(var(--x), var(--y)) scale(1);
-  }
+/* Cibler spécifiquement le bouton flottant */
+.theme-switcher-floating .theme-switcher-btn,
+.theme-switcher-floating #theme-toggle {
+  width: 48px !important;
+  height: 48px !important;
+  padding: 0 !important;
+  overflow: hidden !important;
 }
 
-.theme-switcher-btn::after {
-  --x: 0;
-  --y: 0;
-  content: '';
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  width: 100%;
-  height: 100%;
-  background: radial-gradient(circle, var(--theme-primary-alpha-20) 0%, transparent 70%);
-  transform: translate(-50%, -50%) scale(0);
-  opacity: 0;
-  pointer-events: none;
+/* Masquer tout texte éventuel */
+.theme-switcher-floating .theme-switcher-btn *:not(.theme-switcher-icon),
+.theme-switcher-floating .theme-switcher-btn *:not(i) {
+  font-size: 0 !important;
+  color: transparent !important;
+  line-height: 0 !important;
 }
 
-.theme-switcher-btn:active::after {
-  animation: particle 600ms ease;
+/* S'assurer que les icônes restent visibles et centrées */
+.theme-switcher-floating .theme-switcher-icon {
+  display: flex !important;
+  width: 100% !important;
+  height: 100% !important;
+  align-items: center !important;
+  justify-content: center !important;
 }
 
-/* ========================================
-   TOOLTIP DE THÈME
-   ======================================== */
-
-.theme-tooltip {
-  position: absolute;
-  bottom: calc(100% + 8px);
-  left: 50%;
-  transform: translateX(-50%);
-  padding: var(--space-2) var(--space-3);
-  background: var(--bg-tertiary);
-  color: var(--text-primary);
-  font-size: var(--font-size-xs);
-  font-weight: var(--font-weight-medium);
-  border-radius: var(--radius-md);
-  white-space: nowrap;
-  opacity: 0;
-  visibility: hidden;
-  transition: all 200ms ease;
-  pointer-events: none;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-}
-
-.theme-switcher-btn:hover .theme-tooltip {
-  opacity: 1;
-  visibility: visible;
-  transform: translateX(-50%) translateY(-4px);
+/* Taille des icônes */
+.theme-switcher-floating .theme-switcher-icon i {
+  font-size: 18px !important;
+  color: var(--text-secondary) !important;
 }
